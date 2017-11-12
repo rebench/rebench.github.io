@@ -1,0 +1,32 @@
+{
+  "name": "rebench",
+  "private": true,
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "benchmark": "^2.1.4",
+    "codemirror": "^5.31.0",
+    "file-loader": "^1.1.5",
+    "react": "^15.4.2",
+    "react-codemirror": "^1.0.0",
+    "react-dom": "^15.4.2",
+    "reason": "^3.0.0",
+    "reason-react": ">=0.2.1",
+    "reason-rebase": "^0.1.2"
+  },
+  "devDependencies": {
+    "bs-platform": "^2.0.0",
+    "webpack": "^3.8.1"
+  }
+}

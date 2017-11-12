@@ -1,0 +1,10 @@
+{
+  "name": "rebench",
+  "reason": {"react-jsx" : 2},
+  "bs-dependencies": ["reason-react", "reason-rebase"],
+  "refmt": 3,
+  "sources": [{
+    "dir": "src",
+    "subdirs": true
+  }]
+}
