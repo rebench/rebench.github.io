@@ -26081,6 +26081,7 @@ var React        = __webpack_require__(15);
 var Js_exn       = __webpack_require__(69);
 var Rebase       = __webpack_require__(137);
 var Worker       = __webpack_require__(136);
+var JSBlock      = __webpack_require__(284);
 var Toolbar      = __webpack_require__(144);
 var Compiler     = __webpack_require__(174);
 var TestCase     = __webpack_require__(178);
@@ -26192,11 +26193,12 @@ function make() {
                   /* setupCode */state[/* setupCode */0],
                   /* testCases */state[/* testCases */1],
                   /* worker */[Worker.make(Curry._1(param[/* reduce */3], (function (message) {
-                                return /* WorkerMessage */Block.__(3, [message]);
+                                return /* WorkerMessage */Block.__(4, [message]);
                               })), (function (prim) {
                             console.log(prim);
                             return /* () */0;
-                          }))]
+                          }))],
+                  /* compiledCode */state[/* compiledCode */3]
                 ]]);
     });
   newrecord[/* render */9] = (function (param) {
@@ -26209,7 +26211,7 @@ function make() {
                                   return /* RunAll */0;
                                 }
                               })), /* array */[])), ReasonReact.element(/* None */0, /* None */0, SetupBlock.make(state[/* setupCode */0], Curry._1(reduce, (function (code) {
-                                return /* SetupChanged */Block.__(4, [code]);
+                                return /* SetupChanged */Block.__(3, [code]);
                               })), /* array */[])), $$Array.of_list(Rebase.List[/* reverse */14](Rebase.List[/* map */2]((function ($$this) {
                                 return ReasonReact.element(/* Some */[$$this[/* data */0][/* id */0]], /* None */0, TestCase.View[/* make */2]($$this[/* data */0], $$this[/* state */1], Curry._1(reduce, (function (data) {
                                                       return /* Change */Block.__(2, [data]);
@@ -26218,7 +26220,7 @@ function make() {
                                                     })), Curry._1(reduce, (function () {
                                                       return /* Remove */Block.__(1, [$$this[/* data */0]]);
                                                     })), /* array */[]));
-                              }), state[/* testCases */1]))));
+                              }), state[/* testCases */1]))), ReasonReact.element(/* None */0, /* None */0, JSBlock.make(state[/* compiledCode */3], /* array */[])));
     });
   newrecord[/* initialState */10] = (function () {
       var match = retrieve(/* () */0);
@@ -26231,36 +26233,45 @@ function make() {
                       }), (function (prim) {
                         console.log(prim);
                         return /* () */0;
-                      }))]
+                      }))],
+              /* compiledCode */"// nothing yet"
             ];
     });
   newrecord[/* reducer */12] = (function (action, state) {
       var setPersistentState = function (setupCode, testCases) {
         persist(setupCode, testCases);
-        return /* Update */Block.__(0, [/* record */[
-                    /* setupCode */setupCode,
-                    /* testCases */testCases,
-                    /* worker */state[/* worker */2]
-                  ]]);
+        return /* record */[
+                /* setupCode */setupCode,
+                /* testCases */testCases,
+                /* worker */state[/* worker */2],
+                /* compiledCode */state[/* compiledCode */3]
+              ];
+      };
+      var setCompiledCode = function (state) {
+        return /* record */[
+                /* setupCode */state[/* setupCode */0],
+                /* testCases */state[/* testCases */1],
+                /* worker */state[/* worker */2],
+                /* compiledCode */Compiler.compile(state[/* setupCode */0], Rebase.List[/* map */2]((function ($$this) {
+                            return $$this[/* data */0];
+                          }), state[/* testCases */1]))
+              ];
       };
       if (typeof action === "number") {
         if (action) {
-          return setPersistentState(state[/* setupCode */0], /* :: */[
-                      /* record */[
-                        /* data */TestCase.make(Curry._1(newId, /* () */0)),
-                        /* state : Virgin */0
-                      ],
-                      state[/* testCases */1]
-                    ]);
+          return /* Update */Block.__(0, [setPersistentState(state[/* setupCode */0], /* :: */[
+                          /* record */[
+                            /* data */TestCase.make(Curry._1(newId, /* () */0)),
+                            /* state : Virgin */0
+                          ],
+                          state[/* testCases */1]
+                        ])]);
         } else {
-          var code = Compiler.compile(state[/* setupCode */0], Rebase.List[/* map */2]((function ($$this) {
-                      return $$this[/* data */0];
-                    }), state[/* testCases */1]));
           var ids = Rebase.List[/* map */2]((function ($$this) {
                   return $$this[/* data */0][/* id */0];
                 }), state[/* testCases */1]);
           Curry._1(state[/* worker */2][0][/* postMessage */0], /* Run */[
-                code,
+                state[/* compiledCode */3],
                 ids
               ]);
           return /* NoUpdate */0;
@@ -26268,73 +26279,68 @@ function make() {
       } else {
         switch (action.tag | 0) {
           case 0 : 
-              var data = action[0];
-              var code$1 = Compiler.compile(state[/* setupCode */0], /* :: */[
-                    data,
-                    /* [] */0
-                  ]);
               Curry._1(state[/* worker */2][0][/* postMessage */0], /* Run */[
-                    code$1,
+                    state[/* compiledCode */3],
                     /* :: */[
-                      data[/* id */0],
+                      action[0][/* id */0],
                       /* [] */0
                     ]
                   ]);
               return /* NoUpdate */0;
           case 1 : 
               var target = action[0];
-              return setPersistentState(state[/* setupCode */0], Rebase.List[/* filter */10]((function ($$this) {
-                                return +($$this[/* data */0][/* id */0] !== target[/* id */0]);
-                              }), state[/* testCases */1]));
+              return /* Update */Block.__(0, [setPersistentState(state[/* setupCode */0], Rebase.List[/* filter */10]((function ($$this) {
+                                    return +($$this[/* data */0][/* id */0] !== target[/* id */0]);
+                                  }), state[/* testCases */1]))]);
           case 2 : 
               var target$1 = action[0];
-              return setPersistentState(state[/* setupCode */0], _updateResults(Rebase.List[/* map */2]((function ($$this) {
-                                    var match = +($$this[/* data */0][/* id */0] === target$1[/* id */0]);
-                                    if (match !== 0) {
-                                      return /* record */[
-                                              /* data */target$1,
-                                              /* state : Virgin */0
-                                            ];
-                                    } else {
-                                      return $$this;
-                                    }
-                                  }), state[/* testCases */1])));
+              return /* Update */Block.__(0, [setCompiledCode(setPersistentState(state[/* setupCode */0], _updateResults(Rebase.List[/* map */2]((function ($$this) {
+                                            var match = +($$this[/* data */0][/* id */0] === target$1[/* id */0]);
+                                            if (match !== 0) {
+                                              return /* record */[
+                                                      /* data */target$1,
+                                                      /* state : Virgin */0
+                                                    ];
+                                            } else {
+                                              return $$this;
+                                            }
+                                          }), state[/* testCases */1]))))]);
           case 3 : 
+              return /* Update */Block.__(0, [setCompiledCode(setPersistentState(action[0], state[/* testCases */1]))]);
+          case 4 : 
               var match = action[0];
               if (typeof match === "number") {
                 return /* NoUpdate */0;
               } else if (match.tag) {
                 var result = match[1];
                 var id = match[0];
-                return setPersistentState(state[/* setupCode */0], _updateResults(Rebase.List[/* map */2]((function ($$this) {
-                                      var match = +($$this[/* data */0][/* id */0] === id);
+                return /* Update */Block.__(0, [setPersistentState(state[/* setupCode */0], _updateResults(Rebase.List[/* map */2]((function ($$this) {
+                                          var match = +($$this[/* data */0][/* id */0] === id);
+                                          if (match !== 0) {
+                                            return /* record */[
+                                                    /* data */$$this[/* data */0],
+                                                    /* state : Complete */Block.__(1, [result])
+                                                  ];
+                                          } else {
+                                            return $$this;
+                                          }
+                                        }), state[/* testCases */1])))]);
+              } else {
+                var result$1 = match[1];
+                var id$1 = match[0];
+                return /* Update */Block.__(0, [setPersistentState(state[/* setupCode */0], Rebase.List[/* map */2]((function ($$this) {
+                                      var match = +($$this[/* data */0][/* id */0] === id$1);
                                       if (match !== 0) {
                                         return /* record */[
                                                 /* data */$$this[/* data */0],
-                                                /* state : Complete */Block.__(1, [result])
+                                                /* state : Running */Block.__(0, [result$1])
                                               ];
                                       } else {
                                         return $$this;
                                       }
-                                    }), state[/* testCases */1])));
-              } else {
-                var result$1 = match[1];
-                var id$1 = match[0];
-                return setPersistentState(state[/* setupCode */0], Rebase.List[/* map */2]((function ($$this) {
-                                  var match = +($$this[/* data */0][/* id */0] === id$1);
-                                  if (match !== 0) {
-                                    return /* record */[
-                                            /* data */$$this[/* data */0],
-                                            /* state : Running */Block.__(0, [result$1])
-                                          ];
-                                  } else {
-                                    return $$this;
-                                  }
-                                }), state[/* testCases */1]));
+                                    }), state[/* testCases */1]))]);
               }
               break;
-          case 4 : 
-              return setPersistentState(action[0], state[/* testCases */1]);
           
         }
       }
@@ -52906,6 +52912,45 @@ var header = Glamor.css(/* :: */[
 exports.root   = root;
 exports.header = header;
 /* root Not a pure module */
+
+
+/***/ }),
+/* 284 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var React            = __webpack_require__(15);
+var Editor           = __webpack_require__(179);
+var ReasonReact      = __webpack_require__(18);
+var SetupBlockStyles = __webpack_require__(283);
+
+function text(prim) {
+  return prim;
+}
+
+var component = ReasonReact.statelessComponent("TestCase");
+
+function make(code, _) {
+  var newrecord = component.slice();
+  newrecord[/* render */9] = (function () {
+      return React.createElement("div", {
+                  className: SetupBlockStyles.root
+                }, React.createElement("div", {
+                      className: SetupBlockStyles.header
+                    }, "Generated JavaScript"), ReasonReact.element(/* None */0, /* None */0, Editor.make(code, /* JS */16585, /* None */0, /* Some */[/* true */1], /* None */0, /* None */0, /* array */[])));
+    });
+  return newrecord;
+}
+
+var Styles = 0;
+
+exports.Styles    = Styles;
+exports.text      = text;
+exports.component = component;
+exports.make      = make;
+/* component Not a pure module */
 
 
 /***/ })
