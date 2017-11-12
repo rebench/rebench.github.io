@@ -26073,17 +26073,19 @@ ReactDOMRe.renderToElementWithId(ReasonReact.element(/* None */0, /* None */0, A
 "use strict";
 
 
-var $$Array     = __webpack_require__(68);
-var Block       = __webpack_require__(21);
-var Curry       = __webpack_require__(7);
-var Utils       = __webpack_require__(70);
-var React       = __webpack_require__(15);
-var Rebase      = __webpack_require__(137);
-var Worker      = __webpack_require__(136);
-var Toolbar     = __webpack_require__(144);
-var Compiler    = __webpack_require__(174);
-var TestCase    = __webpack_require__(178);
-var ReasonReact = __webpack_require__(18);
+var $$Array      = __webpack_require__(68);
+var Block        = __webpack_require__(21);
+var Curry        = __webpack_require__(7);
+var Utils        = __webpack_require__(70);
+var React        = __webpack_require__(15);
+var Js_exn       = __webpack_require__(69);
+var Rebase       = __webpack_require__(137);
+var Worker       = __webpack_require__(136);
+var Toolbar      = __webpack_require__(144);
+var Compiler     = __webpack_require__(174);
+var TestCase     = __webpack_require__(178);
+var ReasonReact  = __webpack_require__(18);
+var Js_primitive = __webpack_require__(139);
 
 function _updateResults(testCases) {
   var completed = Rebase.List[/* map */2](Rebase.Option[/* getOrRaise */15], Rebase.List[/* filter */10](Rebase.Option[/* isSome */11], Rebase.List[/* map */2]((function ($$this) {
@@ -26129,11 +26131,49 @@ var component = ReasonReact.reducerComponent("App");
 
 function make() {
   var newId = Utils.makeCounter(1);
-  var makeTestCase = function () {
+  var wrapTestCase = function (data) {
     return /* record */[
-            /* data */TestCase.make(Curry._1(newId, /* () */0)),
+            /* data */data,
             /* state : Virgin */0
           ];
+  };
+  var retrieve = function () {
+    var fromLocalStorage = function () {
+      return Rebase.Option[/* map */2]((function (prim) {
+                    return prim;
+                  }), Rebase.Option[/* map */2]((function (prim) {
+                        return JSON.parse(prim);
+                      }), Js_primitive.null_to_opt(localStorage.getItem("rebench-data"))));
+    };
+    var partial_arg = Rebase.List[/* map */2];
+    return Rebase.Option[/* getOr */14](/* :: */[
+                /* record */[
+                  /* data */TestCase.make(Curry._1(newId, /* () */0)),
+                  /* state : Virgin */0
+                ],
+                /* :: */[
+                  /* record */[
+                    /* data */TestCase.make(Curry._1(newId, /* () */0)),
+                    /* state : Virgin */0
+                  ],
+                  /* [] */0
+                ]
+              ], Rebase.Option[/* map */2]((function (param) {
+                      return partial_arg(wrapTestCase, param);
+                    }), Rebase.Option[/* or_ */13](fromLocalStorage(/* () */0), /* None */0)));
+  };
+  var persist = function (data) {
+    try {
+      localStorage.setItem("rebench-data", Rebase.Option[/* getOrRaise */15](Js_primitive.undefined_to_opt(JSON.stringify(Rebase.List[/* map */2]((function ($$this) {
+                              return $$this[/* data */0];
+                            }), data)))));
+      return /* () */0;
+    }
+    catch (raw_e){
+      var e = Js_exn.internalToOCamlException(raw_e);
+      console.log(e);
+      return /* () */0;
+    }
   };
   var newrecord = component.slice();
   newrecord[/* didMount */4] = (function (param) {
@@ -26167,13 +26207,7 @@ function make() {
     });
   newrecord[/* initialState */10] = (function () {
       return /* record */[
-              /* testCases : :: */[
-                makeTestCase(/* () */0),
-                /* :: */[
-                  makeTestCase(/* () */0),
-                  /* [] */0
-                ]
-              ],
+              /* testCases */retrieve(/* () */0),
               /* worker */[Worker.make((function (prim) {
                         console.log(prim);
                         return /* () */0;
@@ -26184,15 +26218,22 @@ function make() {
             ];
     });
   newrecord[/* reducer */12] = (function (action, state) {
+      var setTestCases = function (testCases) {
+        persist(testCases);
+        return /* Update */Block.__(0, [/* record */[
+                    /* testCases */testCases,
+                    /* worker */state[/* worker */1]
+                  ]]);
+      };
       if (typeof action === "number") {
         if (action) {
-          return /* Update */Block.__(0, [/* record */[
-                      /* testCases : :: */[
-                        makeTestCase(/* () */0),
-                        state[/* testCases */0]
+          return setTestCases(/* :: */[
+                      /* record */[
+                        /* data */TestCase.make(Curry._1(newId, /* () */0)),
+                        /* state : Virgin */0
                       ],
-                      /* worker */state[/* worker */1]
-                    ]]);
+                      state[/* testCases */0]
+                    ]);
         } else {
           var code = Compiler.compile(Rebase.List[/* map */2]((function ($$this) {
                       return $$this[/* data */0];
@@ -26224,28 +26265,22 @@ function make() {
               return /* NoUpdate */0;
           case 1 : 
               var target = action[0];
-              return /* Update */Block.__(0, [/* record */[
-                          /* testCases */Rebase.List[/* filter */10]((function ($$this) {
-                                  return +($$this[/* data */0][/* id */0] !== target[/* id */0]);
-                                }), state[/* testCases */0]),
-                          /* worker */state[/* worker */1]
-                        ]]);
+              return setTestCases(Rebase.List[/* filter */10]((function ($$this) {
+                                return +($$this[/* data */0][/* id */0] !== target[/* id */0]);
+                              }), state[/* testCases */0]));
           case 2 : 
               var target$1 = action[0];
-              return /* Update */Block.__(0, [/* record */[
-                          /* testCases */_updateResults(Rebase.List[/* map */2]((function ($$this) {
-                                      var match = +($$this[/* data */0][/* id */0] === target$1[/* id */0]);
-                                      if (match !== 0) {
-                                        return /* record */[
-                                                /* data */target$1,
-                                                /* state : Virgin */0
-                                              ];
-                                      } else {
-                                        return $$this;
-                                      }
-                                    }), state[/* testCases */0])),
-                          /* worker */state[/* worker */1]
-                        ]]);
+              return setTestCases(_updateResults(Rebase.List[/* map */2]((function ($$this) {
+                                    var match = +($$this[/* data */0][/* id */0] === target$1[/* id */0]);
+                                    if (match !== 0) {
+                                      return /* record */[
+                                              /* data */target$1,
+                                              /* state : Virgin */0
+                                            ];
+                                    } else {
+                                      return $$this;
+                                    }
+                                  }), state[/* testCases */0])));
           case 3 : 
               var match = action[0];
               if (typeof match === "number") {
@@ -26253,37 +26288,31 @@ function make() {
               } else if (match.tag) {
                 var result = match[1];
                 var id = match[0];
-                return /* Update */Block.__(0, [/* record */[
-                            /* testCases */_updateResults(Rebase.List[/* map */2]((function ($$this) {
-                                        var match = +($$this[/* data */0][/* id */0] === id);
-                                        if (match !== 0) {
-                                          return /* record */[
-                                                  /* data */$$this[/* data */0],
-                                                  /* state : Complete */Block.__(1, [result])
-                                                ];
-                                        } else {
-                                          return $$this;
-                                        }
-                                      }), state[/* testCases */0])),
-                            /* worker */state[/* worker */1]
-                          ]]);
+                return setTestCases(_updateResults(Rebase.List[/* map */2]((function ($$this) {
+                                      var match = +($$this[/* data */0][/* id */0] === id);
+                                      if (match !== 0) {
+                                        return /* record */[
+                                                /* data */$$this[/* data */0],
+                                                /* state : Complete */Block.__(1, [result])
+                                              ];
+                                      } else {
+                                        return $$this;
+                                      }
+                                    }), state[/* testCases */0])));
               } else {
                 var result$1 = match[1];
                 var id$1 = match[0];
-                return /* Update */Block.__(0, [/* record */[
-                            /* testCases */Rebase.List[/* map */2]((function ($$this) {
-                                    var match = +($$this[/* data */0][/* id */0] === id$1);
-                                    if (match !== 0) {
-                                      return /* record */[
-                                              /* data */$$this[/* data */0],
-                                              /* state : Running */Block.__(0, [result$1])
-                                            ];
-                                    } else {
-                                      return $$this;
-                                    }
-                                  }), state[/* testCases */0]),
-                            /* worker */state[/* worker */1]
-                          ]]);
+                return setTestCases(Rebase.List[/* map */2]((function ($$this) {
+                                  var match = +($$this[/* data */0][/* id */0] === id$1);
+                                  if (match !== 0) {
+                                    return /* record */[
+                                            /* data */$$this[/* data */0],
+                                            /* state : Running */Block.__(0, [result$1])
+                                          ];
+                                  } else {
+                                    return $$this;
+                                  }
+                                }), state[/* testCases */0]));
               }
               break;
           

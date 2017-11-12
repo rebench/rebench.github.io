@@ -51,22 +51,47 @@ let _updateResults = (testCases) => {
   })
 };
 
-
 let component = ReasonReact.reducerComponent("App");
 
 let make = (_children) => {
 
   let newId = Utils.makeCounter(1);
-  let makeTestCase = () => {
-    data: TestCase.make(newId()),
+  let wrapTestCase = (data) => {
+    data,
     state: TestCase.Virgin
   };
+  let makeTestCase = () =>
+    newId() |> TestCase.make
+            |> wrapTestCase;
+
+  let retrieve = () => {
+    let fromQueryParam = () => None;
+
+    let fromLocalStorage = () =>
+      Dom.Storage.(localStorage |> getItem("rebench-data"))
+      |> Option.map(Js.Json.parseExn)
+      |> Option.map((Obj.magic: Js.Json.t => list(TestCase.t)));
+
+    fromQueryParam()
+    |> Option.or_(fromLocalStorage())
+    |> Option.map(List.map(wrapTestCase))
+    |> Option.getOr([makeTestCase(), makeTestCase()])
+  };
+
+  let persist = (data) => {
+    try (
+      Dom.Storage.(localStorage |> setItem("rebench-data", data |> List.map((this) => this.data) |> Js.Json.stringifyAny |> Option.getOrRaise))
+    ) {
+    | e => Js.log(e)
+    }
+  };
+
 
   {
     ...component,
 
     initialState: () => {
-      testCases: [makeTestCase(), makeTestCase()],
+      testCases: retrieve(),
       worker: ref(Worker.make(~onMessage=Js.log, ~onError=Js.log))
     },
 
@@ -80,7 +105,12 @@ let make = (_children) => {
       })
     },
 
-    reducer: (action, state) =>
+    reducer: (action, state) => {
+      let setTestCases = (testCases) => {
+        persist(testCases);
+        ReasonReact.Update({ ...state, testCases })
+      };
+
       switch action {
       
       | RunAll => {
@@ -101,44 +131,32 @@ let make = (_children) => {
       }
 
       | Add =>
-        ReasonReact.Update({
-          ...state,
-          testCases: [makeTestCase(), ...state.testCases]
-        })
+        [makeTestCase(), ...state.testCases]
+        |> setTestCases
 
       | Remove(target) =>
-        ReasonReact.Update({
-          ...state,
-          testCases: List.filter((this) => this.data.id !== target.id, state.testCases)
-        })
+        List.filter((this) => this.data.id !== target.id, state.testCases)
+        |> setTestCases
 
       | Change(target) =>
-        ReasonReact.Update({
-          ...state,
-          testCases: _updateResults(
-            List.map((this) => this.data.id === target.id ? { data: target, state: TestCase.Virgin } : this, state.testCases)
-          )
-        })
+        List.map((this) => this.data.id === target.id ? { data: target, state: TestCase.Virgin } : this, state.testCases)
+        |> _updateResults
+        |> setTestCases
       
       | WorkerMessage(CaseCycle(id, result)) =>
-        ReasonReact.Update({
-          ...state,
-          testCases: List.map((this) => this.data.id === id ? { ...this, state: TestCase.Running(result) } : this, state.testCases)
-        })
+        List.map((this) => this.data.id === id ? { ...this, state: TestCase.Running(result) } : this, state.testCases)
+        |> setTestCases
 
       | WorkerMessage(SuiteCycle(id, result)) =>
-        ReasonReact.Update({
-          ...state,
-          testCases: _updateResults(
-            List.map((this) => this.data.id === id ? { ...this, state: TestCase.Complete(result) } : this, state.testCases)
-          )
-        })
+        List.map((this) => this.data.id === id ? { ...this, state: TestCase.Complete(result) } : this, state.testCases)
+        |> _updateResults
+        |> setTestCases
 
       | WorkerMessage(SuiteComplete) => {
         ReasonReact.NoUpdate
       }
-
-      },
+      }
+    },
 
     render: ({ reduce, state }) =>
       <div>
