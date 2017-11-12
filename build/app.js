@@ -26084,6 +26084,7 @@ var Worker       = __webpack_require__(136);
 var Toolbar      = __webpack_require__(144);
 var Compiler     = __webpack_require__(174);
 var TestCase     = __webpack_require__(178);
+var SetupBlock   = __webpack_require__(282);
 var ReasonReact  = __webpack_require__(18);
 var Js_primitive = __webpack_require__(139);
 
@@ -26145,28 +26146,37 @@ function make() {
                         return JSON.parse(prim);
                       }), Js_primitive.null_to_opt(localStorage.getItem("rebench-data"))));
     };
-    var partial_arg = Rebase.List[/* map */2];
-    return Rebase.Option[/* getOr */14](/* :: */[
-                /* record */[
-                  /* data */TestCase.make(Curry._1(newId, /* () */0)),
-                  /* state : Virgin */0
-                ],
+    return Rebase.Option[/* getOr */14](/* tuple */[
+                "/* code goes here */",
                 /* :: */[
                   /* record */[
                     /* data */TestCase.make(Curry._1(newId, /* () */0)),
                     /* state : Virgin */0
                   ],
-                  /* [] */0
+                  /* :: */[
+                    /* record */[
+                      /* data */TestCase.make(Curry._1(newId, /* () */0)),
+                      /* state : Virgin */0
+                    ],
+                    /* [] */0
+                  ]
                 ]
               ], Rebase.Option[/* map */2]((function (param) {
-                      return partial_arg(wrapTestCase, param);
+                      return /* tuple */[
+                              param[0],
+                              Rebase.List[/* map */2](wrapTestCase, param[1])
+                            ];
                     }), Rebase.Option[/* or_ */13](fromLocalStorage(/* () */0), /* None */0)));
   };
-  var persist = function (data) {
+  var persist = function (setupCode, testCases) {
     try {
-      localStorage.setItem("rebench-data", Rebase.Option[/* getOrRaise */15](Js_primitive.undefined_to_opt(JSON.stringify(Rebase.List[/* map */2]((function ($$this) {
-                              return $$this[/* data */0];
-                            }), data)))));
+      var data = Rebase.Option[/* getOrRaise */15](Js_primitive.undefined_to_opt(JSON.stringify(/* tuple */[
+                    setupCode,
+                    Rebase.List[/* map */2]((function ($$this) {
+                            return $$this[/* data */0];
+                          }), testCases)
+                  ])));
+      localStorage.setItem("rebench-data", data);
       return /* () */0;
     }
     catch (raw_e){
@@ -26177,8 +26187,10 @@ function make() {
   };
   var newrecord = component.slice();
   newrecord[/* didMount */4] = (function (param) {
+      var state = param[/* state */4];
       return /* Update */Block.__(0, [/* record */[
-                  /* testCases */param[/* state */4][/* testCases */0],
+                  /* setupCode */state[/* setupCode */0],
+                  /* testCases */state[/* testCases */1],
                   /* worker */[Worker.make(Curry._1(param[/* reduce */3], (function (message) {
                                 return /* WorkerMessage */Block.__(3, [message]);
                               })), (function (prim) {
@@ -26188,6 +26200,7 @@ function make() {
                 ]]);
     });
   newrecord[/* render */9] = (function (param) {
+      var state = param[/* state */4];
       var reduce = param[/* reduce */3];
       return React.createElement("div", undefined, ReasonReact.element(/* None */0, /* None */0, Toolbar.make(Curry._1(reduce, (function (param) {
                                 if (param >= 3254785) {
@@ -26195,6 +26208,8 @@ function make() {
                                 } else {
                                   return /* RunAll */0;
                                 }
+                              })), /* array */[])), ReasonReact.element(/* None */0, /* None */0, SetupBlock.make(state[/* setupCode */0], Curry._1(reduce, (function (code) {
+                                return /* SetupChanged */Block.__(4, [code]);
                               })), /* array */[])), $$Array.of_list(Rebase.List[/* reverse */14](Rebase.List[/* map */2]((function ($$this) {
                                 return ReasonReact.element(/* Some */[$$this[/* data */0][/* id */0]], /* None */0, TestCase.View[/* make */2]($$this[/* data */0], $$this[/* state */1], Curry._1(reduce, (function (data) {
                                                       return /* Change */Block.__(2, [data]);
@@ -26203,11 +26218,13 @@ function make() {
                                                     })), Curry._1(reduce, (function () {
                                                       return /* Remove */Block.__(1, [$$this[/* data */0]]);
                                                     })), /* array */[]));
-                              }), param[/* state */4][/* testCases */0]))));
+                              }), state[/* testCases */1]))));
     });
   newrecord[/* initialState */10] = (function () {
+      var match = retrieve(/* () */0);
       return /* record */[
-              /* testCases */retrieve(/* () */0),
+              /* setupCode */match[0],
+              /* testCases */match[1],
               /* worker */[Worker.make((function (prim) {
                         console.log(prim);
                         return /* () */0;
@@ -26218,30 +26235,31 @@ function make() {
             ];
     });
   newrecord[/* reducer */12] = (function (action, state) {
-      var setTestCases = function (testCases) {
-        persist(testCases);
+      var setPersistentState = function (setupCode, testCases) {
+        persist(setupCode, testCases);
         return /* Update */Block.__(0, [/* record */[
+                    /* setupCode */setupCode,
                     /* testCases */testCases,
-                    /* worker */state[/* worker */1]
+                    /* worker */state[/* worker */2]
                   ]]);
       };
       if (typeof action === "number") {
         if (action) {
-          return setTestCases(/* :: */[
+          return setPersistentState(state[/* setupCode */0], /* :: */[
                       /* record */[
                         /* data */TestCase.make(Curry._1(newId, /* () */0)),
                         /* state : Virgin */0
                       ],
-                      state[/* testCases */0]
+                      state[/* testCases */1]
                     ]);
         } else {
-          var code = Compiler.compile(Rebase.List[/* map */2]((function ($$this) {
+          var code = Compiler.compile(state[/* setupCode */0], Rebase.List[/* map */2]((function ($$this) {
                       return $$this[/* data */0];
-                    }), state[/* testCases */0]));
+                    }), state[/* testCases */1]));
           var ids = Rebase.List[/* map */2]((function ($$this) {
                   return $$this[/* data */0][/* id */0];
-                }), state[/* testCases */0]);
-          Curry._1(state[/* worker */1][0][/* postMessage */0], /* Run */[
+                }), state[/* testCases */1]);
+          Curry._1(state[/* worker */2][0][/* postMessage */0], /* Run */[
                 code,
                 ids
               ]);
@@ -26251,11 +26269,11 @@ function make() {
         switch (action.tag | 0) {
           case 0 : 
               var data = action[0];
-              var code$1 = Compiler.compile(/* :: */[
+              var code$1 = Compiler.compile(state[/* setupCode */0], /* :: */[
                     data,
                     /* [] */0
                   ]);
-              Curry._1(state[/* worker */1][0][/* postMessage */0], /* Run */[
+              Curry._1(state[/* worker */2][0][/* postMessage */0], /* Run */[
                     code$1,
                     /* :: */[
                       data[/* id */0],
@@ -26265,12 +26283,12 @@ function make() {
               return /* NoUpdate */0;
           case 1 : 
               var target = action[0];
-              return setTestCases(Rebase.List[/* filter */10]((function ($$this) {
+              return setPersistentState(state[/* setupCode */0], Rebase.List[/* filter */10]((function ($$this) {
                                 return +($$this[/* data */0][/* id */0] !== target[/* id */0]);
-                              }), state[/* testCases */0]));
+                              }), state[/* testCases */1]));
           case 2 : 
               var target$1 = action[0];
-              return setTestCases(_updateResults(Rebase.List[/* map */2]((function ($$this) {
+              return setPersistentState(state[/* setupCode */0], _updateResults(Rebase.List[/* map */2]((function ($$this) {
                                     var match = +($$this[/* data */0][/* id */0] === target$1[/* id */0]);
                                     if (match !== 0) {
                                       return /* record */[
@@ -26280,7 +26298,7 @@ function make() {
                                     } else {
                                       return $$this;
                                     }
-                                  }), state[/* testCases */0])));
+                                  }), state[/* testCases */1])));
           case 3 : 
               var match = action[0];
               if (typeof match === "number") {
@@ -26288,7 +26306,7 @@ function make() {
               } else if (match.tag) {
                 var result = match[1];
                 var id = match[0];
-                return setTestCases(_updateResults(Rebase.List[/* map */2]((function ($$this) {
+                return setPersistentState(state[/* setupCode */0], _updateResults(Rebase.List[/* map */2]((function ($$this) {
                                       var match = +($$this[/* data */0][/* id */0] === id);
                                       if (match !== 0) {
                                         return /* record */[
@@ -26298,11 +26316,11 @@ function make() {
                                       } else {
                                         return $$this;
                                       }
-                                    }), state[/* testCases */0])));
+                                    }), state[/* testCases */1])));
               } else {
                 var result$1 = match[1];
                 var id$1 = match[0];
-                return setTestCases(Rebase.List[/* map */2]((function ($$this) {
+                return setPersistentState(state[/* setupCode */0], Rebase.List[/* map */2]((function ($$this) {
                                   var match = +($$this[/* data */0][/* id */0] === id$1);
                                   if (match !== 0) {
                                     return /* record */[
@@ -26312,9 +26330,11 @@ function make() {
                                   } else {
                                     return $$this;
                                   }
-                                }), state[/* testCases */0]));
+                                }), state[/* testCases */1]));
               }
               break;
+          case 4 : 
+              return setPersistentState(action[0], state[/* testCases */1]);
           
         }
       }
@@ -36609,15 +36629,15 @@ var List   = __webpack_require__(34);
 var Reason = __webpack_require__(176);
 
 function template(id, code) {
-  return "let " + (String(id) + (" = () => {\n  " + (String(code) + ("\n};\n\n" + (String(id) + "();\n")))));
+  return "\nlet " + (String(id) + (" = () => {\n  " + (String(code) + "\n};\n")));
 }
 
-function compile(testCases) {
-  return List.fold_left((function (acc, $$this) {
-                return acc + "\n" + $$this.js_code;
-              }), "", List.map((function ($$this) {
-                    return BS.compile(Reason.printML(Reason.parseRE(template($$this[/* id */0], $$this[/* code */1]))));
-                  }), testCases));
+function compile(setupCode, testCases) {
+  return BS.compile(Reason.printML(Reason.parseRE(List.fold_left((function (acc, $$this) {
+                            return acc + $$this;
+                          }), setupCode, List.map((function ($$this) {
+                                return template($$this[/* id */0], $$this[/* code */1]);
+                              }), testCases))))).js_code;
 }
 
 exports.template = template;
@@ -52800,6 +52820,91 @@ var state = Glamor.css(/* :: */[
 exports.root   = root;
 exports.footer = footer;
 exports.state  = state;
+/* root Not a pure module */
+
+
+/***/ }),
+/* 282 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Curry            = __webpack_require__(7);
+var React            = __webpack_require__(15);
+var Editor           = __webpack_require__(179);
+var ReasonReact      = __webpack_require__(18);
+var SetupBlockStyles = __webpack_require__(283);
+
+function text(prim) {
+  return prim;
+}
+
+var component = ReasonReact.statelessComponent("TestCase");
+
+function make(code, onChange, _) {
+  var newrecord = component.slice();
+  newrecord[/* render */9] = (function () {
+      return React.createElement("div", {
+                  className: SetupBlockStyles.root
+                }, React.createElement("div", {
+                      className: SetupBlockStyles.header
+                    }, "Setup"), ReasonReact.element(/* None */0, /* None */0, Editor.make(code, /* RE */18355, /* None */0, /* None */0, /* None */0, /* Some */[Curry.__1(onChange)], /* array */[])));
+    });
+  return newrecord;
+}
+
+var Styles = 0;
+
+exports.Styles    = Styles;
+exports.text      = text;
+exports.component = component;
+exports.make      = make;
+/* component Not a pure module */
+
+
+/***/ }),
+/* 283 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Glamor = __webpack_require__(148);
+
+var root = Glamor.css(/* :: */[
+      Glamor.background("#263238"),
+      /* :: */[
+        Glamor.margin("1em"),
+        /* :: */[
+          Glamor.paddingBottom(".5em"),
+          /* [] */0
+        ]
+      ]
+    ]);
+
+var header = Glamor.css(/* :: */[
+      Glamor.padding(".75em 1.25em"),
+      /* :: */[
+        Glamor.fontSize(".85em"),
+        /* :: */[
+          Glamor.color("#162228"),
+          /* :: */[
+            Glamor.color("#aaa"),
+            /* :: */[
+              Glamor.textTransform("lowercase"),
+              /* :: */[
+                Glamor.fontVariant("small-caps"),
+                /* [] */0
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]);
+
+exports.root   = root;
+exports.header = header;
 /* root Not a pure module */
 
 

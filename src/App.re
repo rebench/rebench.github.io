@@ -7,6 +7,7 @@ type testCase = {
 };
 
 type state = {
+  setupCode: string,
   testCases: list(testCase),
   worker: ref(Worker.t),
 };
@@ -17,7 +18,8 @@ type action =
   | Add
   | Remove(TestCase.t)
   | Change(TestCase.t)
-  | WorkerMessage(Worker.Message.receive);
+  | WorkerMessage(Worker.Message.receive)
+  | SetupChanged(string);
 
 let _updateResults = (testCases) => {
   let completed =
@@ -70,18 +72,23 @@ let make = (_children) => {
     let fromLocalStorage = () =>
       Dom.Storage.(localStorage |> getItem("rebench-data"))
       |> Option.map(Js.Json.parseExn)
-      |> Option.map((Obj.magic: Js.Json.t => list(TestCase.t)));
+      |> Option.map((Obj.magic: Js.Json.t => (string, list(TestCase.t))));
 
     fromQueryParam()
     |> Option.or_(fromLocalStorage())
-    |> Option.map(List.map(wrapTestCase))
-    |> Option.getOr([makeTestCase(), makeTestCase()])
+    |> Option.map(((code, cases)) => (code, cases |> List.map(wrapTestCase)))
+    |> Option.getOr(("/* code goes here */", [makeTestCase(), makeTestCase()]))
   };
 
-  let persist = (data) => {
-    try (
-      Dom.Storage.(localStorage |> setItem("rebench-data", data |> List.map((this) => this.data) |> Js.Json.stringifyAny |> Option.getOrRaise))
-    ) {
+  let persist = (setupCode, testCases) => {
+    try {
+      let data =
+        (setupCode, testCases |> List.map((this) => this.data))
+        |> Js.Json.stringifyAny
+        |> Option.getOrRaise;
+
+      Dom.Storage.(localStorage |> setItem("rebench-data", data))
+    } {
     | e => Js.log(e)
     }
   };
@@ -91,8 +98,12 @@ let make = (_children) => {
     ...component,
 
     initialState: () => {
-      testCases: retrieve(),
-      worker: ref(Worker.make(~onMessage=Js.log, ~onError=Js.log))
+      let (setupCode, testCases) = retrieve();
+      {
+        setupCode,
+        testCases,
+        worker: ref(Worker.make(~onMessage=Js.log, ~onError=Js.log)),
+      }
     },
 
     didMount: ({ reduce, state }) => {
@@ -106,16 +117,16 @@ let make = (_children) => {
     },
 
     reducer: (action, state) => {
-      let setTestCases = (testCases) => {
-        persist(testCases);
-        ReasonReact.Update({ ...state, testCases })
+      let setPersistentState = (setupCode, testCases) => {
+        persist(setupCode, testCases);
+        ReasonReact.Update({ ...state, setupCode, testCases })
       };
 
       switch action {
       
       | RunAll => {
         let code = state.testCases |> List.map((this) => this.data)
-                                   |> Compiler.compile;
+                                   |> Compiler.compile(state.setupCode);
 
         let ids = state.testCases |> List.map((this) => this.data.id);
 
@@ -124,7 +135,7 @@ let make = (_children) => {
       }
 
       | RunSingle(data) => {
-        let code = Compiler.compile([data]);
+        let code = Compiler.compile(state.setupCode, [data]);
 
         state.worker^.postMessage(Run(code, [data.id]));
         ReasonReact.NoUpdate
@@ -132,29 +143,32 @@ let make = (_children) => {
 
       | Add =>
         [makeTestCase(), ...state.testCases]
-        |> setTestCases
+        |> setPersistentState(state.setupCode)
 
       | Remove(target) =>
         List.filter((this) => this.data.id !== target.id, state.testCases)
-        |> setTestCases
+        |> setPersistentState(state.setupCode)
 
       | Change(target) =>
         List.map((this) => this.data.id === target.id ? { data: target, state: TestCase.Virgin } : this, state.testCases)
         |> _updateResults
-        |> setTestCases
+        |> setPersistentState(state.setupCode)
       
       | WorkerMessage(CaseCycle(id, result)) =>
         List.map((this) => this.data.id === id ? { ...this, state: TestCase.Running(result) } : this, state.testCases)
-        |> setTestCases
+        |> setPersistentState(state.setupCode)
 
       | WorkerMessage(SuiteCycle(id, result)) =>
         List.map((this) => this.data.id === id ? { ...this, state: TestCase.Complete(result) } : this, state.testCases)
         |> _updateResults
-        |> setTestCases
+        |> setPersistentState(state.setupCode)
 
-      | WorkerMessage(SuiteComplete) => {
+      | WorkerMessage(SuiteComplete) =>
         ReasonReact.NoUpdate
-      }
+
+      | SetupChanged(code) =>
+        setPersistentState(code, state.testCases);
+
       }
     },
 
@@ -164,6 +178,10 @@ let make = (_children) => {
           fun | `RunAll => RunAll
               | `Add => Add
         ) />
+
+        <SetupBlock code=state.setupCode
+                    onChange=reduce((code) => SetupChanged(code)) />
+
         (
           state.testCases |> List.map((this) =>
                                <TestCase.View
