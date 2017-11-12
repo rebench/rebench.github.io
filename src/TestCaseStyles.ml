@@ -1,7 +1,9 @@
 open Glamor
 
 let root = css [
+  background "#263238";
   margin "1em";
+  paddingTop "1em";
 ]
 
 let footer = css [

@@ -18,7 +18,8 @@ module Message = {
       CaseCycle(data##id, {
         hz: data##hz,
         sampleCount: data##sampleCount,
-        rme: data##rme
+        rme: data##rme,
+        comparison: None,
       })
     }
 
@@ -27,7 +28,8 @@ module Message = {
       SuiteCycle(data##id, {
         hz: data##hz,
         sampleCount: data##sampleCount,
-        rme: data##rme
+        rme: data##rme,
+        comparison: None,
       })
 
     | "complete" =>

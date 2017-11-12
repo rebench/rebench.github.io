@@ -1,3 +1,6 @@
+let _toArray = Array.of_list;
+open Rebase;
+
 type testCase = {
   data: TestCase.t,
   state: TestCase.state
@@ -16,7 +19,41 @@ type action =
   | Change(TestCase.t)
   | WorkerMessage(Worker.Message.receive);
 
+let _updateResults = (testCases) => {
+  let completed =
+    testCases |> List.map((this) =>
+                  switch this.state {
+                  | Complete(result) => Some((this.data.id, result))
+                  | _ => None
+                  })
+              |> List.filter(Option.isSome)
+              |> List.map(Option.getOrRaise);
+
+  let fastest =
+    completed |> List.map(((_, { TestCase.hz })) => hz)
+              |> List.reduce(Js.Math.max_float, 0.);
+
+  testCases |> List.map((this) => {
+    let result =
+      completed |> List.find(((id, _)) => this.data.id === id)
+                |> Option.map(((_, result)) => result);
+
+    switch result {
+    | Some({ TestCase.hz } as result) => {
+      ...this,
+      state: Complete({
+        ...result,
+        comparison: Some((hz -. fastest) /. fastest *. 100.)
+      })
+    }
+    | None => this
+    }
+  })
+};
+
+
 let component = ReasonReact.reducerComponent("App");
+
 let make = (_children) => {
 
   let newId = Utils.makeCounter(1);
@@ -78,23 +115,28 @@ let make = (_children) => {
       | Change(target) =>
         ReasonReact.Update({
           ...state,
-          testCases: List.map((this) => this.data.id === target.id ? { data: target, state: TestCase.Virgin } : this, state.testCases)
+          testCases: _updateResults(
+            List.map((this) => this.data.id === target.id ? { data: target, state: TestCase.Virgin } : this, state.testCases)
+          )
         })
       
       | WorkerMessage(CaseCycle(id, result)) =>
         ReasonReact.Update({
           ...state,
-          testCases: List.map((this) => this.data.id === id ? { ...this, state: Running(result) } : this, state.testCases)
+          testCases: List.map((this) => this.data.id === id ? { ...this, state: TestCase.Running(result) } : this, state.testCases)
         })
 
       | WorkerMessage(SuiteCycle(id, result)) =>
         ReasonReact.Update({
           ...state,
-          testCases: List.map((this) => this.data.id === id ? { ...this, state: Complete(result) } : this, state.testCases)
+          testCases: _updateResults(
+            List.map((this) => this.data.id === id ? { ...this, state: TestCase.Complete(result) } : this, state.testCases)
+          )
         })
 
-      | WorkerMessage(SuiteComplete) =>
+      | WorkerMessage(SuiteComplete) => {
         ReasonReact.NoUpdate
+      }
 
       },
 
@@ -114,8 +156,8 @@ let make = (_children) => {
                                  data=this.data
                                  state=this.state
                                />)
-                          |> List.rev
-                          |> Array.of_list
+                          |> List.reverse
+                          |> _toArray
                           |> ReasonReact.arrayToElement
         )
       </div>

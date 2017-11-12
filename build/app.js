@@ -26073,17 +26073,57 @@ ReactDOMRe.renderToElementWithId(ReasonReact.element(/* None */0, /* None */0, A
 "use strict";
 
 
-var List        = __webpack_require__(34);
 var $$Array     = __webpack_require__(68);
 var Block       = __webpack_require__(21);
 var Curry       = __webpack_require__(7);
 var Utils       = __webpack_require__(70);
 var React       = __webpack_require__(15);
+var Rebase      = __webpack_require__(137);
 var Worker      = __webpack_require__(136);
 var Toolbar     = __webpack_require__(144);
 var Compiler    = __webpack_require__(174);
 var TestCase    = __webpack_require__(178);
 var ReasonReact = __webpack_require__(18);
+
+function _updateResults(testCases) {
+  var completed = Rebase.List[/* map */2](Rebase.Option[/* getOrRaise */15], Rebase.List[/* filter */10](Rebase.Option[/* isSome */11], Rebase.List[/* map */2]((function ($$this) {
+                  var match = $$this[/* state */1];
+                  if (typeof match === "number" || !match.tag) {
+                    return /* None */0;
+                  } else {
+                    return /* Some */[/* tuple */[
+                              $$this[/* data */0][/* id */0],
+                              match[0]
+                            ]];
+                  }
+                }), testCases)));
+  var fastest = Rebase.List[/* reduce */0]((function (prim, prim$1) {
+          return Math.max(prim, prim$1);
+        }), 0, Rebase.List[/* map */2]((function (param) {
+              return param[1][/* hz */0];
+            }), completed));
+  return Rebase.List[/* map */2]((function ($$this) {
+                var result = Rebase.Option[/* map */2]((function (param) {
+                        return param[1];
+                      }), Rebase.List[/* find */7]((function (param) {
+                            return +($$this[/* data */0][/* id */0] === param[0]);
+                          }), completed));
+                if (result) {
+                  var result$1 = result[0];
+                  return /* record */[
+                          /* data */$$this[/* data */0],
+                          /* state : Complete */Block.__(1, [/* record */[
+                                /* hz */result$1[/* hz */0],
+                                /* rme */result$1[/* rme */1],
+                                /* sampleCount */result$1[/* sampleCount */2],
+                                /* comparison : Some */[(result$1[/* hz */0] - fastest) / fastest * 100]
+                              ]])
+                        ];
+                } else {
+                  return $$this;
+                }
+              }), testCases);
+}
 
 var component = ReasonReact.reducerComponent("App");
 
@@ -26115,7 +26155,7 @@ function make() {
                                 } else {
                                   return /* RunAll */0;
                                 }
-                              })), /* array */[])), $$Array.of_list(List.rev(List.map((function ($$this) {
+                              })), /* array */[])), $$Array.of_list(Rebase.List[/* reverse */14](Rebase.List[/* map */2]((function ($$this) {
                                 return ReasonReact.element(/* Some */[$$this[/* data */0][/* id */0]], /* None */0, TestCase.View[/* make */2]($$this[/* data */0], $$this[/* state */1], Curry._1(reduce, (function (data) {
                                                       return /* Change */Block.__(2, [data]);
                                                     })), Curry._1(reduce, (function () {
@@ -26154,10 +26194,10 @@ function make() {
                       /* worker */state[/* worker */1]
                     ]]);
         } else {
-          var code = Compiler.compile(List.map((function ($$this) {
+          var code = Compiler.compile(Rebase.List[/* map */2]((function ($$this) {
                       return $$this[/* data */0];
                     }), state[/* testCases */0]));
-          var ids = List.map((function ($$this) {
+          var ids = Rebase.List[/* map */2]((function ($$this) {
                   return $$this[/* data */0][/* id */0];
                 }), state[/* testCases */0]);
           Curry._1(state[/* worker */1][0][/* postMessage */0], /* Run */[
@@ -26185,25 +26225,25 @@ function make() {
           case 1 : 
               var target = action[0];
               return /* Update */Block.__(0, [/* record */[
-                          /* testCases */List.filter((function ($$this) {
-                                    return +($$this[/* data */0][/* id */0] !== target[/* id */0]);
-                                  }))(state[/* testCases */0]),
+                          /* testCases */Rebase.List[/* filter */10]((function ($$this) {
+                                  return +($$this[/* data */0][/* id */0] !== target[/* id */0]);
+                                }), state[/* testCases */0]),
                           /* worker */state[/* worker */1]
                         ]]);
           case 2 : 
               var target$1 = action[0];
               return /* Update */Block.__(0, [/* record */[
-                          /* testCases */List.map((function ($$this) {
-                                  var match = +($$this[/* data */0][/* id */0] === target$1[/* id */0]);
-                                  if (match !== 0) {
-                                    return /* record */[
-                                            /* data */target$1,
-                                            /* state : Virgin */0
-                                          ];
-                                  } else {
-                                    return $$this;
-                                  }
-                                }), state[/* testCases */0]),
+                          /* testCases */_updateResults(Rebase.List[/* map */2]((function ($$this) {
+                                      var match = +($$this[/* data */0][/* id */0] === target$1[/* id */0]);
+                                      if (match !== 0) {
+                                        return /* record */[
+                                                /* data */target$1,
+                                                /* state : Virgin */0
+                                              ];
+                                      } else {
+                                        return $$this;
+                                      }
+                                    }), state[/* testCases */0])),
                           /* worker */state[/* worker */1]
                         ]]);
           case 3 : 
@@ -26214,24 +26254,24 @@ function make() {
                 var result = match[1];
                 var id = match[0];
                 return /* Update */Block.__(0, [/* record */[
-                            /* testCases */List.map((function ($$this) {
-                                    var match = +($$this[/* data */0][/* id */0] === id);
-                                    if (match !== 0) {
-                                      return /* record */[
-                                              /* data */$$this[/* data */0],
-                                              /* state : Complete */Block.__(1, [result])
-                                            ];
-                                    } else {
-                                      return $$this;
-                                    }
-                                  }), state[/* testCases */0]),
+                            /* testCases */_updateResults(Rebase.List[/* map */2]((function ($$this) {
+                                        var match = +($$this[/* data */0][/* id */0] === id);
+                                        if (match !== 0) {
+                                          return /* record */[
+                                                  /* data */$$this[/* data */0],
+                                                  /* state : Complete */Block.__(1, [result])
+                                                ];
+                                        } else {
+                                          return $$this;
+                                        }
+                                      }), state[/* testCases */0])),
                             /* worker */state[/* worker */1]
                           ]]);
               } else {
                 var result$1 = match[1];
                 var id$1 = match[0];
                 return /* Update */Block.__(0, [/* record */[
-                            /* testCases */List.map((function ($$this) {
+                            /* testCases */Rebase.List[/* map */2]((function ($$this) {
                                     var match = +($$this[/* data */0][/* id */0] === id$1);
                                     if (match !== 0) {
                                       return /* record */[
@@ -26253,8 +26293,12 @@ function make() {
   return newrecord;
 }
 
-exports.component = component;
-exports.make      = make;
+var _toArray = $$Array.of_list;
+
+exports._toArray       = _toArray;
+exports._updateResults = _updateResults;
+exports.component      = component;
+exports.make           = make;
 /* component Not a pure module */
 
 
@@ -29439,7 +29483,8 @@ function _decodeReceived(message) {
                   /* record */[
                     /* hz */data.hz,
                     /* rme */data.rme,
-                    /* sampleCount */data.sampleCount
+                    /* sampleCount */data.sampleCount,
+                    /* comparison : None */0
                   ]
                 ]);
     case "complete" : 
@@ -29451,7 +29496,8 @@ function _decodeReceived(message) {
                   /* record */[
                     /* hz */data$1.hz,
                     /* rme */data$1.rme,
-                    /* sampleCount */data$1.sampleCount
+                    /* sampleCount */data$1.sampleCount,
+                    /* comparison : None */0
                   ]
                 ]);
     default:
@@ -38581,6 +38627,7 @@ var Curry          = __webpack_require__(7);
 var Utils          = __webpack_require__(70);
 var React          = __webpack_require__(15);
 var Editor         = __webpack_require__(179);
+var Rebase         = __webpack_require__(137);
 var ReasonReact    = __webpack_require__(18);
 var TestCaseStyles = __webpack_require__(281);
 
@@ -38610,7 +38657,13 @@ function formatResult(param) {
       })(param[/* rme */1]);
   var match$1 = +(sampleCount > 1);
   var plural = match$1 !== 0 ? "s" : "";
-  return "" + (String(hz$1) + (" ops/sec \xb1" + (String(rme) + ("% (" + (String(sampleCount) + (" run" + (String(plural) + " sampled)")))))));
+  var comparison = Rebase.Option[/* mapOr */16]((function (c) {
+          var match = +(c === 0);
+          return "- " + (
+                  match !== 0 ? "Fastest" : (-c).toFixed() + "% slower"
+                );
+        }), "", param[/* comparison */3]);
+  return "" + (String(hz$1) + (" ops/sec \xb1" + (String(rme) + ("% (" + (String(sampleCount) + (" run" + (String(plural) + (" sampled) " + (String(comparison) + "")))))))));
 }
 
 var component = ReasonReact.statelessComponent("TestCase");
@@ -38621,7 +38674,7 @@ function make$1(data, state, onChange, onRun, onRemove, _) {
       var tmp;
       tmp = typeof state === "number" ? React.createElement("div", {
               className: TestCaseStyles.state + " s-virgin"
-            }, ReasonReact.element(/* None */0, /* None */0, Icon.make("minus", /* array */[]))) : (
+            }) : (
           state.tag ? React.createElement("div", {
                   className: TestCaseStyles.state + " s-complete"
                 }, ReasonReact.element(/* None */0, /* None */0, Icon.make("check", /* array */[])), formatResult(state[0])) : React.createElement("div", {
@@ -52620,8 +52673,14 @@ var Block  = __webpack_require__(21);
 var Glamor = __webpack_require__(148);
 
 var root = Glamor.css(/* :: */[
-      Glamor.margin("1em"),
-      /* [] */0
+      Glamor.background("#263238"),
+      /* :: */[
+        Glamor.margin("1em"),
+        /* :: */[
+          Glamor.paddingTop("1em"),
+          /* [] */0
+        ]
+      ]
     ]);
 
 var footer = Glamor.css(/* :: */[

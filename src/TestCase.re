@@ -12,6 +12,7 @@ type result = {
   hz: float,
   rme: float,
   sampleCount: int,
+  comparison: option(float)
 };
 
 type state =
@@ -30,12 +31,13 @@ let make: int => t = (id) => {
 
 module View = {
 
-  let formatResult = ({hz, rme, sampleCount}) => {
+  let formatResult = ({hz, rme, sampleCount, comparison}) => {
     let hz = hz |> Js.Float.toFixedWithPrecision(~digits=hz < 100. ? 2 : 0)
                 |> Utils.formatNumber;
     let rme = rme |> Js.Float.toFixedWithPrecision(~digits=2);
     let plural = sampleCount > 1 ? "s" : "";
-    {j|$hz ops/sec \xb1$rme% ($sampleCount run$plural sampled)|j} 
+    let comparison = Option.mapOr((c) => "- " ++ (c == 0. ? "Fastest" : (Js.Float.toFixed(-.c) ++ "% slower")), "", comparison);
+    {j|$hz ops/sec \xb1$rme% ($sampleCount run$plural sampled) $comparison|j} 
   };
 
   let component = ReasonReact.statelessComponent("TestCase");
@@ -61,7 +63,6 @@ module View = {
             switch state {
             | Virgin =>
               <div className=(Styles.state ++ " s-virgin")>
-                <Icon name="minus" />
               </div>
 
             | Running(result) =>
@@ -69,7 +70,7 @@ module View = {
                 <Icon name="history" />
                 (
                   result |> formatResult
-                          |> text
+                         |> text
                 )
               </div>
 
@@ -78,7 +79,7 @@ module View = {
                 <Icon name="check" />
                 (
                   result |> formatResult
-                          |> text
+                         |> text
                 )
               </div>
             }
