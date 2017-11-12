@@ -8,7 +8,7 @@ let makeCounter = (init) => {
 };
 
 let formatNumber : string => string = [%raw {|
-function formatNumber(number) {
+function (number) {
   number = String(number).split('.');
 
   return number[0].replace(/(?=(?:\d{3})+$)(?!\b)/g, ',') + (number[1] ? '.' + number[1] : '');

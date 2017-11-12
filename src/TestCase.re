@@ -1,4 +1,5 @@
 open Rebase;
+module Styles = TestCaseStyles;
 
 let text = ReasonReact.stringToElement;
 
@@ -12,6 +13,11 @@ type result = {
   rme: float,
   sampleCount: int,
 };
+
+type state =
+  | Virgin
+  | Running(result)
+  | Complete(result);
 
 let make: int => t = (id) => {
   id: {j|__testCase$(id)__|j},
@@ -33,16 +39,50 @@ module View = {
   };
 
   let component = ReasonReact.statelessComponent("TestCase");
-  let make = (~data, ~result, ~onChange, ~onRemove, _children) => {
+  let make = (~data, ~state, ~onChange, ~onRemove, _children) => {
     ...component,
 
     render: (_) =>
-      <div>
-        <Editor value=data.code lang=`ML onChange=((code) => onChange({ ...data, code })) />
-        <div>
-          <button onClick=((_) => onRemove())> (text("Run")) </button>
-          <button onClick=((_) => onRemove())> (text("Remove")) </button>
-          <div> (text(Option.mapOr(formatResult, "No result yet", result))) </div>
+      <div className=Styles.root>
+        <Editor value=data.code lang=`RE onChange=((code) => onChange({ ...data, code })) />
+        <div className=Styles.footer>
+
+          <button onClick=((_) => onRemove())>
+            <Icon name="play" />
+            (text("Run"))
+          </button>
+
+          <button onClick=((_) => onRemove())>
+            <Icon name="minus" />
+            (text("Remove"))
+          </button>
+
+          (
+            switch state {
+            | Virgin =>
+              <div className=(Styles.state ++ " s-virgin")>
+                <Icon name="minus" />
+              </div>
+
+            | Running(result) =>
+              <div className=(Styles.state ++ " s-running")>
+                <Icon name="play" />
+                (
+                  result |> formatResult
+                          |> text
+                )
+              </div>
+
+            | Complete(result) =>
+              <div className=(Styles.state ++ " s-complete")>
+                <Icon name="check" />
+                (
+                  result |> formatResult
+                          |> text
+                )
+              </div>
+            }
+          )
         </div>
       </div>
   };
