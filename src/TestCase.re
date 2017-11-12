@@ -39,7 +39,7 @@ module View = {
   };
 
   let component = ReasonReact.statelessComponent("TestCase");
-  let make = (~data, ~state, ~onChange, ~onRemove, _children) => {
+  let make = (~data, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
     ...component,
 
     render: (_) =>
@@ -47,13 +47,13 @@ module View = {
         <Editor value=data.code lang=`RE onChange=((code) => onChange({ ...data, code })) />
         <div className=Styles.footer>
 
-          <button onClick=((_) => onRemove())>
+          <button onClick=((_) => onRun())>
             <Icon name="play" />
             (text("Run"))
           </button>
 
           <button onClick=((_) => onRemove())>
-            <Icon name="minus" />
+            <Icon name="close" />
             (text("Remove"))
           </button>
 
@@ -66,7 +66,7 @@ module View = {
 
             | Running(result) =>
               <div className=(Styles.state ++ " s-running")>
-                <Icon name="play" />
+                <Icon name="history" />
                 (
                   result |> formatResult
                           |> text

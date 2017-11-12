@@ -10,6 +10,7 @@ type state = {
 
 type action =
   | RunAll
+  | RunSingle(TestCase.t)
   | Add
   | Remove(TestCase.t)
   | Change(TestCase.t)
@@ -52,6 +53,13 @@ let make = (_children) => {
         let ids = state.testCases |> List.map((this) => this.data.id);
 
         state.worker^.postMessage(Run(code, ids));
+        ReasonReact.NoUpdate
+      }
+
+      | RunSingle(data) => {
+        let code = Compiler.compile([data]);
+
+        state.worker^.postMessage(Run(code, [data.id]));
         ReasonReact.NoUpdate
       }
 
@@ -101,6 +109,7 @@ let make = (_children) => {
                                <TestCase.View
                                  key=this.data.id
                                  onChange=reduce((data) => Change(data))
+                                 onRun=reduce(() => RunSingle(this.data))
                                  onRemove=reduce(() => Remove(this.data))
                                  data=this.data
                                  state=this.state

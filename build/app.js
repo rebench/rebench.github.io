@@ -26100,7 +26100,7 @@ function make() {
       return /* Update */Block.__(0, [/* record */[
                   /* testCases */param[/* state */4][/* testCases */0],
                   /* worker */[Worker.make(Curry._1(param[/* reduce */3], (function (message) {
-                                return /* WorkerMessage */Block.__(2, [message]);
+                                return /* WorkerMessage */Block.__(3, [message]);
                               })), (function (prim) {
                             console.log(prim);
                             return /* () */0;
@@ -26117,9 +26117,11 @@ function make() {
                                 }
                               })), /* array */[])), $$Array.of_list(List.rev(List.map((function ($$this) {
                                 return ReasonReact.element(/* Some */[$$this[/* data */0][/* id */0]], /* None */0, TestCase.View[/* make */2]($$this[/* data */0], $$this[/* state */1], Curry._1(reduce, (function (data) {
-                                                      return /* Change */Block.__(1, [data]);
+                                                      return /* Change */Block.__(2, [data]);
                                                     })), Curry._1(reduce, (function () {
-                                                      return /* Remove */Block.__(0, [$$this[/* data */0]]);
+                                                      return /* RunSingle */Block.__(0, [$$this[/* data */0]]);
+                                                    })), Curry._1(reduce, (function () {
+                                                      return /* Remove */Block.__(1, [$$this[/* data */0]]);
                                                     })), /* array */[]));
                               }), param[/* state */4][/* testCases */0]))));
     });
@@ -26167,6 +26169,20 @@ function make() {
       } else {
         switch (action.tag | 0) {
           case 0 : 
+              var data = action[0];
+              var code$1 = Compiler.compile(/* :: */[
+                    data,
+                    /* [] */0
+                  ]);
+              Curry._1(state[/* worker */1][0][/* postMessage */0], /* Run */[
+                    code$1,
+                    /* :: */[
+                      data[/* id */0],
+                      /* [] */0
+                    ]
+                  ]);
+              return /* NoUpdate */0;
+          case 1 : 
               var target = action[0];
               return /* Update */Block.__(0, [/* record */[
                           /* testCases */List.filter((function ($$this) {
@@ -26174,7 +26190,7 @@ function make() {
                                   }))(state[/* testCases */0]),
                           /* worker */state[/* worker */1]
                         ]]);
-          case 1 : 
+          case 2 : 
               var target$1 = action[0];
               return /* Update */Block.__(0, [/* record */[
                           /* testCases */List.map((function ($$this) {
@@ -26190,7 +26206,7 @@ function make() {
                                 }), state[/* testCases */0]),
                           /* worker */state[/* worker */1]
                         ]]);
-          case 2 : 
+          case 3 : 
               var match = action[0];
               if (typeof match === "number") {
                 return /* NoUpdate */0;
@@ -38599,7 +38615,7 @@ function formatResult(param) {
 
 var component = ReasonReact.statelessComponent("TestCase");
 
-function make$1(data, state, onChange, onRemove, _) {
+function make$1(data, state, onChange, onRun, onRemove, _) {
   var newrecord = component.slice();
   newrecord[/* render */9] = (function () {
       var tmp;
@@ -38610,7 +38626,7 @@ function make$1(data, state, onChange, onRemove, _) {
                   className: TestCaseStyles.state + " s-complete"
                 }, ReasonReact.element(/* None */0, /* None */0, Icon.make("check", /* array */[])), formatResult(state[0])) : React.createElement("div", {
                   className: TestCaseStyles.state + " s-running"
-                }, ReasonReact.element(/* None */0, /* None */0, Icon.make("play", /* array */[])), formatResult(state[0]))
+                }, ReasonReact.element(/* None */0, /* None */0, Icon.make("history", /* array */[])), formatResult(state[0]))
         );
       return React.createElement("div", {
                   className: TestCaseStyles.root
@@ -38623,13 +38639,13 @@ function make$1(data, state, onChange, onRemove, _) {
                       className: TestCaseStyles.footer
                     }, React.createElement("button", {
                           onClick: (function () {
-                              return Curry._1(onRemove, /* () */0);
+                              return Curry._1(onRun, /* () */0);
                             })
                         }, ReasonReact.element(/* None */0, /* None */0, Icon.make("play", /* array */[])), "Run"), React.createElement("button", {
                           onClick: (function () {
                               return Curry._1(onRemove, /* () */0);
                             })
-                        }, ReasonReact.element(/* None */0, /* None */0, Icon.make("minus", /* array */[])), "Remove"), tmp));
+                        }, ReasonReact.element(/* None */0, /* None */0, Icon.make("close", /* array */[])), "Remove"), tmp));
     });
   return newrecord;
 }
