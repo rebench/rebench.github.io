@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 276);
+/******/ 	return __webpack_require__(__webpack_require__.s = 274);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 113:
+/***/ 116:
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -75,7 +75,7 @@ module.exports = __webpack_amd_options__;
 
 /***/ }),
 
-/***/ 19:
+/***/ 27:
 /***/ (function(module, exports) {
 
 var g;
@@ -103,41 +103,12 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 24:
-/***/ (function(module, exports) {
-
-module.exports = function(module) {
-	if(!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if(!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-
-/***/ }),
-
-/***/ 276:
+/***/ 274:
 /***/ (function(module, exports, __webpack_require__) {
 
 importScripts('../static/stdlibBundle.js');
 
-const Benchmark = __webpack_require__(277);
+const Benchmark = __webpack_require__(275);
 
 onmessage = ({data}) => {
   exports = {};
@@ -174,7 +145,7 @@ onmessage = ({data}) => {
 
 /***/ }),
 
-/***/ 277:
+/***/ 275:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var require;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -690,7 +661,7 @@ onmessage = ({data}) => {
       // Lazy define.
       createFunction = function(args, body) {
         var result,
-            anchor = __webpack_require__(33) ? __webpack_require__(113) : Benchmark,
+            anchor = __webpack_require__(33) ? __webpack_require__(116) : Benchmark,
             prop = uid + 'createFunction';
 
         runScript((__webpack_require__(33) ? 'define.amd.' : 'Benchmark.') + prop + '=function(' + args + '){' + body + '}');
@@ -837,7 +808,7 @@ onmessage = ({data}) => {
      * @param {string} code The code to run.
      */
     function runScript(code) {
-      var anchor = __webpack_require__(33) ? __webpack_require__(113) : Benchmark,
+      var anchor = __webpack_require__(33) ? __webpack_require__(116) : Benchmark,
           script = doc.createElement('script'),
           sibling = doc.getElementsByTagName('script')[0],
           parent = sibling.parentNode,
@@ -2976,7 +2947,7 @@ onmessage = ({data}) => {
   // Some AMD build optimizers, like r.js, check for condition patterns like the following:
   if (true) {
     // Define as an anonymous module so, through path mapping, it can be aliased.
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(279), __webpack_require__(280)], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, platform) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(277), __webpack_require__(278)], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, platform) {
       return runInContext({
         '_': _,
         'platform': platform
@@ -3003,11 +2974,11 @@ onmessage = ({data}) => {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)(module), __webpack_require__(19)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)(module), __webpack_require__(27)))
 
 /***/ }),
 
-/***/ 278:
+/***/ 276:
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -3016,11 +2987,11 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 278;
+webpackEmptyContext.id = 276;
 
 /***/ }),
 
-/***/ 279:
+/***/ 277:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -20109,11 +20080,11 @@ webpackEmptyContext.id = 278;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19), __webpack_require__(24)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27), __webpack_require__(28)(module)))
 
 /***/ }),
 
-/***/ 280:
+/***/ 278:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -21335,7 +21306,36 @@ webpackEmptyContext.id = 278;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)(module), __webpack_require__(19)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)(module), __webpack_require__(27)))
+
+/***/ }),
+
+/***/ 28:
+/***/ (function(module, exports) {
+
+module.exports = function(module) {
+	if(!module.webpackPolyfill) {
+		module.deprecate = function() {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if(!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
 
 /***/ }),
 

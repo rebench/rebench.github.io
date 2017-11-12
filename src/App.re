@@ -133,15 +133,18 @@ let make = (_children) => {
       switch action {
       
       | RunAll => {
+        let state = setCompiledCode(state);
         let ids = state.testCases |> List.map((this) => this.data.id);
 
         state.worker^.postMessage(Run(state.compiledCode, ids));
-        ReasonReact.NoUpdate
+        ReasonReact.Update(state)
       }
 
       | RunSingle(data) => {
+        let state = setCompiledCode(state);
+
         state.worker^.postMessage(Run(state.compiledCode, [data.id]));
-        ReasonReact.NoUpdate
+        ReasonReact.Update(state)
       }
 
       | Add =>

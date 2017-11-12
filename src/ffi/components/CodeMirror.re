@@ -1,4 +1,6 @@
-[@bs.module] external codeMirror : ReasonReact.reactClass = "react-codemirror";
+open Rebase;
+
+[@bs.module "react-codemirror2"] external codeMirror : ReasonReact.reactClass = "UnControlled";
 [@bs.send] external focus : ReasonReact.reactRef => unit = "";
 
 let execCommand: (ReasonReact.reactRef, string) => unit = [%bs.raw {|
@@ -12,7 +14,7 @@ let make =
       ~style: option(Js.t({..}))=?,
       ~value: option(string)=?,
       ~defaultValue: option(string)=?,
-      ~onChange: option((string => unit))=?,
+      ~onChange: option(string => unit)=?,
       ~options: option(Js.t({..}))=?,
       children
     ) =>
@@ -22,7 +24,7 @@ let make =
       "style": Js.Undefined.from_opt(style),
       "value": Js.Undefined.from_opt(value),
       "defaultValue": Js.Undefined.from_opt(defaultValue),
-      "onChange": Js.Undefined.from_opt(onChange),
+      "onChange": onChange |> Option.mapOr((f) => (_, _, value) => f(value), (_, _, _) => ()),
       "options": Js.Undefined.from_opt(options)
     },
     children
