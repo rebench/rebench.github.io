@@ -1,4 +1,4 @@
 open! Glamor
 
 let root = BlockStyles.root
-let header = BlockStyles.header
+let header = BlockStyles.clickableHeader

@@ -1,7 +1,7 @@
-open Rebase;
+open! Rebase;
+open! Helpers;
 module Styles = TestCaseStyles;
 
-let text = ReasonReact.stringToElement;
 
 type t = {
   id: string,
@@ -12,7 +12,7 @@ type result = {
   hz: float,
   rme: float,
   sampleCount: int,
-  comparison: option(float)
+  relativeScore: option(float)
 };
 
 type state =
@@ -31,21 +31,47 @@ let make: int => t = (id) => {
 
 module View = {
 
-  let formatResult = ({hz, rme, sampleCount, comparison}) => {
+  let formatResult = ({hz, rme, sampleCount}) => {
     let hz = hz |> Js.Float.toFixedWithPrecision(~digits=hz < 100. ? 2 : 0)
                 |> Utils.formatNumber;
     let rme = rme |> Js.Float.toFixedWithPrecision(~digits=2);
     let plural = sampleCount > 1 ? "s" : "";
-    let comparison = Option.mapOr((c) => "- " ++ (c == 0. ? "Fastest" : (Js.Float.toFixed(-.c) ++ "% slower")), "", comparison);
-    {j|$hz ops/sec \xb1$rme% ($sampleCount run$plural sampled) $comparison|j} 
+    {j|$hz ops/sec \xb1$rme% ($sampleCount run$plural sampled)|j} 
   };
+
+  let formatRelativeScore = (score) =>
+    score == 0. ? "Fastest" : (Js.Float.toFixed(-.score) ++ "% slower");
+
+  let getStateClass =
+    fun | Virgin => " s-virgin"
+        | Running(_) => " s-running"
+        | Complete({ relativeScore: Some(s) }) when s == 0. => " s-complete s-fastest"
+        | Complete({ relativeScore: Some(s) }) when s >= -10. => " s-complete s-close"
+        | Complete({ relativeScore: Some(s) }) when s <= -50. => " s-complete s-not-even-close"
+        | Complete(_) => " s-complete";
 
   let component = ReasonReact.statelessComponent("TestCase");
   let make = (~data, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
     ...component,
 
     render: (_) =>
-      <div className=Styles.root>
+      <div className=(Styles.root ++ getStateClass(state))>
+        <div className=Styles.header>
+          ("Test Case" |> text)
+          (
+            switch state {
+            | Complete({ relativeScore: Some(score) }) =>
+              <span>
+                (" - " |> text)
+                <span className="score">
+                  (score |> formatRelativeScore
+                         |> text)
+                </span>
+              </span>
+            | _ => ReasonReact.nullElement
+            }
+          )
+        </div>
         <Editor value=data.code lang=`RE onChange=((code) => onChange({ ...data, code })) />
         <div className=Styles.footer>
 

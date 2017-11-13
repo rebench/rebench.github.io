@@ -1,47 +1,57 @@
 open Glamor
 
 let root = css [
-  background "#263238";
-  margin "1em";
-  paddingTop "1em";
+  background Colors.panel;
+  margin "2em";
+
+  Selector("&.s-not-even-close .score", [
+    color Colors.red;
+  ]);
+
+  Selector("&.s-close .score", [
+    color Colors.yellow;
+  ]);
+
+  Selector("&.s-fastest .score", [
+    color Colors.green;
+  ]);
 ]
+
+let header = BlockStyles.header
 
 let footer = css [
   display "flex";
-  background "#263238";
-  color "#aaa";
+  background Colors.panelDark;
+  color Colors.text;
+  marginTop ".5em";
 
   Selector("& button", [
-    background "#263238";
-    padding ".5em 1em";
-    color "#aaa";
+    background Colors.panelDark;
+    padding ".75em 1em";
+    color Colors.text;
 
     Selector("& .mdi", [
       marginRight ".25em";
     ]);
 
     Selector("&:hover", [
-      background "#364248";
+      background Colors.highlightOverlay;
     ]);
   ])
 ]
 
 let state = css [
-  padding ".5em 1em";
+  padding ".75em 1em";
 
   Selector("& .mdi", [
     marginRight ".25em";
   ]);
 
-  Selector("&.s-virgin .mdi", [
-    color "rgba(255, 255, 255, .5)";
-  ]);
-
   Selector("&.s-running .mdi", [
-    color "#FFCB6D";
+    color Colors.yellow;
   ]);
 
   Selector("&.s-complete .mdi", [
-    color "#C3E88D";
+    color Colors.green;
   ]);
 ]

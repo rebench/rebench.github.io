@@ -10,34 +10,31 @@ module Message = {
     | SuiteCycle(string, TestCase.result)
     | SuiteComplete;
 
-  let _decodeReceived = (message) =>
+  let _decodeReceived = (message) => {
+    let data = message##data##contents;
+
+    let makeResult = () => TestCase.{
+      hz: data##hz,
+      sampleCount: data##sampleCount,
+      rme: data##rme,
+      relativeScore: None,
+    };
+
     switch message##data##_type {
     
-    | "caseCycle" => {
-      let data = message##data##contents;
-      CaseCycle(data##id, {
-        hz: data##hz,
-        sampleCount: data##sampleCount,
-        rme: data##rme,
-        comparison: None,
-      })
-    }
+    | "caseCycle" =>
+      CaseCycle(data##id, makeResult())
 
     | "suiteCycle" =>
-      let data = message##data##contents;
-      SuiteCycle(data##id, {
-        hz: data##hz,
-        sampleCount: data##sampleCount,
-        rme: data##rme,
-        comparison: None,
-      })
+      SuiteCycle(data##id, makeResult())
 
     | "complete" =>
       SuiteComplete
 
     | _ =>
       failwith("unknown worker message")
-    };
+    }
+  };
   
   let _encodeToSend =
     fun | Run(code, testCases) => { "code": code, "testCases": testCases |> _toArray };

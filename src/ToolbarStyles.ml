@@ -1,19 +1,7 @@
 open Glamor
 
 let root = css [
-  background "#263238";
+  background Colors.panel;
 ]
 
-let button = css [
-  background "#263238";
-  color "#aaa";
-  padding "1em";
-
-  Selector("& .mdi", [
-    marginRight ".25em";
-  ]);
-
-  Selector("&:hover", [
-    background "#364248";
-  ]);
-]
+let button = ButtonStyles.button

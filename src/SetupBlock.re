@@ -1,4 +1,4 @@
-open Rebase;
+open! Rebase;
 module Styles = SetupBlockStyles;
 
 let text = ReasonReact.stringToElement;

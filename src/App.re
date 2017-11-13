@@ -46,7 +46,7 @@ let _updateResults = (testCases) => {
       ...this,
       state: Complete({
         ...result,
-        comparison: Some((hz -. fastest) /. fastest *. 100.)
+        relativeScore: Some((hz -. fastest) /. fastest *. 100.)
       })
     }
     | None => this
