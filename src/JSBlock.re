@@ -1,7 +1,6 @@
-open Rebase;
+open! Rebase;
+open Helpers;
 module Styles = JSBlockStyles;
-
-let text = ReasonReact.stringToElement;
 
 let component = ReasonReact.statelessComponent("TestCase");
 let make = (~code, _children) => {

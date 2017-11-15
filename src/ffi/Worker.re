@@ -10,7 +10,7 @@ module Message = {
     | SuiteCycle(string, TestCase.result)
     | SuiteComplete;
 
-  let _decodeReceived = (message) => {
+  let _decodeReceived = message => {
     let data = message##data##contents;
 
     let makeResult = () => TestCase.{
@@ -55,7 +55,7 @@ let make = (~onMessage, ~onError) => {
   let timeoutId = ref(None);
   let worker = _makeWorker("../build/worker.js");
 
-  _onmessage(worker, (message) => {
+  _onmessage(worker, message => {
     if (message##_type == "end") {
       timeoutId.contents |> Option.forEach(Js.Global.clearTimeout);
     } else {
@@ -66,7 +66,7 @@ let make = (~onMessage, ~onError) => {
   _onerror(worker, onError);
 
   {
-    postMessage: (message) =>
+    postMessage: message =>
       message |> Message._encodeToSend
               |> _postMessage(worker)
   }

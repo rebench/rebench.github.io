@@ -1,4 +1,4 @@
-let makeCounter = (init) => {
+let makeCounter = init => {
   let i = ref(init - 1);
 
   () => {

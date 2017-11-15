@@ -1,7 +1,6 @@
 open! Rebase;
+open Helpers;
 module Styles = SetupBlockStyles;
-
-let text = ReasonReact.stringToElement;
 
 let component = ReasonReact.statelessComponent("TestCase");
 let make = (~code, ~onChange, _children) => {
@@ -12,6 +11,6 @@ let make = (~code, ~onChange, _children) => {
       <div className=Styles.header>
         ("Setup" |> text)
       </div>
-      <Editor value=code lang=`RE onChange=((code) => onChange(code)) />
+      <Editor value=code lang=`RE onChange=(code => onChange(code)) />
     </div>
 };

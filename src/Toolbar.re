@@ -1,6 +1,5 @@
+open Helpers;
 module Styles = ToolbarStyles;
-
-let text = ReasonReact.stringToElement;
 
 let component = ReasonReact.statelessComponent("Toolbar");
 let make = (~onButtonClick, _) => {
@@ -11,13 +10,13 @@ let make = (~onButtonClick, _) => {
       <button className=Styles.button
               onClick=((_) => onButtonClick(`RunAll))>
         <Icon name="play" />
-        (text("Run All"))
+        ("Run All" |> text)
       </button>
       
       <button className=Styles.button
               onClick=((_) => onButtonClick(`Add))>
         <Icon name="plus" />
-        (text("Add"))
+        ("Add" |> text)
       </button>
     </div>
 };

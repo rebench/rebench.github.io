@@ -2,7 +2,6 @@ open! Rebase;
 open! Helpers;
 module Styles = TestCaseStyles;
 
-
 type t = {
   id: string,
   code: string
@@ -20,17 +19,8 @@ type state =
   | Running(result)
   | Complete(result);
 
-let make: int => t = (id) => {
-  id: {j|__testCase$(id)__|j},
-  code: switch id {
-  | 1 => "string_of_int(42)"
-  | 2 => "Js.String.make(42)"
-  | _ => "/* put stuff here */"
-  }
-};
 
 module View = {
-
   let formatResult = ({hz, rme, sampleCount}) => {
     let hz = hz |> Js.Float.toFixedWithPrecision(~digits=hz < 100. ? 2 : 0)
                 |> Utils.formatNumber;
@@ -39,7 +29,7 @@ module View = {
     {j|$hz ops/sec \xb1$rme% ($sampleCount run$plural sampled)|j} 
   };
 
-  let formatRelativeScore = (score) =>
+  let formatRelativeScore = score =>
     score == 0. ? "Fastest" : (Js.Float.toFixed(-.score) ++ "% slower");
 
   let getStateClass =
@@ -72,17 +62,21 @@ module View = {
             }
           )
         </div>
-        <Editor value=data.code lang=`RE onChange=((code) => onChange({ ...data, code })) />
+
+        <Editor value=data.code
+                lang=`RE
+                onChange=(code => onChange({ ...data, code })) />
+
         <div className=Styles.footer>
 
           <button onClick=((_) => onRun())>
             <Icon name="play" />
-            (text("Run"))
+            ("Run" |> text)
           </button>
 
           <button onClick=((_) => onRemove())>
             <Icon name="close" />
-            (text("Remove"))
+            ("Remove" |> text)
           </button>
 
           (
