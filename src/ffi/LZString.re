@@ -1,0 +1,2 @@
+[@bs.module "lz-string"] external compress : string => string = "compressToEncodedURIComponent";
+[@bs.module "lz-string"] [@bs.return nullable] external decompress : string => option(string) = "decompressFromEncodedURIComponent";
