@@ -1,6 +1,6 @@
 open Rebase;
 
-let retrieve = () => {
+let retrieve: unit => option((string, list(TestCase.t))) = () => {
   let fromQueryParam = () => None;
 
   let fromLocalStorage = () =>
@@ -13,7 +13,7 @@ let retrieve = () => {
   )
 };
 
-let persist = (setupCode, testCases) => {
+let persist: (string, list(TestCase.t)) => unit = (setupCode, testCases) => {
   try {
     let data =
       (setupCode, testCases)

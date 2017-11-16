@@ -17,6 +17,7 @@ type actions =
   | RunSingle(TestCase.t)
   | Add
   | Remove(TestCase.t)
+  | Clear
   | Change(TestCase.t)
   | SetupChanged(string)
   | WorkerMessage(Worker.Message.receive);
@@ -54,38 +55,41 @@ let _updateResults = testCases => {
               })
 };
 let nextId = state =>
-  state.testCases |> List.map(this => int_of_string(this.data.id))
-                  |> List.reduce(Js.Math.max_int, 0)
-                  |> succ
-                  |> string_of_int;
+  state.testCases |> List.map(this => this.data.id)
+                  |> TestCase.Id.next;
 
 let withState = data => {
   data,
   state: TestCase.Virgin
 };
 
-let initial = () => {
-  let (setupCode, testCases) =
-    Storage.retrieve()
-    |> Option.getOr((
-      "/* code goes here */", TestCase.[
-        { id: "2", code:  "Js.String.make(42)" },
-        { id: "1", code: "string_of_int(42)" }
-      ]
-    ));
+let default = {
+  setupCode: "/* code goes here */",
+  testCases: [
+    withState({ id: TestCase.Id.fromInt(2), code:  "Js.String.make(42)" }),
+    withState({ id: TestCase.Id.fromInt(1), code: "string_of_int(42)" })
+  ],
+  worker: ref(Worker.make(~onMessage=Js.log, ~onError=Js.log)),
+  compiledCode: "// nothing yet"
+};
 
-  {
-    setupCode,
-    testCases: testCases |> List.map(withState),
-    worker: ref(Worker.make(~onMessage=Js.log, ~onError=Js.log)),
-    compiledCode: "// nothing yet"
-  }
+let initial = () => {
+  Storage.retrieve()
+  |> Option.mapOr(
+       ((setupCode, testCases)) => {
+         ...default,
+         setupCode,
+         testCases: testCases |> List.map(withState)
+       },
+       default
+    )
 };
 
 let reducer = (action, state) => {
   let setPersistentState = (setupCode, testCases) => {
-    Storage.persist(setupCode, testCases);
+    Storage.persist(setupCode, testCases |> List.map(t => t.data));
     { ...state, setupCode, testCases }
+
   };
 
   let setCompiledCode = state => {
@@ -122,6 +126,11 @@ let reducer = (action, state) => {
     ReasonReact.Update(
       List.filter(this => this.data.id !== target.id, state.testCases)
       |> setPersistentState(state.setupCode)
+    )
+
+  | Clear => 
+    ReasonReact.Update(
+      setPersistentState(default.setupCode, default.testCases)
     )
 
   | Change(target) =>

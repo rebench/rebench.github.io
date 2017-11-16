@@ -3,11 +3,11 @@ open Rebase;
 
 module Message = {
   type send =
-    | Run(string, list(string));
+    | Run(string, list(TestCase.Id.t));
 
   type receive =
-    | CaseCycle(string, TestCase.result)
-    | SuiteCycle(string, TestCase.result)
+    | CaseCycle(TestCase.Id.t, TestCase.result)
+    | SuiteCycle(TestCase.Id.t, TestCase.result)
     | SuiteComplete;
 
   let _decodeReceived = message => {
@@ -36,8 +36,17 @@ module Message = {
     }
   };
   
-  let _encodeToSend =
-    fun | Run(code, testCases) => { "code": code, "testCases": testCases |> _toArray };
+  let _encodeToSend : send => {. "code": string, "tests": array({. "name": TestCase.Id.t, "fn": string }) } =
+    fun | Run(code, testCases) => { 
+            "code": code,
+            "tests":
+              testCases |> _toArray
+                        |> Js.Array.reverseInPlace
+                        |> Array.map(id => {
+                             "name": id,
+                             "fn": TestCase.Id.generateFunctionName(id)
+                           })
+          };
 };
 
 type _worker;

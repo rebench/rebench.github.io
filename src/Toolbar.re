@@ -18,5 +18,12 @@ let make = (~onButtonClick, _) => {
         <Icon name="plus" />
         ("Add" |> text)
       </button>
+
+      <button className=Styles.button
+              onClick=((_) => onButtonClick(`Clear))>
+        <Icon name="close" />
+        ("Clear" |> text)
+      </button>
+
     </div>
 };

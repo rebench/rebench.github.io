@@ -1,11 +1,15 @@
-let template = (id, code) => {j|
-let $id = () => {
+let template = (testCase: TestCase.t) => {
+  let name = TestCase.Id.generateFunctionName(testCase.id);
+  let code = testCase.code;
+{j|
+let $name = () => {
   $code
 };
-|j};
+|j}};
 
 let compile = (setupCode, testCases) =>
-  testCases |> List.map(this => template(this.TestCase.id, this.code))
+  testCases |> List.map(template)
+            |> List.rev
             |> List.fold_left((acc, this) => acc ++ this, setupCode)
             |> Refmt.parseRE
             |> Refmt.printML

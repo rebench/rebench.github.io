@@ -2,8 +2,27 @@ open! Rebase;
 open! Helpers;
 module Styles = TestCaseStyles;
 
+module Id : {
+  type t;
+  let next : list(t) => t;
+  let fromInt : int => t;
+  let toString : t => string;
+  let generateFunctionName : t => string;
+} = {
+  type t = int;
+
+  let next = ids =>
+    ids |> List.reduce(Js.Math.max_int, 0)
+        |> succ;
+
+  let fromInt = n => n;
+  let toString = string_of_int;
+
+  let generateFunctionName = id => {j|__testCase$(id)__|j}
+};
+
 type t = {
-  id: string,
+  id: Id.t,
   code: string
 };
 

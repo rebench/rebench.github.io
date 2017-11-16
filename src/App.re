@@ -24,6 +24,7 @@ let make = _children => AppState.{
       <Toolbar onButtonClick=reduce(
         fun | `RunAll => RunAll
             | `Add => Add
+            | `Clear => Clear
       ) />
 
       <SetupBlock code=state.setupCode
@@ -32,7 +33,7 @@ let make = _children => AppState.{
       (
         state.testCases |> List.map(this =>
                               <TestCase.View
-                                key=this.data.id
+                                key=(this.data.id |> TestCase.Id.toString)
                                 onChange=reduce(data => Change(data))
                                 onRun=reduce(() => RunSingle(this.data))
                                 onRemove=reduce(() => Remove(this.data))

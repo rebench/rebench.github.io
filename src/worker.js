@@ -7,10 +7,10 @@ onmessage = ({data}) => {
   eval(data.code);
 
   var suite = new Benchmark.Suite;
-  
-  data.testCases.forEach(name =>
+
+  data.tests.forEach(({ name, fn }) =>
     suite.add(name, {
-      fn: exports[name],
+      fn: exports[fn],
       onCycle: ({ target: { name, hz, stats }}) => {
         postMessage({ type: "caseCycle", contents: {
           id: name,
