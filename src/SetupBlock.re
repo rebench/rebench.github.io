@@ -2,7 +2,7 @@ open! Rebase;
 open Helpers;
 module Styles = SetupBlockStyles;
 
-let component = ReasonReact.statelessComponent("TestCase");
+let component = ReasonReact.statelessComponent("SetupBlock");
 let make = (~code, ~onChange, _children) => {
   ...component,
 

@@ -5,11 +5,18 @@ type statefulTestCase = {
   state: TestCase.state
 };
 
+type error =
+  | Error(string)
+  | Warning(string)
+  | Nothing;
+
+
 type t = {
   setupCode: string,
   testCases: list(statefulTestCase),
   worker: ref(Worker.t),
   compiledCode: string,
+  error: error,
 };
 
 type actions =
@@ -70,7 +77,8 @@ let default = {
     withState({ id: TestCase.Id.fromInt(1), code: "string_of_int(42)" })
   ],
   worker: ref(Worker.make(~onMessage=Js.log, ~onError=Js.log)),
-  compiledCode: "// nothing yet"
+  compiledCode: "// nothing yet",
+  error: Nothing
 };
 
 let initial = () => {
@@ -92,17 +100,24 @@ let reducer = (action, state) => {
 
   };
 
-  let setCompiledCode = state => {
-    ...state,
-    compiledCode:
-      state.testCases |> List.map(this => this.data)
-                      |> Compiler.compile(state.setupCode)
-  };
+  let tryCompile = state =>
+    state.testCases |> List.map(this => this.data)
+                    |> Compiler.compile(state.setupCode)
+                    |> fun | Result.Ok((code, warnings)) => {
+                               ...state,
+                               compiledCode: code,
+                               error: warnings |> Option.mapOr(w => Warning(w), Nothing)
+                             }
+                           | Result.Error(err) => {
+                             ...state,
+                             compiledCode: "// ERROR: " ++ err,
+                             error: Error(err)
+                           };
 
   switch action {
   
   | RunAll => {
-    let state = setCompiledCode(state);
+    let state = tryCompile(state);
     let ids = state.testCases |> List.map(this => this.data.id);
 
     state.worker^.postMessage(Run(state.compiledCode, ids));
@@ -110,7 +125,7 @@ let reducer = (action, state) => {
   }
 
   | RunSingle(data) => {
-    let state = setCompiledCode(state);
+    let state = tryCompile(state);
 
     state.worker^.postMessage(Run(state.compiledCode, [data.id]));
     ReasonReact.Update(state)
@@ -138,13 +153,13 @@ let reducer = (action, state) => {
       List.map(this => this.data.id === target.id ? { data: target, state: TestCase.Virgin } : this, state.testCases)
       |> _updateResults
       |> setPersistentState(state.setupCode)
-      |> setCompiledCode
+      |> tryCompile
     )
 
   | SetupChanged(code) =>
     ReasonReact.Update(
       setPersistentState(code, state.testCases)
-      |> setCompiledCode
+      |> tryCompile
     )
   
   | WorkerMessage(CaseCycle(id, result)) =>

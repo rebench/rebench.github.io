@@ -27874,6 +27874,7 @@ var React       = __webpack_require__(15);
 var Rebase      = __webpack_require__(23);
 var Worker      = __webpack_require__(84);
 var JSBlock     = __webpack_require__(186);
+var Message     = __webpack_require__(287);
 var Toolbar     = __webpack_require__(188);
 var AppState    = __webpack_require__(191);
 var TestCase    = __webpack_require__(39);
@@ -27895,12 +27896,18 @@ function make() {
                             console.log(prim);
                             return /* () */0;
                           }))],
-                  /* compiledCode */state[/* compiledCode */3]
+                  /* compiledCode */state[/* compiledCode */3],
+                  /* error */state[/* error */4]
                 ]]);
     });
   newrecord[/* render */9] = (function (param) {
       var state = param[/* state */4];
       var reduce = param[/* reduce */3];
+      var match = state[/* error */4];
+      var tmp;
+      tmp = typeof match === "number" ? null : (
+          match.tag ? ReasonReact.element(/* None */0, /* None */0, Message.make(/* Warning */-685964740, match[0], /* array */[])) : ReasonReact.element(/* None */0, /* None */0, Message.make(/* Error */106380200, match[0], /* array */[]))
+        );
       return React.createElement("div", undefined, ReasonReact.element(/* None */0, /* None */0, Toolbar.make(Curry._1(reduce, (function (param) {
                                 if (param !== -267608394) {
                                   if (param >= 3254785) {
@@ -27911,7 +27918,7 @@ function make() {
                                 } else {
                                   return /* RunAll */0;
                                 }
-                              })), /* array */[])), ReasonReact.element(/* None */0, /* None */0, SetupBlock.make(state[/* setupCode */0], Curry._1(reduce, (function (code) {
+                              })), /* array */[])), tmp, ReasonReact.element(/* None */0, /* None */0, SetupBlock.make(state[/* setupCode */0], Curry._1(reduce, (function (code) {
                                 return /* SetupChanged */Block.__(3, [code]);
                               })), /* array */[])), $$Array.of_list(Rebase.List[/* reverse */14](Rebase.List[/* map */2]((function ($$this) {
                                 return ReasonReact.element(/* Some */[Curry._1(TestCase.Id[/* toString */2], $$this[/* data */0][/* id */0])], /* None */0, TestCase.View[/* make */4]($$this[/* data */0], $$this[/* state */1], Curry._1(reduce, (function (data) {
@@ -38805,7 +38812,7 @@ var Helpers       = __webpack_require__(40);
 var ReasonReact   = __webpack_require__(16);
 var JSBlockStyles = __webpack_require__(187);
 
-var component = ReasonReact.statelessComponent("TestCase");
+var component = ReasonReact.statelessComponent("JSBlock");
 
 function make(code, _) {
   var newrecord = component.slice();
@@ -39061,7 +39068,8 @@ var $$default = /* record */[
   /* setupCode */"/* code goes here */",
   default_001,
   default_002,
-  /* compiledCode */"// nothing yet"
+  /* compiledCode */"// nothing yet",
+  /* error : Nothing */0
 ];
 
 function initial() {
@@ -39070,7 +39078,8 @@ function initial() {
                         /* setupCode */param[0],
                         /* testCases */Rebase.List[/* map */2](withState, param[1]),
                         default_002,
-                        /* compiledCode */"// nothing yet"
+                        /* compiledCode */"// nothing yet",
+                        /* error : Nothing */0
                       ];
               }), $$default, Storage.retrieve(/* () */0));
 }
@@ -39084,23 +39093,40 @@ function reducer(action, state) {
             /* setupCode */setupCode,
             /* testCases */testCases,
             /* worker */state[/* worker */2],
-            /* compiledCode */state[/* compiledCode */3]
+            /* compiledCode */state[/* compiledCode */3],
+            /* error */state[/* error */4]
           ];
   };
-  var setCompiledCode = function (state) {
-    return /* record */[
-            /* setupCode */state[/* setupCode */0],
-            /* testCases */state[/* testCases */1],
-            /* worker */state[/* worker */2],
-            /* compiledCode */Compiler.compile(state[/* setupCode */0], Rebase.List[/* map */2]((function ($$this) {
-                        return $$this[/* data */0];
-                      }), state[/* testCases */1]))
-          ];
+  var tryCompile = function (state) {
+    var param = Compiler.compile(state[/* setupCode */0], Rebase.List[/* map */2]((function ($$this) {
+                return $$this[/* data */0];
+              }), state[/* testCases */1]));
+    if (param.tag) {
+      var err = param[0];
+      return /* record */[
+              /* setupCode */state[/* setupCode */0],
+              /* testCases */state[/* testCases */1],
+              /* worker */state[/* worker */2],
+              /* compiledCode */"// ERROR: " + err,
+              /* error : Error */Block.__(0, [err])
+            ];
+    } else {
+      var match = param[0];
+      return /* record */[
+              /* setupCode */state[/* setupCode */0],
+              /* testCases */state[/* testCases */1],
+              /* worker */state[/* worker */2],
+              /* compiledCode */match[0],
+              /* error */Rebase.Option[/* mapOr */16]((function (w) {
+                      return /* Warning */Block.__(1, [w]);
+                    }), /* Nothing */0, match[1])
+            ];
+    }
   };
   if (typeof action === "number") {
     switch (action) {
       case 0 : 
-          var state$1 = setCompiledCode(state);
+          var state$1 = tryCompile(state);
           var ids = Rebase.List[/* map */2]((function ($$this) {
                   return $$this[/* data */0][/* id */0];
                 }), state$1[/* testCases */1]);
@@ -39127,7 +39153,7 @@ function reducer(action, state) {
   } else {
     switch (action.tag | 0) {
       case 0 : 
-          var state$2 = setCompiledCode(state);
+          var state$2 = tryCompile(state);
           Curry._1(state$2[/* worker */2][0][/* postMessage */0], /* Run */[
                 state$2[/* compiledCode */3],
                 /* :: */[
@@ -39143,7 +39169,7 @@ function reducer(action, state) {
                               }), state[/* testCases */1]))]);
       case 2 : 
           var target$1 = action[0];
-          return /* Update */Block.__(0, [setCompiledCode(setPersistentState(state[/* setupCode */0], _updateResults(Rebase.List[/* map */2]((function ($$this) {
+          return /* Update */Block.__(0, [tryCompile(setPersistentState(state[/* setupCode */0], _updateResults(Rebase.List[/* map */2]((function ($$this) {
                                         var match = +($$this[/* data */0][/* id */0] === target$1[/* id */0]);
                                         if (match !== 0) {
                                           return /* record */[
@@ -39155,7 +39181,7 @@ function reducer(action, state) {
                                         }
                                       }), state[/* testCases */1]))))]);
       case 3 : 
-          return /* Update */Block.__(0, [setCompiledCode(setPersistentState(action[0], state[/* testCases */1]))]);
+          return /* Update */Block.__(0, [tryCompile(setPersistentState(action[0], state[/* testCases */1]))]);
       case 4 : 
           var match = action[0];
           if (typeof match === "number") {
@@ -39256,10 +39282,13 @@ exports.persist  = persist;
 "use strict";
 
 
-var BS       = __webpack_require__(194);
-var List     = __webpack_require__(52);
-var Reason   = __webpack_require__(195);
-var TestCase = __webpack_require__(39);
+var BS           = __webpack_require__(194);
+var Block        = __webpack_require__(12);
+var Js_exn       = __webpack_require__(50);
+var Rebase       = __webpack_require__(23);
+var Reason       = __webpack_require__(195);
+var TestCase     = __webpack_require__(39);
+var Js_primitive = __webpack_require__(83);
 
 function template(testCase) {
   var name = TestCase.Id[/* generateFunctionName */3](testCase[/* id */0]);
@@ -39267,15 +39296,63 @@ function template(testCase) {
   return "\nlet " + (String(name) + (" = () => {\n  " + (String(code) + "\n};\n")));
 }
 
-function compile(setupCode, testCases) {
-  return BS.compile(Reason.printML(Reason.parseRE(List.fold_left((function (acc, $$this) {
-                            return acc + $$this;
-                          }), setupCode, List.rev(List.map(template, testCases)))))).js_code;
+
+  function _captureConsoleErrors(f) {
+    let errors = "";
+    const _consoleError = console.error;
+    console.error = (...args) => args.forEach(argument => errors += argument + `\n`);
+
+    let res = f();
+
+    console.error = _consoleError;
+    return [res, errors ? [errors] : 0];
+  }
+
+;
+
+function _assemble(setupCode, testCases) {
+  return Rebase.List[/* reduce */0]((function (acc, $$this) {
+                return acc + $$this;
+              }), setupCode, Rebase.List[/* reverse */14](Rebase.List[/* map */2](template, testCases)));
 }
 
-exports.template = template;
-exports.compile  = compile;
-/* reason Not a pure module */
+function _reToML(reCode) {
+  try {
+    return /* Ok */Block.__(0, [Reason.printML(Reason.parseRE(reCode))]);
+  }
+  catch (raw_exn){
+    var exn = Js_exn.internalToOCamlException(raw_exn);
+    if (exn[0] === Js_exn.$$Error) {
+      return /* Error */Block.__(1, [Rebase.Option[/* getOrRaise */15](Js_primitive.undefined_to_opt(exn[1].message))]);
+    } else {
+      throw exn;
+    }
+  }
+}
+
+function _compile(mlCode) {
+  var match = _captureConsoleErrors((function () {
+          return BS.compile(mlCode);
+        }));
+  var warnings = match[1];
+  return Rebase.Result[/* map */3]((function (code) {
+                return /* tuple */[
+                        code,
+                        warnings
+                      ];
+              }), match[0]);
+}
+
+function compile(setupCode, testCases) {
+  return Rebase.Result[/* flatMap */6](_compile, _reToML(_assemble(setupCode, testCases)));
+}
+
+exports.template  = template;
+exports._assemble = _assemble;
+exports._reToML   = _reToML;
+exports._compile  = _compile;
+exports.compile   = compile;
+/*  Not a pure module */
 
 
 /***/ }),
@@ -39285,9 +39362,42 @@ exports.compile  = compile;
 "use strict";
 
 
+var Block                   = __webpack_require__(12);
+var Rebase                  = __webpack_require__(23);
+var Js_json                 = __webpack_require__(286);
+var Js_primitive            = __webpack_require__(83);
+var Caml_builtin_exceptions = __webpack_require__(8);
 
 function compile(code) {
-  return JSON.parse(window.ocaml.compile(code));
+  var param = Js_json.classify(JSON.parse(window.ocaml.compile(code)));
+  if (typeof param === "number") {
+    throw [
+          Caml_builtin_exceptions.match_failure,
+          [
+            "/Users/glennsl/dev.github/rebench.github.io/src/ffi/BS.re",
+            8,
+            10
+          ]
+        ];
+  } else {
+    switch (param.tag | 0) {
+      case 0 : 
+          return /* Error */Block.__(1, [param[0]]);
+      case 2 : 
+          return Rebase.Option[/* mapOr */16]((function (code) {
+                        return /* Ok */Block.__(0, [code]);
+                      }), /* Error */Block.__(1, ["unknown error"]), Rebase.Option[/* flatMap */5](Js_json.decodeString, Js_primitive.undefined_to_opt(param[0]["js_code"])));
+      default:
+        throw [
+              Caml_builtin_exceptions.match_failure,
+              [
+                "/Users/glennsl/dev.github/rebench.github.io/src/ffi/BS.re",
+                8,
+                10
+              ]
+            ];
+    }
+  }
 }
 
 exports.compile = compile;
@@ -41311,7 +41421,7 @@ var Helpers          = __webpack_require__(40);
 var ReasonReact      = __webpack_require__(16);
 var SetupBlockStyles = __webpack_require__(198);
 
-var component = ReasonReact.statelessComponent("TestCase");
+var component = ReasonReact.statelessComponent("SetupBlock");
 
 function make(code, onChange, _) {
   var newrecord = component.slice();
@@ -51216,6 +51326,192 @@ var ReactDOMInvalidARIAHook = {
 
 module.exports = ReactDOMInvalidARIAHook;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 281 */,
+/* 282 */,
+/* 283 */,
+/* 284 */,
+/* 285 */,
+/* 286 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Block = __webpack_require__(12);
+
+function classify(x) {
+  var ty = typeof x;
+  if (ty === "string") {
+    return /* JSONString */Block.__(0, [x]);
+  } else if (ty === "number") {
+    return /* JSONNumber */Block.__(1, [x]);
+  } else if (ty === "boolean") {
+    if (x === true) {
+      return /* JSONTrue */1;
+    } else {
+      return /* JSONFalse */0;
+    }
+  } else if (x === null) {
+    return /* JSONNull */2;
+  } else if (Array.isArray(x)) {
+    return /* JSONArray */Block.__(3, [x]);
+  } else {
+    return /* JSONObject */Block.__(2, [x]);
+  }
+}
+
+function test(x, v) {
+  switch (v) {
+    case 0 : 
+        return +(typeof x === "string");
+    case 1 : 
+        return +(typeof x === "number");
+    case 2 : 
+        if (x !== null && typeof x === "object") {
+          return 1 - +Array.isArray(x);
+        } else {
+          return /* false */0;
+        }
+    case 3 : 
+        return +Array.isArray(x);
+    case 4 : 
+        return +(typeof x === "boolean");
+    case 5 : 
+        return +(x === null);
+    
+  }
+}
+
+function decodeString(json) {
+  if (typeof json === "string") {
+    return /* Some */[json];
+  } else {
+    return /* None */0;
+  }
+}
+
+function decodeNumber(json) {
+  if (typeof json === "number") {
+    return /* Some */[json];
+  } else {
+    return /* None */0;
+  }
+}
+
+function decodeObject(json) {
+  if (typeof json === "object" && !Array.isArray(json) && json !== null) {
+    return /* Some */[json];
+  } else {
+    return /* None */0;
+  }
+}
+
+function decodeArray(json) {
+  if (Array.isArray(json)) {
+    return /* Some */[json];
+  } else {
+    return /* None */0;
+  }
+}
+
+function decodeBoolean(json) {
+  if (typeof json === "boolean") {
+    return /* Some */[json];
+  } else {
+    return /* None */0;
+  }
+}
+
+function decodeNull(json) {
+  if (json === null) {
+    return /* Some */[null];
+  } else {
+    return /* None */0;
+  }
+}
+
+exports.classify      = classify;
+exports.test          = test;
+exports.decodeString  = decodeString;
+exports.decodeNumber  = decodeNumber;
+exports.decodeObject  = decodeObject;
+exports.decodeArray   = decodeArray;
+exports.decodeBoolean = decodeBoolean;
+exports.decodeNull    = decodeNull;
+/* No side effect */
+
+
+/***/ }),
+/* 287 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var React         = __webpack_require__(15);
+var Helpers       = __webpack_require__(40);
+var ReasonReact   = __webpack_require__(16);
+var MessageStyles = __webpack_require__(288);
+
+var component = ReasonReact.statelessComponent("Error");
+
+function make(type_, message, _) {
+  var newrecord = component.slice();
+  newrecord[/* render */9] = (function () {
+      var style = type_ >= 106380200 ? MessageStyles.error : MessageStyles.warning;
+      return React.createElement("div", {
+                  className: style
+                }, Helpers.text(message));
+    });
+  return newrecord;
+}
+
+var Styles = 0;
+
+exports.Styles    = Styles;
+exports.component = component;
+exports.make      = make;
+/* component Not a pure module */
+
+
+/***/ }),
+/* 288 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Colors = __webpack_require__(41);
+var Glamor = __webpack_require__(42);
+
+var error = Glamor.css(/* :: */[
+      Glamor.background(Colors.red),
+      /* :: */[
+        Glamor.padding("1em"),
+        /* :: */[
+          Glamor.color("white"),
+          /* [] */0
+        ]
+      ]
+    ]);
+
+var warning = Glamor.css(/* :: */[
+      Glamor.background(Colors.yellow),
+      /* :: */[
+        Glamor.padding("1em"),
+        /* :: */[
+          Glamor.color("#444"),
+          /* [] */0
+        ]
+      ]
+    ]);
+
+exports.error   = error;
+exports.warning = warning;
+/* error Not a pure module */
+
 
 /***/ })
 /******/ ]);

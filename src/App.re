@@ -27,6 +27,14 @@ let make = _children => AppState.{
             | `Clear => Clear
       ) />
 
+      (
+        switch state.error {
+        | Error(message) => <Message type_=`Error message />
+        | Warning(message) => <Message type_=`Warning message />
+        | Nothing => ReasonReact.nullElement
+        }
+      )
+
       <SetupBlock code=state.setupCode
                   onChange=reduce(code => SetupChanged(code)) />
 

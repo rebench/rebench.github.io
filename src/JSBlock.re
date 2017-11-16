@@ -2,7 +2,7 @@ open! Rebase;
 open Helpers;
 module Styles = JSBlockStyles;
 
-let component = ReasonReact.statelessComponent("TestCase");
+let component = ReasonReact.statelessComponent("JSBlock");
 let make = (~code, _children) => {
   ...component,
 

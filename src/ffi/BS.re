@@ -1,9 +1,14 @@
-type result = {.
-  "js_code": string
-};
+open Rebase;
 
 [@bs.val] [@bs.scope ("window", "ocaml")] external compile : string => string = "";
-let compile : string => result = code =>
+let compile : string => Result.t(string, string) = code =>
   code |> compile
        |> Js.Json.parseExn
-       |> Obj.magic 
+       |> Js.Json.classify
+       |> fun | JSONString(err) => Result.Error(err)
+              | JSONObject(res) =>
+                Js.Dict.get(res, "js_code")
+                |> Option.flatMap(Js.Json.decodeString)
+                |> Option.mapOr(
+                    code => Result.Ok(code),
+                    Result.Error("unknown error"));
