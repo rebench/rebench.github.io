@@ -39959,23 +39959,15 @@ exports.compile   = compile;
 "use strict";
 
 
-var Block                   = __webpack_require__(9);
-var Rebase                  = __webpack_require__(18);
-var Js_json                 = __webpack_require__(198);
-var Js_primitive            = __webpack_require__(42);
-var Caml_builtin_exceptions = __webpack_require__(8);
+var Block        = __webpack_require__(9);
+var Rebase       = __webpack_require__(18);
+var Js_json      = __webpack_require__(198);
+var Js_primitive = __webpack_require__(42);
 
 function compile(code) {
   var param = Js_json.classify(JSON.parse(window.ocaml.compile(code)));
   if (typeof param === "number") {
-    throw [
-          Caml_builtin_exceptions.match_failure,
-          [
-            "/home/glennsl/dev/remote/rebench/src/ffi/BS.re",
-            8,
-            10
-          ]
-        ];
+    return /* Error */Block.__(1, ["Unrecognized compiler output"]);
   } else {
     switch (param.tag | 0) {
       case 0 : 
@@ -39983,16 +39975,9 @@ function compile(code) {
       case 2 : 
           return Rebase.Option[/* mapOr */16]((function (code) {
                         return /* Ok */Block.__(0, [code]);
-                      }), /* Error */Block.__(1, ["unknown error"]), Rebase.Option[/* flatMap */5](Js_json.decodeString, Js_primitive.undefined_to_opt(param[0]["js_code"])));
+                      }), /* Error */Block.__(1, ["Unrecognized compiler output"]), Rebase.Option[/* flatMap */5](Js_json.decodeString, Js_primitive.undefined_to_opt(param[0]["js_code"])));
       default:
-        throw [
-              Caml_builtin_exceptions.match_failure,
-              [
-                "/home/glennsl/dev/remote/rebench/src/ffi/BS.re",
-                8,
-                10
-              ]
-            ];
+        return /* Error */Block.__(1, ["Unrecognized compiler output"]);
     }
   }
 }

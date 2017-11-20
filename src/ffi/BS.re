@@ -11,4 +11,5 @@ let compile : string => Result.t(string, string) = code =>
                 |> Option.flatMap(Js.Json.decodeString)
                 |> Option.mapOr(
                     code => Result.Ok(code),
-                    Result.Error("unknown error"));
+                    Result.Error("Unrecognized compiler output"))
+              | _ => Result.Error("Unrecognized compiler output");
