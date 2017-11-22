@@ -2,7 +2,7 @@
   "name": "rebench",
   "reason": {"react-jsx" : 2},
   "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
-  "bs-dependencies": ["reason-react", "reason-rebase", "bs-glamor"],
+  "bs-dependencies": ["reason-react", "reason-rebase", "bs-glamor", "bs-json"],
   "refmt": 3,
   "sources": [{
     "dir": "src",

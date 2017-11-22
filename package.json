@@ -17,6 +17,7 @@
   "dependencies": {
     "benchmark": "^2.1.4",
     "bs-glamor": "^0.1.3",
+    "bs-json": "^0.2.4",
     "codemirror": "^5.31.0",
     "file-loader": "^1.1.5",
     "lz-string": "^1.4.4",

@@ -16,27 +16,28 @@ let make = _children => AppState.{
       ))
     })
   },
+  didUpdate: AppState.didUpdate,
 
   reducer: AppState.reducer,
 
   render: ({ reduce, state }) =>
     <div>
       <Toolbar onButtonClick=reduce(
-        fun | `RunAll => RunAll
-            | `Add => Add
-            | `Clear => Clear
-      ) />
+                  fun | `RunAll => RunAll
+                      | `Add => Add
+                      | `Clear => Clear) 
+              shareableUrl=computeShareableUrl(state) />
 
       (
         switch state.error {
-        | Error(message) => <Message type_=`Error message />
-        | Warning(message) => <Message type_=`Warning message />
-        | Nothing => ReasonReact.nullElement
+        | Some(Error(message)) => <Message type_=`Error message />
+        | Some(Warning(_, message)) => <Message type_=`Warning message />
+        | _ => ReasonReact.nullElement
         }
       )
 
       <SetupBlock code=state.setupCode
-                  onChange=reduce(code => SetupChanged(code)) />
+                  onChange=reduce(code => ChangeSetup(code)) />
 
       (
         state.testCases |> List.map(this =>

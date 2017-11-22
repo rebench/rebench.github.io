@@ -1,5 +1,11 @@
 open Rebase;
 
+type result =
+  | Ok(string)
+  | Warning(string, string)
+  | Error(string)
+;
+
 let template = (testCase: TestCase.t) => {
   let name = TestCase.Id.generateFunctionName(testCase.id);
   let code = testCase.code;
@@ -48,4 +54,7 @@ let _compile = mlCode => {
 let compile = (setupCode, testCases) =>
   testCases |> _assemble(setupCode)
             |> _reToML
-            |> Result.flatMap(_compile);
+            |> Result.flatMap(_compile)
+            |> fun | Result.Ok((code, None)) => Ok(code)
+                   | Result.Ok((code, Some(warnings))) => Warning(code, warnings)
+                   | Result.Error(message) => Error(message);

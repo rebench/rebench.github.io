@@ -2,7 +2,7 @@ open Helpers;
 module Styles = ToolbarStyles;
 
 let component = ReasonReact.statelessComponent("Toolbar");
-let make = (~onButtonClick, _) => {
+let make = (~onButtonClick, ~shareableUrl, _) => {
   ...component,
   render: (_) =>
     <div className=Styles.root>
@@ -25,5 +25,8 @@ let make = (~onButtonClick, _) => {
         ("Clear" |> text)
       </button>
 
+      <div className=Styles.separator />
+
+      <ShareButton url=shareableUrl />
     </div>
 };
