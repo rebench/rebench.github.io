@@ -27732,15 +27732,24 @@ var App         = __webpack_require__(121);
 var Curry       = __webpack_require__(5);
 var Store       = __webpack_require__(202);
 var Compiler    = __webpack_require__(205);
+var Debounce    = __webpack_require__(297);
 var ReactDOMRe  = __webpack_require__(210);
 var ReasonReact = __webpack_require__(11);
 
+function compute(data) {
+  return Compiler.compile(data[/* setup */0], data[/* tests */1]);
+}
+
+var DebouncedCompiler = Debounce.Make(/* module */[/* compute */compute]);
+
 ReactDOMRe.renderToElementWithId(ReasonReact.element(/* None */0, /* None */0, Curry._1(Store.make, (function (data, url, updateStore) {
-                var compilerResult = Compiler.compile(data[/* setup */0], data[/* tests */1]);
-                return ReasonReact.element(/* None */0, /* None */0, App.make(data, url, updateStore, compilerResult, /* array */[]));
+                return ReasonReact.element(/* None */0, /* None */0, Curry._3(DebouncedCompiler[/* make */1], data, 300, (function (compilerResult) {
+                                  return ReasonReact.element(/* None */0, /* None */0, App.make(data, url, updateStore, compilerResult, /* array */[]));
+                                })));
               }))), "index");
 
-/*  Not a pure module */
+exports.DebouncedCompiler = DebouncedCompiler;
+/* DebouncedCompiler Not a pure module */
 
 
 /***/ }),
@@ -39832,6 +39841,8 @@ exports.make                = make;
 "use strict";
 
 
+var Curry  = __webpack_require__(5);
+var Rebase = __webpack_require__(18);
 
 function makeCounter(init) {
   var i = [init - 1 | 0];
@@ -39849,8 +39860,25 @@ function (number) {
 }
 );
 
+function debounce(f, wait) {
+  var timeout = [/* None */0];
+  return (function (data) {
+      Rebase.Option[/* forEach */8]((function (id) {
+              clearTimeout(id);
+              timeout[0] = /* None */0;
+              return /* () */0;
+            }), timeout[0]);
+      timeout[0] = /* Some */[setTimeout((function () {
+                timeout[0] = /* None */0;
+                return Curry._1(f, data);
+              }), wait)];
+      return /* () */0;
+    });
+}
+
 exports.makeCounter  = makeCounter;
 exports.formatNumber = formatNumber;
+exports.debounce     = debounce;
 /* formatNumber Not a pure module */
 
 
@@ -52870,6 +52898,76 @@ var ReactDOMInvalidARIAHook = {
 
 module.exports = ReactDOMInvalidARIAHook;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 292 */,
+/* 293 */,
+/* 294 */,
+/* 295 */,
+/* 296 */,
+/* 297 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Block       = __webpack_require__(9);
+var Curry       = __webpack_require__(5);
+var Rebase      = __webpack_require__(18);
+var ReasonReact = __webpack_require__(11);
+
+function Make(Config) {
+  var component = ReasonReact.reducerComponentWithRetainedProps("Debounce");
+  var make = function (input, wait, renderChildren) {
+    var newrecord = component.slice();
+    newrecord[/* didUpdate */5] = (function (param) {
+        var newSelf = param[/* newSelf */1];
+        if (newSelf[/* retainedProps */3][/* input */0] !== param[/* oldSelf */0][/* retainedProps */3][/* input */0]) {
+          var match = newSelf[/* state */2];
+          var timeout = match[/* timeout */1];
+          Rebase.Option[/* forEach */8]((function (id) {
+                  clearTimeout(id);
+                  timeout[0] = /* None */0;
+                  return /* () */0;
+                }), timeout[0]);
+          timeout[0] = /* Some */[setTimeout((function () {
+                    timeout[0] = /* None */0;
+                    return Curry._2(newSelf[/* reduce */1], (function () {
+                                  return Curry._1(Config[/* compute */0], input);
+                                }), /* () */0);
+                  }), wait)];
+          return /* () */0;
+        } else {
+          return 0;
+        }
+      });
+    newrecord[/* render */9] = (function (param) {
+        return Curry._1(renderChildren, param[/* state */2][/* output */0]);
+      });
+    newrecord[/* initialState */10] = (function () {
+        return /* record */[
+                /* output */Curry._1(Config[/* compute */0], input),
+                /* timeout */[/* None */0]
+              ];
+      });
+    newrecord[/* retainedProps */11] = /* record */[/* input */input];
+    newrecord[/* reducer */12] = (function (output, state) {
+        return /* Update */Block.__(0, [/* record */[
+                    /* output */output,
+                    /* timeout */state[/* timeout */1]
+                  ]]);
+      });
+    return newrecord;
+  };
+  return /* module */[
+          /* component */component,
+          /* make */make
+        ];
+}
+
+exports.Make = Make;
+/* ReasonReact Not a pure module */
+
 
 /***/ })
 /******/ ]);
