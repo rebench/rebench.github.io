@@ -6,8 +6,8 @@ type result =
   | Error(string)
 ;
 
-let template = (testCase: TestCase.t) => {
-  let name = TestCase.Id.generateFunctionName(testCase.id);
+let template = (testCase: Model.Test.t) => {
+  let name = Model.Id.generateFunctionName(testCase.id);
   let code = testCase.code;
 {j|
 let $name = () => {
