@@ -3,17 +3,17 @@ open Rebase;
 
 module Message = {
   type send =
-    | Run(string, list(Model.Id.t));
+    | Run(string, list(Test.id));
 
   type receive =
-    | CaseCycle(Model.Id.t, Model.Test.result)
-    | SuiteCycle(Model.Id.t, Model.Test.result)
+    | CaseCycle(Test.id, Test.result)
+    | SuiteCycle(Test.id, Test.result)
     | SuiteComplete;
 
   let _decodeReceived = message => {
     let data = message##data##contents;
 
-    let makeResult = () => Model.Test.{
+    let makeResult = () => Test.{
       hz: data##hz,
       sampleCount: data##sampleCount,
       rme: data##rme,
@@ -36,7 +36,7 @@ module Message = {
     }
   };
   
-  let _encodeToSend : send => {. "code": string, "tests": array({. "name": Model.Id.t, "fn": string }) } =
+  let _encodeToSend : send => {. "code": string, "tests": array({. "name": Test.id, "fn": string }) } =
     fun | Run(code, testCases) => { 
             "code": code,
             "tests":
@@ -44,7 +44,7 @@ module Message = {
                         |> Js.Array.reverseInPlace
                         |> Array.map(id => {
                              "name": id,
-                             "fn": Model.Id.generateFunctionName(id)
+                             "fn": Test.Id.generateFunctionName(id)
                            })
           };
 };

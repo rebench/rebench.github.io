@@ -4,13 +4,13 @@ let _remove_assoc = List.remove_assoc;
 open Rebase;
 
 type t = {
-  tests: list((Model.Id.t, Model.Test.state)),
+  tests: list((Test.id, Test.state)),
   worker: ref(Worker.t)
 };
 
 type actions =
   | RunAll
-  | RunSingle(Model.Test.t)
+  | RunSingle(Test.t)
   | WorkerMessage(Worker.Message.receive)
 ;
 /*
@@ -74,7 +74,7 @@ let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
     | RunAll =>
       ReasonReact.SideEffects(
         self => {
-          let ids = data.tests |> List.map(this => this.Model.Test.id);
+          let ids = data.tests |> List.map(this => this.Test.id);
   
           switch compilerResult {
           | Ok(code)
@@ -100,13 +100,13 @@ let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
     | WorkerMessage(CaseCycle(id, result)) =>
       ReasonReact.Update({
         ...state,
-        tests: [(id, Model.Test.Running(result)), ..._remove_assoc(id, state.tests)]
+        tests: [(id, Test.Running(result)), ..._remove_assoc(id, state.tests)]
       })
   
     | WorkerMessage(SuiteCycle(id, result)) =>
       ReasonReact.Update({
         ...state,
-        tests: [(id, Model.Test.Complete(result)), ..._remove_assoc(id, state.tests)]
+        tests: [(id, Test.Complete(result)), ..._remove_assoc(id, state.tests)]
       })
   
     | WorkerMessage(SuiteComplete) =>
@@ -136,14 +136,14 @@ let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
 
       (
         data.tests |> List.map(test =>
-                        <TestCase
-                          key=(test.Model.Test.id |> Model.Id.toString)
+                        <TestBlock
+                          key=(test.Test.id |> Test.Id.toString)
                           onChange=(changed => updateStore(Store.UpdateTest(changed)))
                           onRun=reduce(() => RunSingle(test))
                           onRemove=(() => updateStore(Store.RemoveTest(test)))
                           data=test
                           state=(try (_assoc(test.id, state.tests)) {
-                            | Not_found => Model.Test.Untested
+                            | Not_found => Test.Untested
                             })
                         />)
                     |> List.reverse

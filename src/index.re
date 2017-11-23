@@ -9,7 +9,8 @@ ReactDOMRe.renderToElementWithId(
   <Store> 
     ...((data, url, ~updateStore) => {
       <DebouncedCompiler input=data wait=300>
-        ...(compilerResult => <App data url updateStore compilerResult/>)
+        ...(compilerResult =>
+          <App data url updateStore compilerResult/>)
       </DebouncedCompiler>
     })
   </Store>,

@@ -1,13 +1,14 @@
 open! Rebase;
 open! Helpers;
-module Styles = TestCaseStyles;
-open Model.Test;
+module Styles = TestBlockStyles;
+open Test;
 
 let formatResult = ({hz, rme, sampleCount}) => {
   let hz = hz |> Js.Float.toFixedWithPrecision(~digits=hz < 100. ? 2 : 0)
               |> Utils.formatNumber;
   let rme = rme |> Js.Float.toFixedWithPrecision(~digits=2);
   let plural = sampleCount > 1 ? "s" : "";
+
   {j|$hz ops/sec \xb1$rme% ($sampleCount run$plural sampled)|j} 
 };
 
@@ -23,7 +24,7 @@ let getStateClass =
       | Complete(_) => " s-complete";
 
 let component = ReasonReact.statelessComponent("TestCase");
-let make = (~data: Model.Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
+let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
   ...component,
 
   render: (_) =>
