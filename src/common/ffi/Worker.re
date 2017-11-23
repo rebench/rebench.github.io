@@ -37,15 +37,15 @@ module Message = {
   };
   
   let _encodeToSend : send => {. "code": string, "tests": array({. "name": Test.id, "fn": string }) } =
-    fun | Run(code, testCases) => { 
+    fun | Run(code, tests) => { 
             "code": code,
             "tests":
-              testCases |> _toArray
-                        |> Js.Array.reverseInPlace
-                        |> Array.map(id => {
-                             "name": id,
-                             "fn": Test.Id.generateFunctionName(id)
-                           })
+              tests |> _toArray
+                    |> Js.Array.reverseInPlace
+                    |> Array.map(id => {
+                         "name": id,
+                         "fn": Test.Id.generateFunctionName(id)
+                       })
           };
 };
 

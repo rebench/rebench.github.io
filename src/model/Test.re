@@ -17,7 +17,7 @@ module Id : {
   let fromInt = n => n;
   let toString = string_of_int;
 
-  let generateFunctionName = id => {j|__testCase$(id)__|j}
+  let generateFunctionName = id => {j|__test$(id)__|j}
 };
 
 type id = Id.t;

@@ -6,9 +6,8 @@ type result =
   | Error(string)
 ;
 
-let template = (testCase: Test.t) => {
-  let name = Test.Id.generateFunctionName(testCase.id);
-  let code = testCase.code;
+let template = ({ Test.id, code }) => {
+  let name = Test.Id.generateFunctionName(id);
 {j|
 let $name = () => {
   $code
@@ -29,10 +28,10 @@ let $name = () => {
 |}];
 [@bs.val] external _captureConsoleErrors : (unit => 'a) => ('a, option(string)) = "";
 
-let _assemble = (setupCode, testCases) =>
-  testCases |> List.map(template)
-            |> List.reverse
-            |> List.reduce((acc, this) => acc ++ this, setupCode);
+let _assemble = (setup, tests) =>
+  tests |> List.map(template)
+        |> List.reverse
+        |> List.reduce((acc, this) => acc ++ this, setup);
 
 let _reToML = reCode =>
   try (Result.Ok(
@@ -51,10 +50,10 @@ let _compile = mlCode => {
   res |> Result.map(code => (code, warnings))
 };
 
-let compile = (setupCode, testCases) =>
-  testCases |> _assemble(setupCode)
-            |> _reToML
-            |> Result.flatMap(_compile)
-            |> fun | Result.Ok((code, None)) => Ok(code)
-                   | Result.Ok((code, Some(warnings))) => Warning(code, warnings)
-                   | Result.Error(message) => Error(message);
+let compile = (setup, tests) =>
+  tests |> _assemble(setup)
+        |> _reToML
+        |> Result.flatMap(_compile)
+        |> fun | Result.Ok((code, None)) => Ok(code)
+               | Result.Ok((code, Some(warnings))) => Warning(code, warnings)
+               | Result.Error(message) => Error(message);

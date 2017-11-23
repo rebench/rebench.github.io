@@ -8778,7 +8778,7 @@ function fromInt(n) {
 }
 
 function generateFunctionName(id) {
-  return "__testCase" + (String(id) + "__");
+  return "__test" + (String(id) + "__");
 }
 
 var Id = /* module */[
@@ -39207,7 +39207,7 @@ function formatRelativeScore(score) {
 
 function getStateClass(param) {
   if (typeof param === "number") {
-    return " s-virgin";
+    return " s-untested";
   } else if (param.tag) {
     var match = param[0][/* relativeScore */3];
     if (match) {
@@ -39229,7 +39229,7 @@ function getStateClass(param) {
   }
 }
 
-var component = ReasonReact.statelessComponent("TestCase");
+var component = ReasonReact.statelessComponent("TestBlock");
 
 function make(data, state, onChange, onRun, onRemove, _) {
   var newrecord = component.slice();
@@ -39247,7 +39247,7 @@ function make(data, state, onChange, onRun, onRemove, _) {
       }
       var tmp$1;
       tmp$1 = typeof state === "number" ? React.createElement("div", {
-              className: TestBlockStyles.state + " s-virgin"
+              className: TestBlockStyles.state + " s-untested"
             }) : (
           state.tag ? React.createElement("div", {
                   className: TestBlockStyles.state + " s-complete"
@@ -39672,7 +39672,7 @@ var Json_encode = __webpack_require__(202);
 
 var id = Json_decode.string;
 
-function testCase(json) {
+function test(json) {
   var match = Json_decode.pair(id, Json_decode.string, json);
   return /* record */[
           /* id */match[0],
@@ -39682,13 +39682,13 @@ function testCase(json) {
 
 function state(json) {
   return Json_decode.pair(Json_decode.string, (function (param) {
-                return Json_decode.list(testCase, param);
+                return Json_decode.list(test, param);
               }), json);
 }
 
 var Decode = /* module */[
   /* id */id,
-  /* testCase */testCase,
+  /* test */test,
   /* state */state
 ];
 
@@ -39696,7 +39696,7 @@ function id$1(value) {
   return Curry._1(Test.Id[/* toString */2], value);
 }
 
-function testCase$1(value) {
+function test$1(value) {
   return Json_encode.pair(id$1, (function (prim) {
                 return prim;
               }), /* tuple */[
@@ -39709,13 +39709,13 @@ function state$1(value) {
   return Json_encode.pair((function (prim) {
                 return prim;
               }), (function (param) {
-                return Json_encode.list(testCase$1, param);
+                return Json_encode.list(test$1, param);
               }), value);
 }
 
 var Encode = /* module */[
   /* id */id$1,
-  /* testCase */testCase$1,
+  /* test */test$1,
   /* state */state$1
 ];
 
@@ -40819,10 +40819,9 @@ var Rebase       = __webpack_require__(15);
 var Reason       = __webpack_require__(209);
 var Js_primitive = __webpack_require__(43);
 
-function template(testCase) {
-  var name = Test.Id[/* generateFunctionName */3](testCase[/* id */0]);
-  var code = testCase[/* code */1];
-  return "\nlet " + (String(name) + (" = () => {\n  " + (String(code) + "\n};\n")));
+function template(param) {
+  var name = Test.Id[/* generateFunctionName */3](param[/* id */0]);
+  return "\nlet " + (String(name) + (" = () => {\n  " + (String(param[/* code */1]) + "\n};\n")));
 }
 
 
@@ -40839,10 +40838,10 @@ function template(testCase) {
 
 ;
 
-function _assemble(setupCode, testCases) {
+function _assemble(setup, tests) {
   return Rebase.List[/* reduce */0]((function (acc, $$this) {
                 return acc + $$this;
-              }), setupCode, Rebase.List[/* reverse */14](Rebase.List[/* map */2](template, testCases)));
+              }), setup, Rebase.List[/* reverse */14](Rebase.List[/* map */2](template, tests)));
 }
 
 function _reToML(reCode) {
@@ -40872,8 +40871,8 @@ function _compile(mlCode) {
               }), match[0]);
 }
 
-function compile(setupCode, testCases) {
-  var param = Rebase.Result[/* flatMap */6](_compile, _reToML(_assemble(setupCode, testCases)));
+function compile(setup, tests) {
+  var param = Rebase.Result[/* flatMap */6](_compile, _reToML(_assemble(setup, tests)));
   if (param.tag) {
     return /* Error */Block.__(2, [param[0]]);
   } else {

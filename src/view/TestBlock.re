@@ -16,14 +16,14 @@ let formatRelativeScore = score =>
   score == 0. ? "Fastest" : (Js.Float.toFixed(-.score) ++ "% slower");
 
 let getStateClass =
-  fun | Untested => " s-virgin"
+  fun | Untested => " s-untested"
       | Running(_) => " s-running"
       | Complete({ relativeScore: Some(s) }) when s == 0. => " s-complete s-fastest"
       | Complete({ relativeScore: Some(s) }) when s >= -10. => " s-complete s-close"
       | Complete({ relativeScore: Some(s) }) when s <= -50. => " s-complete s-not-even-close"
       | Complete(_) => " s-complete";
 
-let component = ReasonReact.statelessComponent("TestCase");
+let component = ReasonReact.statelessComponent("TestBlock");
 let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
   ...component,
 
@@ -65,7 +65,7 @@ let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
         (
           switch state {
           | Untested =>
-            <div className=(Styles.state ++ " s-virgin")>
+            <div className=(Styles.state ++ " s-untested")>
             </div>
 
           | Running(result) =>
