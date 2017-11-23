@@ -40266,17 +40266,17 @@ function Make(Config) {
         var url = _generateUrl(state);
         window.history.replaceState((null), "", url);
         return Curry._3(renderChildren, state, url, Curry._1(param[/* reduce */1], (function (action) {
-                          return Curry._2(Config[/* reducer */2], state, action);
+                          return action;
                         })));
       });
     newrecord[/* initialState */10] = (function () {
         return Rebase.Option[/* getOr */14](Curry._1(Config[/* default */1], /* () */0), _retrieve(/* () */0));
       });
-    newrecord[/* reducer */12] = (function (data, _) {
+    newrecord[/* reducer */12] = (function (action, state) {
         return /* UpdateWithSideEffects */Block.__(3, [
-                  data,
-                  (function () {
-                      return _persist(data);
+                  Curry._2(Config[/* reducer */2], state, action),
+                  (function (param) {
+                      return _persist(param[/* state */2]);
                     })
                 ]);
       });

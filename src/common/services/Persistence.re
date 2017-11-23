@@ -17,7 +17,6 @@ module Make(Config: Config) = {
 
   let _retrieve = () => {
     let fromUrl = () => {
-
       if (Location.search |> Js.String.startsWith(_prefix)) {
         Location.search |> Js.String.sliceToEnd(~from=String.length(_prefix))
                         |> LZString.decompress
@@ -47,16 +46,16 @@ module Make(Config: Config) = {
 
     initialState: () => _retrieve() |> Option.getOr(Config.default()), /* TODO: getOrLazy */
 
-    reducer: (data, _self) =>
+    reducer: (action, state) =>
       ReasonReact.UpdateWithSideEffects(
-        data,
-        _self => _persist(data)
+        Config.reducer(state, action),
+        ({ state }) => _persist(state)
       ),
 
     render: ({ state, reduce }) => {
       let url = state |> _generateUrl;
       Location.replaceState(url);
-      renderChildren(state, url, ~updateStore=reduce(action => action |> Config.reducer(state)))
+      renderChildren(state, url, ~updateStore=reduce(action => action))
     }
   };
 };
