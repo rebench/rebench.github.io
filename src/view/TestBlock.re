@@ -27,67 +27,69 @@ let getStateClass =
       | Complete(_, Some(s)) when s <= -50. => " s-complete s-not-even-close"
       | Complete(_) => " s-complete";
 
+let renderHeader = state => [|
+  ("Test" |> text),
+  (
+    switch state {
+    | Complete(_, Some(score)) =>
+      <span>
+        (" - " |> text)
+        <span className="score">
+          (score |> formatRelativeScore
+                  |> text)
+        </span>
+      </span>
+    | _ => ReasonReact.nullElement
+    }
+  )
+|];
+
+let renderFooter = (state, onRun, onRemove) => [|
+  <Button icon="play"
+          label="Run"
+          onClick=(() => onRun()) />,
+
+  <Button icon="close"
+          label="Remove"
+          onClick=(() => onRemove()) />,
+  (
+    switch state {
+    | Untested =>
+      <div className=(Styles.state ++ " s-untested") />
+
+    | Running(result) =>
+      <div className=(Styles.state ++ " s-running")>
+        <Icon name="history" />
+        (
+          result |> formatResult
+                  |> text
+        )
+      </div>
+
+    | Complete(result, _) =>
+      <div className=(Styles.state ++ " s-complete")>
+        <Icon name="check" />
+        (
+          result |> formatResult
+                  |> text
+        )
+      </div>
+    }
+  )
+|];
+
 let component = ReasonReact.statelessComponent("TestBlock");
 let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
   ...component,
 
   render: (_) =>
-    <div className=(Styles.root ++ getStateClass(state))>
-      <div className=Styles.header>
-        ("Test" |> text)
-        (
-          switch state {
-          | Complete(_, Some(score)) =>
-            <span>
-              (" - " |> text)
-              <span className="score">
-                (score |> formatRelativeScore
-                       |> text)
-              </span>
-            </span>
-          | _ => ReasonReact.nullElement
-          }
-        )
-      </div>
+    <Block_ className=(Styles.root ++ getStateClass(state))
+           header=`Elements(renderHeader(state))
+           footer=renderFooter(state, onRun, onRemove) >
 
       <Editor value=data.code
               lang=`RE
               onChange=(code => onChange({ ...data, code })) />
 
-      <div className=Styles.footer>
-
-        <Button icon="play"
-                label="Run"
-                onClick=(() => onRun()) />
-
-        <Button icon="close"
-                label="Remove"
-                onClick=(() => onRemove()) />
-        (
-          switch state {
-          | Untested =>
-            <div className=(Styles.state ++ " s-untested")>
-            </div>
-
-          | Running(result) =>
-            <div className=(Styles.state ++ " s-running")>
-              <Icon name="history" />
-              (
-                result |> formatResult
-                       |> text
-              )
-            </div>
-
-          | Complete(result, _) =>
-            <div className=(Styles.state ++ " s-complete")>
-              <Icon name="check" />
-              (
-                result |> formatResult
-                       |> text
-              )
-            </div>
-          }
-        )
-      </div>
-    </div>
+    </Block_>
 };

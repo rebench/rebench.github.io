@@ -10,7 +10,7 @@ let getIcon =
   fun | Some(name) => <Icon name />
       | None => ReasonReact.nullElement;
 
-let component = ReasonReact.statelessComponent("Icon");
+let component = ReasonReact.statelessComponent("Button");
 let make = (~label, ~icon=?, ~style=`Normal, ~onClick, _) => {
   ...component,
   render: (_) =>

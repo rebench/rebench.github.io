@@ -2,13 +2,12 @@ open Glamor
 
 let root = css [
   background Colors.panel;
+  overflow "auto"; (* contain child element margins *)
   margin "1em";
-  paddingBottom ".5em";
 ]
 
 let header = css [
   padding ".75em 1.25em";
-  marginBottom ".5em";
   fontSize ".85em";
   color Colors.text;
   textTransform "lowercase";
@@ -17,7 +16,6 @@ let header = css [
 
 let clickableHeader = css [
   padding ".75em 1.25em";
-  marginBottom ".5em";
   fontSize ".85em";
   color Colors.text;
   textTransform "lowercase";
@@ -26,5 +24,20 @@ let clickableHeader = css [
   Selector("&:hover", [
     background Colors.panelDark;
     cursor "pointer";
+  ]);
+]
+
+let content = css [
+  marginTop ".5em";
+  marginBottom ".5em";
+]
+
+let footer = css [
+  display "flex";
+  background Colors.panelDark;
+  color Colors.text;
+
+  Selector("& button", [
+    padding ".75em 1em";
   ]);
 ]

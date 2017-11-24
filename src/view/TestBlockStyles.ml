@@ -1,7 +1,6 @@
 open Glamor
 
 let root = css [
-  background Colors.panel;
   margin "2em";
 
   Selector("&.s-not-even-close .score", [
@@ -14,19 +13,6 @@ let root = css [
 
   Selector("&.s-fastest .score", [
     color Colors.green;
-  ]);
-]
-
-let header = BlockStyles.header
-
-let footer = css [
-  display "flex";
-  background Colors.panelDark;
-  color Colors.text;
-  marginTop ".5em";
-
-  Selector("& button", [
-    padding ".75em 1em";
   ]);
 ]
 
