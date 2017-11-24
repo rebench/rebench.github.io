@@ -2,7 +2,11 @@ open! Rebase;
 open! Helpers;
 module Styles = TestBlockStyles;
 open Test;
-
+/*
+module Button = { 
+  let make = Button.make(~style=`Dark) 
+};
+*/
 let formatResult = ({hz, rme, sampleCount}) => {
   let hz = hz |> Js.Float.toFixedWithPrecision(~digits=hz < 100. ? 2 : 0)
               |> Utils.formatNumber;
@@ -52,16 +56,13 @@ let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
 
       <div className=Styles.footer>
 
-        <button onClick=((_) => onRun())>
-          <Icon name="play" />
-          ("Run" |> text)
-        </button>
+        <Button icon="play"
+                label="Run"
+                onClick=(() => onRun()) />
 
-        <button onClick=((_) => onRemove())>
-          <Icon name="close" />
-          ("Remove" |> text)
-        </button>
-
+        <Button icon="close"
+                label="Remove"
+                onClick=(() => onRemove()) />
         (
           switch state {
           | Untested =>

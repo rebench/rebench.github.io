@@ -26,18 +26,8 @@ let footer = css [
   marginTop ".5em";
 
   Selector("& button", [
-    background Colors.panelDark;
     padding ".75em 1em";
-    color Colors.text;
-
-    Selector("& .mdi", [
-      marginRight ".25em";
-    ]);
-
-    Selector("&:hover", [
-      background Colors.highlightOverlay;
-    ]);
-  ])
+  ]);
 ]
 
 let state = css [

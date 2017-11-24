@@ -1,4 +1,4 @@
-open Helpers;
+open! Helpers;
 module Styles = ToolbarStyles;
 
 let component = ReasonReact.statelessComponent("Toolbar");
@@ -7,23 +7,17 @@ let make = (~onButtonClick, ~shareableUrl, _) => {
   render: (_) =>
     <div className=Styles.root>
 
-      <button className=Styles.button
-              onClick=((_) => onButtonClick(`RunAll))>
-        <Icon name="play" />
-        ("Run All" |> text)
-      </button>
+      <Button icon="play"
+              label="Run All"
+              onClick=(() => onButtonClick(`RunAll)) />
       
-      <button className=Styles.button
-              onClick=((_) => onButtonClick(`Add))>
-        <Icon name="plus" />
-        ("Add" |> text)
-      </button>
+      <Button icon="plus"
+              label="Add"
+              onClick=(() => onButtonClick(`Add)) />
 
-      <button className=Styles.button
-              onClick=((_) => onButtonClick(`Clear))>
-        <Icon name="close" />
-        ("Clear" |> text)
-      </button>
+      <Button icon="close"
+              label="Clear"
+              onClick=(() => onButtonClick(`Clear)) />
 
       <div className=Styles.separator />
 

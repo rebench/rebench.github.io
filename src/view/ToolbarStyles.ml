@@ -5,8 +5,6 @@ let root = css [
   display "flex";
 ]
 
-let button = ButtonStyles.button
-
 let separator = css [
   flexGrow "1";
 ]

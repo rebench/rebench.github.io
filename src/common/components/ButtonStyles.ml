@@ -1,7 +1,7 @@
 open Glamor
 
-let button = css [
-  background Colors.panel;
+let common = [
+  background "red";
   color Colors.text;
   padding "1em";
 
@@ -13,3 +13,11 @@ let button = css [
     background Colors.highlightOverlay;
   ]);
 ]
+
+let normal = css (common @ [
+  background Colors.panel;
+])
+
+let dark = css (common @ [
+  background Colors.panelDark;
+])

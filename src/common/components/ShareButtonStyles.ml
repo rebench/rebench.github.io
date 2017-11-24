@@ -64,4 +64,4 @@ let root = css [
   ])
 ]
 
-let button = ButtonStyles.button
+let button = ButtonStyles.normal
