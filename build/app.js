@@ -27721,6 +27721,36 @@ var SetupBlock              = __webpack_require__(196);
 var ReasonReact             = __webpack_require__(11);
 var Caml_builtin_exceptions = __webpack_require__(9);
 
+function _recalculateScores(tests) {
+  var fastest = Rebase.List[/* reduce */0]((function (prim, prim$1) {
+          return Math.max(prim, prim$1);
+        }), 0, Rebase.List[/* map */2](Rebase.Option[/* getOrRaise */15], Rebase.List[/* filter */10](Rebase.Option[/* isSome */11], Rebase.List[/* map */2]((function (param) {
+                      var match = param[1];
+                      if (typeof match === "number" || !match.tag) {
+                        return /* None */0;
+                      } else {
+                        return /* Some */[match[0][/* hz */0]];
+                      }
+                    }), tests))));
+  return Rebase.List[/* map */2]((function (test) {
+                var match = test[1];
+                if (typeof match === "number") {
+                  return test;
+                } else if (match.tag) {
+                  var result = match[0];
+                  return /* tuple */[
+                          test[0],
+                          /* Complete */Block.__(1, [
+                              result,
+                              /* Some */[(result[/* hz */0] - fastest) / fastest * 100]
+                            ])
+                        ];
+                } else {
+                  return test;
+                }
+              }), tests);
+}
+
 var component = ReasonReact.reducerComponent("App");
 
 function make(data, url, updateStore, compilerResult, _) {
@@ -27729,7 +27759,7 @@ function make(data, url, updateStore, compilerResult, _) {
       return /* Update */Block.__(0, [/* record */[
                   /* tests */param[/* state */2][/* tests */0],
                   /* worker */[Worker.make(Curry._1(param[/* reduce */1], (function (message) {
-                                return /* WorkerMessage */Block.__(1, [message]);
+                                return /* WorkerMessage */Block.__(4, [message]);
                               })), (function (prim) {
                             console.log(prim);
                             return /* () */0;
@@ -27767,21 +27797,19 @@ function make(data, url, updateStore, compilerResult, _) {
       if (exit === 1) {
         tmp$1 = ReasonReact.element(/* None */0, /* None */0, JSBlock.make(compilerResult[0], /* array */[]));
       }
-      return React.createElement("div", undefined, ReasonReact.element(/* None */0, /* None */0, Toolbar.make((function (param) {
-                            if (param !== -267608394) {
-                              if (param >= 3254785) {
-                                return Curry._1(updateStore, /* AddTest */0);
-                              } else {
-                                return Curry._1(updateStore, /* Clear */1);
-                              }
-                            } else {
-                              return Curry._2(reduce, (function () {
-                                            return /* RunAll */0;
-                                          }), /* () */0);
-                            }
-                          }), url, /* array */[])), tmp, ReasonReact.element(/* None */0, /* None */0, SetupBlock.make(data[/* setup */0], (function (code) {
-                            return Curry._1(updateStore, /* UpdateSetup */Block.__(2, [code]));
-                          }), /* array */[])), $$Array.of_list(Rebase.List[/* reverse */14](Rebase.List[/* map */2]((function (test) {
+      return React.createElement("div", undefined, ReasonReact.element(/* None */0, /* None */0, Toolbar.make(Curry._1(reduce, (function (param) {
+                                if (param !== -267608394) {
+                                  if (param >= 3254785) {
+                                    return /* AddTest */0;
+                                  } else {
+                                    return /* Clear */1;
+                                  }
+                                } else {
+                                  return /* RunAll */2;
+                                }
+                              })), url, /* array */[])), tmp, ReasonReact.element(/* None */0, /* None */0, SetupBlock.make(data[/* setup */0], Curry._1(reduce, (function (code) {
+                                return /* UpdateSetup */Block.__(2, [code]);
+                              })), /* array */[])), $$Array.of_list(Rebase.List[/* reverse */14](Rebase.List[/* map */2]((function (test) {
                                 var tmp;
                                 try {
                                   tmp = List.assoc(test[/* id */0], state[/* tests */0]);
@@ -27793,13 +27821,13 @@ function make(data, url, updateStore, compilerResult, _) {
                                     throw exn;
                                   }
                                 }
-                                return ReasonReact.element(/* Some */[Curry._1(Test.Id[/* toString */2], test[/* id */0])], /* None */0, TestBlock.make(test, tmp, (function (changed) {
-                                                  return Curry._1(updateStore, /* UpdateTest */Block.__(1, [changed]));
-                                                }), Curry._1(reduce, (function () {
-                                                      return /* RunSingle */Block.__(0, [test]);
-                                                    })), (function () {
-                                                  return Curry._1(updateStore, /* RemoveTest */Block.__(0, [test]));
-                                                }), /* array */[]));
+                                return ReasonReact.element(/* Some */[Curry._1(Test.Id[/* toString */2], test[/* id */0])], /* None */0, TestBlock.make(test, tmp, Curry._1(reduce, (function (changed) {
+                                                      return /* UpdateTest */Block.__(0, [changed]);
+                                                    })), Curry._1(reduce, (function () {
+                                                      return /* RunSingle */Block.__(3, [test]);
+                                                    })), Curry._1(reduce, (function () {
+                                                      return /* RemoveTest */Block.__(1, [test]);
+                                                    })), /* array */[]));
                               }), data[/* tests */1]))), tmp$1);
     });
   newrecord[/* initialState */10] = (function () {
@@ -27815,82 +27843,140 @@ function make(data, url, updateStore, compilerResult, _) {
             ];
     });
   newrecord[/* reducer */12] = (function (action, state) {
+      var run = function (tests) {
+        var exit = 0;
+        switch (compilerResult.tag | 0) {
+          case 0 : 
+          case 1 : 
+              exit = 1;
+              break;
+          case 2 : 
+              return /* () */0;
+          
+        }
+        if (exit === 1) {
+          return Curry._1(state[/* worker */1][0][/* postMessage */0], /* Run */[
+                      compilerResult[0],
+                      tests
+                    ]);
+        }
+        
+      };
       if (typeof action === "number") {
-        return /* SideEffects */Block.__(2, [(function (self) {
-                      var ids = Rebase.List[/* map */2]((function ($$this) {
-                              return $$this[/* id */0];
-                            }), data[/* tests */1]);
-                      var exit = 0;
-                      switch (compilerResult.tag | 0) {
-                        case 0 : 
-                        case 1 : 
-                            exit = 1;
-                            break;
-                        case 2 : 
-                            return /* () */0;
-                        
-                      }
-                      if (exit === 1) {
-                        return Curry._1(self[/* state */2][/* worker */1][0][/* postMessage */0], /* Run */[
-                                    compilerResult[0],
-                                    ids
-                                  ]);
-                      }
-                      
-                    })]);
-      } else if (action.tag) {
-        var match = action[0];
-        if (typeof match === "number") {
-          return /* NoUpdate */0;
-        } else if (match.tag) {
-          var id = match[0];
-          return /* Update */Block.__(0, [/* record */[
-                      /* tests : :: */[
-                        /* tuple */[
-                          id,
-                          /* Complete */Block.__(1, [match[1]])
+        switch (action) {
+          case 0 : 
+              return /* SideEffects */Block.__(2, [(function () {
+                            return Curry._1(updateStore, /* AddTest */0);
+                          })]);
+          case 1 : 
+              return /* UpdateWithSideEffects */Block.__(3, [
+                        /* record */[
+                          /* tests : [] */0,
+                          /* worker */state[/* worker */1]
                         ],
-                        List.remove_assoc(id, state[/* tests */0])
-                      ],
-                      /* worker */state[/* worker */1]
-                    ]]);
-        } else {
-          var id$1 = match[0];
-          return /* Update */Block.__(0, [/* record */[
-                      /* tests : :: */[
-                        /* tuple */[
-                          id$1,
-                          /* Running */Block.__(0, [match[1]])
-                        ],
-                        List.remove_assoc(id$1, state[/* tests */0])
-                      ],
-                      /* worker */state[/* worker */1]
-                    ]]);
+                        (function () {
+                            return Curry._1(updateStore, /* Clear */1);
+                          })
+                      ]);
+          case 2 : 
+              return /* SideEffects */Block.__(2, [(function () {
+                            return run(Rebase.List[/* map */2]((function ($$this) {
+                                              return $$this[/* id */0];
+                                            }), data[/* tests */1]));
+                          })]);
+          
         }
       } else {
-        var test = action[0];
-        return /* SideEffects */Block.__(2, [(function (self) {
-                      var exit = 0;
-                      switch (compilerResult.tag | 0) {
-                        case 0 : 
-                        case 1 : 
-                            exit = 1;
-                            break;
-                        case 2 : 
-                            return /* () */0;
-                        
-                      }
-                      if (exit === 1) {
-                        return Curry._1(self[/* state */2][/* worker */1][0][/* postMessage */0], /* Run */[
-                                    compilerResult[0],
-                                    /* :: */[
-                                      test[/* id */0],
-                                      /* [] */0
-                                    ]
-                                  ]);
-                      }
-                      
-                    })]);
+        switch (action.tag | 0) {
+          case 0 : 
+              var test = action[0];
+              return /* UpdateWithSideEffects */Block.__(3, [
+                        /* record */[
+                          /* tests */_recalculateScores(Rebase.List[/* map */2]((function ($$this) {
+                                      var id = $$this[0];
+                                      var match = +(id !== test[/* id */0]);
+                                      if (match !== 0) {
+                                        return $$this;
+                                      } else {
+                                        return /* tuple */[
+                                                id,
+                                                /* Untested */0
+                                              ];
+                                      }
+                                    }), state[/* tests */0])),
+                          /* worker */state[/* worker */1]
+                        ],
+                        (function () {
+                            return Curry._1(updateStore, /* UpdateTest */Block.__(1, [test]));
+                          })
+                      ]);
+          case 1 : 
+              var test$1 = action[0];
+              return /* UpdateWithSideEffects */Block.__(3, [
+                        /* record */[
+                          /* tests */_recalculateScores(Rebase.List[/* filter */10]((function (param) {
+                                      return +(param[0] !== test$1[/* id */0]);
+                                    }), state[/* tests */0])),
+                          /* worker */state[/* worker */1]
+                        ],
+                        (function () {
+                            return Curry._1(updateStore, /* RemoveTest */Block.__(0, [test$1]));
+                          })
+                      ]);
+          case 2 : 
+              var code = action[0];
+              return /* UpdateWithSideEffects */Block.__(3, [
+                        /* record */[
+                          /* tests : [] */0,
+                          /* worker */state[/* worker */1]
+                        ],
+                        (function () {
+                            return Curry._1(updateStore, /* UpdateSetup */Block.__(2, [code]));
+                          })
+                      ]);
+          case 3 : 
+              var test$2 = action[0];
+              return /* SideEffects */Block.__(2, [(function () {
+                            return run(/* :: */[
+                                        test$2[/* id */0],
+                                        /* [] */0
+                                      ]);
+                          })]);
+          case 4 : 
+              var match = action[0];
+              if (typeof match === "number") {
+                return /* NoUpdate */0;
+              } else if (match.tag) {
+                var id = match[0];
+                return /* Update */Block.__(0, [/* record */[
+                            /* tests */_recalculateScores(/* :: */[
+                                  /* tuple */[
+                                    id,
+                                    /* Complete */Block.__(1, [
+                                        match[1],
+                                        /* None */0
+                                      ])
+                                  ],
+                                  List.remove_assoc(id, state[/* tests */0])
+                                ]),
+                            /* worker */state[/* worker */1]
+                          ]]);
+              } else {
+                var id$1 = match[0];
+                return /* Update */Block.__(0, [/* record */[
+                            /* tests : :: */[
+                              /* tuple */[
+                                id$1,
+                                /* Running */Block.__(0, [match[1]])
+                              ],
+                              List.remove_assoc(id$1, state[/* tests */0])
+                            ],
+                            /* worker */state[/* worker */1]
+                          ]]);
+              }
+              break;
+          
+        }
       }
     });
   return newrecord;
@@ -27902,11 +27988,12 @@ var _assoc = List.assoc;
 
 var _remove_assoc = List.remove_assoc;
 
-exports._toArray      = _toArray;
-exports._assoc        = _assoc;
-exports._remove_assoc = _remove_assoc;
-exports.component     = component;
-exports.make          = make;
+exports._toArray           = _toArray;
+exports._assoc             = _assoc;
+exports._remove_assoc      = _remove_assoc;
+exports._recalculateScores = _recalculateScores;
+exports.component          = component;
+exports.make               = make;
 /* component Not a pure module */
 
 
@@ -33290,8 +33377,7 @@ function _decodeReceived(message) {
     return /* record */[
             /* hz */data.hz,
             /* rme */data.rme,
-            /* sampleCount */data.sampleCount,
-            /* relativeScore : None */0
+            /* sampleCount */data.sampleCount
           ];
   };
   var match = message.data.type;
@@ -39209,7 +39295,7 @@ function getStateClass(param) {
   if (typeof param === "number") {
     return " s-untested";
   } else if (param.tag) {
-    var match = param[0][/* relativeScore */3];
+    var match = param[1];
     if (match) {
       var s = match[0];
       if (s === 0) {
@@ -39238,7 +39324,7 @@ function make(data, state, onChange, onRun, onRemove, _) {
       if (typeof state === "number") {
         tmp = null;
       } else if (state.tag) {
-        var match = state[0][/* relativeScore */3];
+        var match = state[1];
         tmp = match ? React.createElement("span", undefined, Helpers.text(" - "), React.createElement("span", {
                     className: "score"
                   }, Helpers.text(formatRelativeScore(match[0])))) : null;
@@ -39259,7 +39345,7 @@ function make(data, state, onChange, onRun, onRemove, _) {
                   className: TestBlockStyles.root + getStateClass(state)
                 }, React.createElement("div", {
                       className: TestBlockStyles.header
-                    }, Helpers.text("Test Case"), tmp), ReasonReact.element(/* None */0, /* None */0, Editor.make(data[/* code */1], /* RE */18355, /* None */0, /* None */0, /* None */0, /* Some */[(function (code) {
+                    }, Helpers.text("Test"), tmp), ReasonReact.element(/* None */0, /* None */0, Editor.make(data[/* code */1], /* RE */18355, /* None */0, /* None */0, /* None */0, /* Some */[(function (code) {
                               return Curry._1(onChange, /* record */[
                                           /* id */data[/* id */0],
                                           /* code */code

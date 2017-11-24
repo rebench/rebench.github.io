@@ -17,7 +17,6 @@ module Message = {
       hz: data##hz,
       sampleCount: data##sampleCount,
       rme: data##rme,
-      relativeScore: None,
     };
 
     switch message##data##_type {

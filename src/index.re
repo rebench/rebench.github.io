@@ -7,12 +7,12 @@ module DebouncedCompiler = Debounce.Make({
 
 ReactDOMRe.renderToElementWithId(
   <Store> 
-    ...((data, url, ~updateStore) => {
+    ...((data, url, ~updateStore) =>
       <DebouncedCompiler input=data wait=300>
         ...(compilerResult =>
           <App data url updateStore compilerResult/>)
       </DebouncedCompiler>
-    })
+    )
   </Store>,
   "index"
 );

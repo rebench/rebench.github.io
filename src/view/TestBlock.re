@@ -18,9 +18,9 @@ let formatRelativeScore = score =>
 let getStateClass =
   fun | Untested => " s-untested"
       | Running(_) => " s-running"
-      | Complete({ relativeScore: Some(s) }) when s == 0. => " s-complete s-fastest"
-      | Complete({ relativeScore: Some(s) }) when s >= -10. => " s-complete s-close"
-      | Complete({ relativeScore: Some(s) }) when s <= -50. => " s-complete s-not-even-close"
+      | Complete(_, Some(s)) when s == 0. => " s-complete s-fastest"
+      | Complete(_, Some(s)) when s >= -10. => " s-complete s-close"
+      | Complete(_, Some(s)) when s <= -50. => " s-complete s-not-even-close"
       | Complete(_) => " s-complete";
 
 let component = ReasonReact.statelessComponent("TestBlock");
@@ -30,15 +30,15 @@ let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
   render: (_) =>
     <div className=(Styles.root ++ getStateClass(state))>
       <div className=Styles.header>
-        ("Test Case" |> text)
+        ("Test" |> text)
         (
           switch state {
-          | Complete({ relativeScore: Some(score) }) =>
+          | Complete(_, Some(score)) =>
             <span>
               (" - " |> text)
               <span className="score">
                 (score |> formatRelativeScore
-                        |> text)
+                       |> text)
               </span>
             </span>
           | _ => ReasonReact.nullElement
@@ -77,7 +77,7 @@ let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
               )
             </div>
 
-          | Complete(result) =>
+          | Complete(result, _) =>
             <div className=(Styles.state ++ " s-complete")>
               <Icon name="check" />
               (

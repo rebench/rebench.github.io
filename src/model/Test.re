@@ -30,12 +30,11 @@ type t = {
 type result = {
   hz: float,
   rme: float,
-  sampleCount: int,
-  relativeScore: option(float)
+  sampleCount: int
 };
 
 type state =
   | Untested
   | Running(result)
-  | Complete(result)
+  | Complete(result, option(float)) /* TODO: should ideally not be option */
 ;
