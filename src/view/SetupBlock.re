@@ -6,7 +6,7 @@ let make = (~code, ~onChange, _children) => {
   ...component,
 
   render: (_) =>
-    <Block_ header=`Text("Setup")>
+    <Block_ header=`Text("Setup") collapsible=true>
       <Editor value=code lang=`RE onChange />
     </Block_>
 };

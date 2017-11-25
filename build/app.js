@@ -9546,12 +9546,26 @@ exports.raiseUriError            = raiseUriError;
 "use strict";
 
 
+var Rebase = __webpack_require__(15);
 
 function text(prim) {
   return prim;
 }
 
-exports.text = text;
+function classNames(items) {
+  return Rebase.List[/* toArray */16](Rebase.List[/* filter */10]((function (s) {
+                      return +(s !== "");
+                    }), Rebase.List[/* map */2]((function (param) {
+                          if (param[1] !== 0) {
+                            return param[0];
+                          } else {
+                            return "";
+                          }
+                        }), items))).join(" ");
+}
+
+exports.text       = text;
+exports.classNames = classNames;
 /* No side effect */
 
 
@@ -22050,6 +22064,8 @@ module.exports = lowPriorityWarning;
 "use strict";
 
 
+var Block       = __webpack_require__(8);
+var Curry       = __webpack_require__(4);
 var React       = __webpack_require__(13);
 var Helpers     = __webpack_require__(33);
 var BlockStyles = __webpack_require__(152);
@@ -22065,7 +22081,7 @@ function renderHeader(param) {
 
 function renderFooter(param) {
   if (param) {
-    return React.createElement("div", {
+    return React.createElement("footer", {
                 className: BlockStyles.footer
               }, param[0]);
   } else {
@@ -22073,26 +22089,58 @@ function renderFooter(param) {
   }
 }
 
-function makeClassName(param) {
-  if (param) {
-    return param[0] + (" " + BlockStyles.root);
-  } else {
-    return BlockStyles.root;
-  }
+function makeClassName($staropt$star, collapsible, state) {
+  var className = $staropt$star ? $staropt$star[0] : "";
+  return Helpers.classNames(/* :: */[
+              /* tuple */[
+                BlockStyles.root,
+                /* true */1
+              ],
+              /* :: */[
+                /* tuple */[
+                  className,
+                  /* true */1
+                ],
+                /* :: */[
+                  /* tuple */[
+                    "collapsible",
+                    collapsible
+                  ],
+                  /* :: */[
+                    /* tuple */[
+                      "s-collapsed",
+                      state[/* collapsed */0]
+                    ],
+                    /* [] */0
+                  ]
+                ]
+              ]
+            ]);
 }
 
-var component = ReasonReact.statelessComponent("Block");
+var component = ReasonReact.reducerComponent("Block");
 
-function make(header, footer, className, children) {
+function make(header, footer, className, $staropt$star, children) {
+  var collapsible = $staropt$star ? $staropt$star[0] : /* false */0;
   var newrecord = component.slice();
-  newrecord[/* render */9] = (function () {
-      return React.createElement("div", {
-                  className: makeClassName(className)
-                }, React.createElement("div", {
-                      className: BlockStyles.header
-                    }, renderHeader(header)), React.createElement("div", {
-                      className: BlockStyles.content
-                    }, children), renderFooter(footer));
+  newrecord[/* render */9] = (function (param) {
+      return React.createElement("section", {
+                  className: makeClassName(className, collapsible, param[/* state */2])
+                }, React.createElement("header", {
+                      onClick: Curry._1(param[/* reduce */1], (function () {
+                              return /* HeaderClicked */0;
+                            }))
+                    }, renderHeader(header)), React.createElement("main", undefined, children), renderFooter(footer));
+    });
+  newrecord[/* initialState */10] = (function () {
+      return /* record */[/* collapsed : false */0];
+    });
+  newrecord[/* reducer */12] = (function (_, state) {
+      if (collapsible !== 0) {
+        return /* Update */Block.__(0, [/* record */[/* collapsed */1 - state[/* collapsed */0]]]);
+      } else {
+        return /* NoUpdate */0;
+      }
     });
   return newrecord;
 }
@@ -33517,7 +33565,7 @@ function make(code, _) {
       return ReasonReact.element(/* None */0, /* None */0, Block_.make(/* `Text */[
                       936573133,
                       "Generated JavaScript"
-                    ], /* None */0, /* None */0, /* array */[ReasonReact.element(/* None */0, /* None */0, Editor.make(code, /* JS */16585, /* None */0, /* Some */[/* true */1], /* None */0, /* None */0, /* array */[]))]));
+                    ], /* None */0, /* None */0, /* Some */[/* true */1], /* array */[ReasonReact.element(/* None */0, /* None */0, Editor.make(code, /* JS */16585, /* None */0, /* Some */[/* true */1], /* None */0, /* None */0, /* array */[]))]));
     });
   return newrecord;
 }
@@ -33544,62 +33592,68 @@ var root = Glamor.css(/* :: */[
         Glamor.overflow("auto"),
         /* :: */[
           Glamor.margin("1em"),
-          /* [] */0
-        ]
-      ]
-    ]);
-
-var header = Glamor.css(/* :: */[
-      Glamor.padding(".75em 1.25em"),
-      /* :: */[
-        Glamor.fontSize(".85em"),
-        /* :: */[
-          Glamor.color(Colors.text),
           /* :: */[
-            Glamor.textTransform("lowercase"),
+            /* Selector */Block.__(1, [
+                "& > header",
+                /* :: */[
+                  Glamor.padding(".75em 1.25em"),
+                  /* :: */[
+                    Glamor.fontSize(".85em"),
+                    /* :: */[
+                      Glamor.color(Colors.text),
+                      /* :: */[
+                        Glamor.textTransform("lowercase"),
+                        /* :: */[
+                          Glamor.fontVariant("small-caps"),
+                          /* [] */0
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]),
             /* :: */[
-              Glamor.fontVariant("small-caps"),
-              /* [] */0
-            ]
-          ]
-        ]
-      ]
-    ]);
-
-var clickableHeader = Glamor.css(/* :: */[
-      Glamor.padding(".75em 1.25em"),
-      /* :: */[
-        Glamor.fontSize(".85em"),
-        /* :: */[
-          Glamor.color(Colors.text),
-          /* :: */[
-            Glamor.textTransform("lowercase"),
-            /* :: */[
-              Glamor.fontVariant("small-caps"),
+              /* Selector */Block.__(1, [
+                  "&.collapsible > header",
+                  /* :: */[
+                    /* Selector */Block.__(1, [
+                        "&:hover",
+                        /* :: */[
+                          Glamor.background(Colors.panelDark),
+                          /* :: */[
+                            Glamor.cursor("pointer"),
+                            /* [] */0
+                          ]
+                        ]
+                      ]),
+                    /* [] */0
+                  ]
+                ]),
               /* :: */[
                 /* Selector */Block.__(1, [
-                    "&:hover",
+                    "& > main",
                     /* :: */[
-                      Glamor.background(Colors.panelDark),
+                      Glamor.marginTop(".5em"),
                       /* :: */[
-                        Glamor.cursor("pointer"),
+                        Glamor.marginBottom(".5em"),
                         /* [] */0
                       ]
                     ]
                   ]),
-                /* [] */0
+                /* :: */[
+                  /* Selector */Block.__(1, [
+                      "&.s-collapsed > main",
+                      /* :: */[
+                        Glamor.display("none"),
+                        /* [] */0
+                      ]
+                    ]),
+                  /* [] */0
+                ]
               ]
             ]
           ]
         ]
-      ]
-    ]);
-
-var content = Glamor.css(/* :: */[
-      Glamor.marginTop(".5em"),
-      /* :: */[
-        Glamor.marginBottom(".5em"),
-        /* [] */0
       ]
     ]);
 
@@ -33623,11 +33677,8 @@ var footer = Glamor.css(/* :: */[
       ]
     ]);
 
-exports.root            = root;
-exports.header          = header;
-exports.clickableHeader = clickableHeader;
-exports.content         = content;
-exports.footer          = footer;
+exports.root   = root;
+exports.footer = footer;
 /* root Not a pure module */
 
 
@@ -39467,7 +39518,7 @@ function make(data, state, onChange, onRun, onRemove, _) {
       return ReasonReact.element(/* None */0, /* None */0, Block_.make(/* `Elements */[
                       -579472809,
                       renderHeader(state)
-                    ], /* Some */[renderFooter(state, onRun, onRemove)], /* Some */[TestBlockStyles.root + getStateClass(state)], /* array */[ReasonReact.element(/* None */0, /* None */0, Editor.make(data[/* code */1], /* RE */18355, /* None */0, /* None */0, /* None */0, /* Some */[(function (code) {
+                    ], /* Some */[renderFooter(state, onRun, onRemove)], /* Some */[TestBlockStyles.root + getStateClass(state)], /* None */0, /* array */[ReasonReact.element(/* None */0, /* None */0, Editor.make(data[/* code */1], /* RE */18355, /* None */0, /* None */0, /* None */0, /* Some */[(function (code) {
                                     return Curry._1(onChange, /* record */[
                                                 /* id */data[/* id */0],
                                                 /* code */code
@@ -39637,7 +39688,7 @@ function make(code, onChange, _) {
       return ReasonReact.element(/* None */0, /* None */0, Block_.make(/* `Text */[
                       936573133,
                       "Setup"
-                    ], /* None */0, /* None */0, /* array */[ReasonReact.element(/* None */0, /* None */0, Editor.make(code, /* RE */18355, /* None */0, /* None */0, /* None */0, /* Some */[onChange], /* array */[]))]));
+                    ], /* None */0, /* None */0, /* Some */[/* true */1], /* array */[ReasonReact.element(/* None */0, /* None */0, Editor.make(code, /* RE */18355, /* None */0, /* None */0, /* None */0, /* Some */[onChange], /* array */[]))]));
     });
   return newrecord;
 }

@@ -4,32 +4,30 @@ let root = css [
   background Colors.panel;
   overflow "auto"; (* contain child element margins *)
   margin "1em";
-]
 
-let header = css [
-  padding ".75em 1.25em";
-  fontSize ".85em";
-  color Colors.text;
-  textTransform "lowercase";
-  fontVariant "small-caps";
-]
-
-let clickableHeader = css [
-  padding ".75em 1.25em";
-  fontSize ".85em";
-  color Colors.text;
-  textTransform "lowercase";
-  fontVariant "small-caps";
-
-  Selector("&:hover", [
-    background Colors.panelDark;
-    cursor "pointer";
+  Selector("& > header", [
+    padding ".75em 1.25em";
+    fontSize ".85em";
+    color Colors.text;
+    textTransform "lowercase";
+    fontVariant "small-caps";
   ]);
-]
 
-let content = css [
-  marginTop ".5em";
-  marginBottom ".5em";
+  Selector("&.collapsible > header", [
+    Selector("&:hover", [
+      background Colors.panelDark;
+      cursor "pointer";
+    ]);
+  ]);
+
+  Selector("& > main", [
+    marginTop ".5em";
+    marginBottom ".5em";
+  ]);
+
+  Selector("&.s-collapsed > main", [
+    display "none";
+  ]);
 ]
 
 let footer = css [
