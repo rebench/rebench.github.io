@@ -7,6 +7,6 @@ let make = (~code, ~onChange, _children) => {
 
   render: (_) =>
     <Block_ header=`Text("Setup")>
-      <Editor value=code lang=`RE onChange=(code => onChange(code)) />
+      <Editor value=code lang=`RE onChange />
     </Block_>
 };

@@ -9,8 +9,8 @@ let make = (~type_, ~message, _children) => {
   render: (_) => {
     let style = 
       switch type_ {
-      | `Error => Styles.error
-      | `Warning => Styles.warning
+      | `Error    => Styles.error
+      | `Warning  => Styles.warning
       };
 
     <div className=style>

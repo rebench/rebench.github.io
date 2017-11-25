@@ -3,10 +3,10 @@ open Rebase;
 module Id : {
   type t;
 
-  let next : list(t) => t;
-  let fromInt : int => t;
-  let toString : t => string;
-  let generateFunctionName : t => string;
+  let next: list(t) => t;
+  let fromInt: int => t;
+  let toString: t => string;
+  let generateFunctionName: t => string;
 } = {
   type t = int;
 

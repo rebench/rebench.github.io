@@ -8,10 +8,10 @@ module Button = {
 };
 */
 let formatResult = ({hz, rme, sampleCount}) => {
-  let hz = hz |> Js.Float.toFixedWithPrecision(~digits=hz < 100. ? 2 : 0)
-              |> Utils.formatNumber;
-  let rme = rme |> Js.Float.toFixedWithPrecision(~digits=2);
-  let plural = sampleCount > 1 ? "s" : "";
+  let hz      = hz |> Js.Float.toFixedWithPrecision(~digits=hz < 100. ? 2 : 0)
+                   |> Utils.formatNumber;
+  let rme     = rme |> Js.Float.toFixedWithPrecision(~digits=2);
+  let plural  = sampleCount > 1 ? "s" : "";
 
   {j|$hz ops/sec \xb1$rme% ($sampleCount run$plural sampled)|j} 
 };
@@ -20,12 +20,12 @@ let formatRelativeScore = score =>
   score == 0. ? "Fastest" : (Js.Float.toFixed(-.score) ++ "% slower");
 
 let getStateClass =
-  fun | Untested => " s-untested"
-      | Running(_) => " s-running"
-      | Complete(_, Some(s)) when s == 0. => " s-complete s-fastest"
+  fun | Untested                            => " s-untested"
+      | Running(_)                          => " s-running"
+      | Complete(_, Some(s)) when s == 0.   => " s-complete s-fastest"
       | Complete(_, Some(s)) when s >= -10. => " s-complete s-close"
       | Complete(_, Some(s)) when s <= -50. => " s-complete s-not-even-close"
-      | Complete(_) => " s-complete";
+      | Complete(_)                         => " s-complete";
 
 let renderHeader = state => [|
   ("Test" |> text),
@@ -35,8 +35,10 @@ let renderHeader = state => [|
       <span>
         (" - " |> text)
         <span className="score">
-          (score |> formatRelativeScore
-                  |> text)
+          (
+            score |> formatRelativeScore
+                  |> text
+          )
         </span>
       </span>
     | _ => ReasonReact.nullElement
@@ -45,15 +47,18 @@ let renderHeader = state => [|
 |];
 
 let renderFooter = (state, onRun, onRemove) => [|
-  <Button icon="play"
-          label="Run"
-          onClick=(() => onRun()) />,
 
-  <Button icon="close"
-          label="Remove"
-          onClick=(() => onRemove()) />,
+  <Button icon    = "play"
+          label   = "Run"
+          onClick = onRun />,
+
+  <Button icon    = "close"
+          label   = "Remove"
+          onClick = onRemove />,
+
   (
     switch state {
+    
     | Untested =>
       <div className=(Styles.state ++ " s-untested") />
 
@@ -62,7 +67,7 @@ let renderFooter = (state, onRun, onRemove) => [|
         <Icon name="history" />
         (
           result |> formatResult
-                  |> text
+                 |> text
         )
       </div>
 
@@ -71,9 +76,10 @@ let renderFooter = (state, onRun, onRemove) => [|
         <Icon name="check" />
         (
           result |> formatResult
-                  |> text
+                 |> text
         )
       </div>
+
     }
   )
 |];
@@ -83,13 +89,13 @@ let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
   ...component,
 
   render: (_) =>
-    <Block_ className=(Styles.root ++ getStateClass(state))
-           header=`Elements(renderHeader(state))
-           footer=renderFooter(state, onRun, onRemove) >
+    <Block_ className = (Styles.root ++ getStateClass(state))
+            header    = `Elements(renderHeader(state))
+            footer    = renderFooter(state, onRun, onRemove) >
 
-      <Editor value=data.code
-              lang=`RE
-              onChange=(code => onChange({ ...data, code })) />
+      <Editor value     = data.code
+              lang      = `RE
+              onChange  = (code => onChange({ ...data, code })) />
 
     </Block_>
 };

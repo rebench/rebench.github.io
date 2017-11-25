@@ -19,10 +19,10 @@ let make = (~value, ~lang, ~defaultValue=?, ~readOnly=false, ~inputRef=?, ~onCha
       ?defaultValue
       ?onChange
       options={
-        "mode": _langToMode(lang),
-        "theme": "material",
-        "lineNumbers": true,
-        "readOnly": Js.Boolean.to_js_boolean(readOnly)
+        "mode":         _langToMode(lang),
+        "theme":        "material",
+        "lineNumbers":  true,
+        "readOnly":     Js.Boolean.to_js_boolean(readOnly)
       }
     />
 };

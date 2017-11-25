@@ -44,20 +44,20 @@ let make = (~url, _) => {
 
   render: ({ reduce, handle, state }) =>
     <div className=(Styles.root ++ (state.showConfirmation ? " s-show-confirmation" : ""))>
-      <input value=url
-             ref=handle((r, { state }) => state.inputRef := Js.Nullable.to_opt(r))
-             readOnly=Js.true_ />
 
-      <button className=Styles.button
-              onClick=reduce((_) => Clicked)>
-        <Icon name="share" />
-        ("Share" |> text)
-      </button>
+      <input value    = url
+             ref      = handle((r, { state }) => state.inputRef := Js.Nullable.to_opt(r))
+             readOnly = Js.true_ />
+
+      <Button icon      = "share"
+              label     = "Share"
+              onClick   = reduce((_) => Clicked) />
 
       <span className="tooltip">
         <span className="arrow" />
         <span className="message"> ("Click to copy to clipboard" |> text) </span>
         <span className="confirmation-message"> ("Copied" |> text) </span>
       </span>
+
     </div>
 };

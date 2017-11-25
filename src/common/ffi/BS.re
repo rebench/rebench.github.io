@@ -4,7 +4,7 @@ open Rebase;
 let compile : string => Result.t(string, string) = code =>
   code |> compile
        |> Js.Json.parseExn
-       |> Js.Json.classify
+       |> Js.Json.classify /* TODO: use bs-json? */
        |> fun | JSONString(err) => Result.Error(err)
               | JSONObject(res) =>
                 Js.Dict.get(res, "js_code")

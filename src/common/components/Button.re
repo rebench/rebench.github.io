@@ -2,21 +2,21 @@ open Helpers;
 
 module Styles = ButtonStyles;
 
-let getStyle =
+let makeClassName =
   fun | `Normal => Styles.normal
-      | `Dark => Styles.dark;
+      | `Dark   => Styles.dark;
 
-let getIcon =
+let makeIcon =
   fun | Some(name) => <Icon name />
-      | None => ReasonReact.nullElement;
+      | None       => ReasonReact.nullElement;
 
 let component = ReasonReact.statelessComponent("Button");
 let make = (~label, ~icon=?, ~style=`Normal, ~onClick, _) => {
   ...component,
   render: (_) =>
-    <button className=getStyle(style)
-            onClick=((_) => onClick())>
-      (getIcon(icon))
+    <button className = makeClassName(style)
+            onClick   = ((_) => onClick()) >
+      (makeIcon(icon))
       (label |> text)
     </button>
 };

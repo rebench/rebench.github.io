@@ -25114,7 +25114,7 @@ var Helpers      = __webpack_require__(33);
 var ReasonReact  = __webpack_require__(10);
 var ButtonStyles = __webpack_require__(93);
 
-function getStyle(param) {
+function makeClassName(param) {
   if (param >= 758939798) {
     return ButtonStyles.dark;
   } else {
@@ -25122,7 +25122,7 @@ function getStyle(param) {
   }
 }
 
-function getIcon(param) {
+function makeIcon(param) {
   if (param) {
     return ReasonReact.element(/* None */0, /* None */0, Icon.make(param[0], /* array */[]));
   } else {
@@ -25137,22 +25137,22 @@ function make(label, icon, $staropt$star, onClick, _) {
   var newrecord = component.slice();
   newrecord[/* render */9] = (function () {
       return React.createElement("button", {
-                  className: getStyle(style),
+                  className: makeClassName(style),
                   onClick: (function () {
                       return Curry._1(onClick, /* () */0);
                     })
-                }, getIcon(icon), Helpers.text(label));
+                }, makeIcon(icon), Helpers.text(label));
     });
   return newrecord;
 }
 
 var Styles = 0;
 
-exports.Styles    = Styles;
-exports.getStyle  = getStyle;
-exports.getIcon   = getIcon;
-exports.component = component;
-exports.make      = make;
+exports.Styles        = Styles;
+exports.makeClassName = makeClassName;
+exports.makeIcon      = makeIcon;
+exports.component     = component;
+exports.make          = make;
 /* component Not a pure module */
 
 
@@ -27855,16 +27855,12 @@ function make(data, url, updateStore, compilerResult, _) {
       if (exit === 1) {
         tmp$1 = ReasonReact.element(/* None */0, /* None */0, JSBlock.make(compilerResult[0], /* array */[]));
       }
-      return React.createElement("div", undefined, ReasonReact.element(/* None */0, /* None */0, Toolbar.make(Curry._1(reduce, (function (param) {
-                                if (param !== -267608394) {
-                                  if (param >= 3254785) {
-                                    return /* AddTest */0;
-                                  } else {
-                                    return /* Clear */1;
-                                  }
-                                } else {
-                                  return /* RunAll */2;
-                                }
+      return React.createElement("div", undefined, ReasonReact.element(/* None */0, /* None */0, Toolbar.make(Curry._1(reduce, (function () {
+                                return /* RunAll */2;
+                              })), Curry._1(reduce, (function () {
+                                return /* AddTest */0;
+                              })), Curry._1(reduce, (function () {
+                                return /* Clear */1;
                               })), url, /* array */[])), tmp, ReasonReact.element(/* None */0, /* None */0, SetupBlock.make(data[/* setup */0], Curry._1(reduce, (function (code) {
                                 return /* UpdateSetup */Block.__(2, [code]);
                               })), /* array */[])), $$Array.of_list(Rebase.List[/* reverse */14](Rebase.List[/* map */2]((function (test) {
@@ -39043,7 +39039,6 @@ exports.warning = warning;
 "use strict";
 
 
-var Curry         = __webpack_require__(4);
 var React         = __webpack_require__(13);
 var Button        = __webpack_require__(92);
 var ReasonReact   = __webpack_require__(10);
@@ -39052,20 +39047,14 @@ var ToolbarStyles = __webpack_require__(193);
 
 var component = ReasonReact.statelessComponent("Toolbar");
 
-function make(onButtonClick, shareableUrl, _) {
+function make(onRunAll, onAdd, onClear, url, _) {
   var newrecord = component.slice();
   newrecord[/* render */9] = (function () {
       return React.createElement("div", {
                   className: ToolbarStyles.root
-                }, ReasonReact.element(/* None */0, /* None */0, Button.make("Run All", /* Some */["play"], /* None */0, (function () {
-                            return Curry._1(onButtonClick, /* RunAll */-267608394);
-                          }), /* array */[])), ReasonReact.element(/* None */0, /* None */0, Button.make("Add", /* Some */["plus"], /* None */0, (function () {
-                            return Curry._1(onButtonClick, /* Add */3254785);
-                          }), /* array */[])), ReasonReact.element(/* None */0, /* None */0, Button.make("Clear", /* Some */["close"], /* None */0, (function () {
-                            return Curry._1(onButtonClick, /* Clear */-611786387);
-                          }), /* array */[])), React.createElement("div", {
+                }, ReasonReact.element(/* None */0, /* None */0, Button.make("Run All", /* Some */["play"], /* None */0, onRunAll, /* array */[])), ReasonReact.element(/* None */0, /* None */0, Button.make("Add", /* Some */["plus"], /* None */0, onAdd, /* array */[])), ReasonReact.element(/* None */0, /* None */0, Button.make("Clear", /* Some */["close"], /* None */0, onClear, /* array */[])), React.createElement("div", {
                       className: ToolbarStyles.separator
-                    }), ReasonReact.element(/* None */0, /* None */0, ShareButton.make(shareableUrl, /* array */[])));
+                    }), ReasonReact.element(/* None */0, /* None */0, ShareButton.make(url, /* array */[])));
     });
   return newrecord;
 }
@@ -39085,10 +39074,10 @@ exports.make      = make;
 "use strict";
 
 
-var Icon              = __webpack_require__(60);
 var Block             = __webpack_require__(8);
 var Curry             = __webpack_require__(4);
 var React             = __webpack_require__(13);
+var Button            = __webpack_require__(92);
 var Rebase            = __webpack_require__(15);
 var Helpers           = __webpack_require__(33);
 var ReasonReact       = __webpack_require__(10);
@@ -39111,12 +39100,9 @@ function make(url, _) {
                             })),
                       readOnly: true,
                       value: url
-                    }), React.createElement("button", {
-                      className: ShareButtonStyles.button,
-                      onClick: Curry._1(param[/* reduce */1], (function () {
-                              return /* Clicked */0;
-                            }))
-                    }, ReasonReact.element(/* None */0, /* None */0, Icon.make("share", /* array */[])), Helpers.text("Share")), React.createElement("span", {
+                    }), ReasonReact.element(/* None */0, /* None */0, Button.make("Share", /* Some */["share"], /* None */0, Curry._1(param[/* reduce */1], (function () {
+                                return /* Clicked */0;
+                              })), /* array */[])), React.createElement("span", {
                       className: "tooltip"
                     }, React.createElement("span", {
                           className: "arrow"
@@ -39176,10 +39162,9 @@ exports.make      = make;
 "use strict";
 
 
-var Block        = __webpack_require__(8);
-var Colors       = __webpack_require__(25);
-var Glamor       = __webpack_require__(26);
-var ButtonStyles = __webpack_require__(93);
+var Block  = __webpack_require__(8);
+var Colors = __webpack_require__(25);
+var Glamor = __webpack_require__(26);
 
 var root = Glamor.css(/* :: */[
       Glamor.position("relative"),
@@ -39195,7 +39180,7 @@ var root = Glamor.css(/* :: */[
                   /* :: */[
                     Glamor.padding("0"),
                     /* :: */[
-                      Glamor.color("#888"),
+                      Glamor.color("rgba(255, 255, 255, .75)"),
                       /* [] */0
                     ]
                   ]
@@ -39217,9 +39202,9 @@ var root = Glamor.css(/* :: */[
                       /* :: */[
                         Glamor.right("1em"),
                         /* :: */[
-                          Glamor.background("rgba(0, 0, 0, .6)"),
+                          Glamor.background("rgba(0, 0, 0, 1)"),
                           /* :: */[
-                            Glamor.color("#aaa"),
+                            Glamor.color("#ccc"),
                             /* :: */[
                               Glamor.whiteSpace("nowrap"),
                               /* :: */[
@@ -39246,7 +39231,7 @@ var root = Glamor.css(/* :: */[
                                                       /* :: */[
                                                         Glamor.border(".5em solid transparent"),
                                                         /* :: */[
-                                                          Glamor.borderBottomColor("rgba(0, 0, 0, .6)"),
+                                                          Glamor.borderBottomColor("rgba(0, 0, 0, 1)"),
                                                           /* :: */[
                                                             Glamor.marginLeft(".5em"),
                                                             /* [] */0
@@ -39339,10 +39324,7 @@ var root = Glamor.css(/* :: */[
       ]
     ]);
 
-var button = ButtonStyles.normal;
-
-exports.root   = root;
-exports.button = button;
+exports.root = root;
 /* root Not a pure module */
 
 
@@ -39471,12 +39453,8 @@ function renderFooter(state, onRun, onRemove) {
             }, ReasonReact.element(/* None */0, /* None */0, Icon.make("history", /* array */[])), Helpers.text(formatResult(state[0])))
     );
   return /* array */[
-          ReasonReact.element(/* None */0, /* None */0, Button.make("Run", /* Some */["play"], /* None */0, (function () {
-                      return Curry._1(onRun, /* () */0);
-                    }), /* array */[])),
-          ReasonReact.element(/* None */0, /* None */0, Button.make("Remove", /* Some */["close"], /* None */0, (function () {
-                      return Curry._1(onRemove, /* () */0);
-                    }), /* array */[])),
+          ReasonReact.element(/* None */0, /* None */0, Button.make("Run", /* Some */["play"], /* None */0, onRun, /* array */[])),
+          ReasonReact.element(/* None */0, /* None */0, Button.make("Remove", /* Some */["close"], /* None */0, onRemove, /* array */[])),
           tmp
         ];
 }
@@ -39647,7 +39625,6 @@ exports.state = state;
 "use strict";
 
 
-var Curry       = __webpack_require__(4);
 var Block_      = __webpack_require__(58);
 var Editor      = __webpack_require__(59);
 var ReasonReact = __webpack_require__(10);
@@ -39660,7 +39637,7 @@ function make(code, onChange, _) {
       return ReasonReact.element(/* None */0, /* None */0, Block_.make(/* `Text */[
                       936573133,
                       "Setup"
-                    ], /* None */0, /* None */0, /* array */[ReasonReact.element(/* None */0, /* None */0, Editor.make(code, /* RE */18355, /* None */0, /* None */0, /* None */0, /* Some */[Curry.__1(onChange)], /* array */[]))]));
+                    ], /* None */0, /* None */0, /* array */[ReasonReact.element(/* None */0, /* None */0, Editor.make(code, /* RE */18355, /* None */0, /* None */0, /* None */0, /* Some */[onChange], /* array */[]))]));
     });
   return newrecord;
 }

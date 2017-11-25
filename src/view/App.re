@@ -35,7 +35,11 @@ let _recalculateScores = (tests) => {
 };
 
 let component = ReasonReact.reducerComponent("App");
-let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
+let make = (~data: Store.data,
+            ~url,
+            ~updateStore,
+            ~compilerResult: Compiler.result,
+            _children) => {
   ...component,
 
   initialState: () => {
@@ -47,8 +51,8 @@ let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
     ReasonReact.Update({
       ...state,
       worker: ref(Worker.make(
-        ~onMessage=reduce(message => WorkerMessage(message)),
-        ~onError=Js.log
+        ~onMessage  = reduce(message => WorkerMessage(message)),
+        ~onError    = Js.log
       ))
     })
   },
@@ -56,8 +60,7 @@ let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
   reducer: (action, state) => {
     let run = tests =>
       switch compilerResult {
-      | Ok(code)
-      | Warning(code, _) =>
+      | Ok(code) | Warning(code, _) =>
         state.worker^.postMessage(Run(code, tests));
       | _ => ()
       };
@@ -73,8 +76,9 @@ let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
       ReasonReact.UpdateWithSideEffects({
           ...state,
           tests:
-            List.map(((id, _) as this) => id !== test.id ? this : (id, Test.Untested), state.tests)
-            |> _recalculateScores
+            state.tests |> List.map(((id, _) as this) =>
+                             id !== test.id ? this : (id, Test.Untested))
+                        |> _recalculateScores
         },
         _self => updateStore(Store.UpdateTest(test))
       )
@@ -83,8 +87,8 @@ let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
       ReasonReact.UpdateWithSideEffects({
           ...state,
           tests:
-            List.filter(((id, _)) => id !== test.id, state.tests)
-            |> _recalculateScores
+            state.tests |> List.filter(((id, _)) => id !== test.id)
+                        |> _recalculateScores
         },
         _self => updateStore(Store.RemoveTest(test))
       )
@@ -118,15 +122,21 @@ let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
     | WorkerMessage(CaseCycle(id, result)) =>
       ReasonReact.Update({
         ...state,
-        tests: [(id, Test.Running(result)), ..._remove_assoc(id, state.tests)]
+        tests:
+          [
+            (id, Test.Running(result)),
+            ..._remove_assoc(id, state.tests)
+          ]
       })
   
     | WorkerMessage(SuiteCycle(id, result)) =>
       ReasonReact.Update({
         ...state,
         tests:
-          [(id, Test.Complete(result, None)), ..._remove_assoc(id, state.tests)]
-          |> _recalculateScores
+          [
+            (id, Test.Complete(result, None)),
+            ..._remove_assoc(id, state.tests)
+          ] |> _recalculateScores
       })
   
     | WorkerMessage(SuiteComplete) =>
@@ -136,34 +146,33 @@ let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
 
   render: ({ reduce, state }) =>
     <div>
-      <Toolbar onButtonClick=reduce(
-                  fun | `RunAll => RunAll
-                      | `Add    => AddTest
-                      | `Clear  => Clear)
-              shareableUrl=url />
+      <Toolbar onRunAll     = reduce(() => RunAll)
+               onAdd        = reduce(() => AddTest)
+               onClear      = reduce(() => Clear)
+               shareableUrl = url />
 
       (
         switch compilerResult {
-        | Compiler.Error(message) => <Message type_=`Error message />
-        | Compiler.Warning(_, message) => <Message type_=`Warning message />
-        | _ => ReasonReact.nullElement
+        | Error(message)      => <Message type_=`Error message />
+        | Warning(_, message) => <Message type_=`Warning message />
+        | _                   => ReasonReact.nullElement
         }
       )
 
-      <SetupBlock code=data.Store.setup
-                  onChange=reduce(code => UpdateSetup(code)) />
+      <SetupBlock code      = data.Store.setup
+                  onChange  = reduce(code => UpdateSetup(code)) />
 
       (
         data.tests |> List.map(test =>
                         <TestBlock
-                          key=(test.Test.id |> Test.Id.toString)
-                          onChange=reduce(changed => UpdateTest(changed))
-                          onRun=reduce(() => RunSingle(test))
-                          onRemove=reduce(() => RemoveTest(test))
-                          data=test
-                          state=(try (_assoc(test.id, state.tests)) {
-                            | Not_found => Test.Untested
-                            })
+                          key       = (test.Test.id |> Test.Id.toString)
+                          onChange  = reduce(changed => UpdateTest(changed))
+                          onRun     = reduce(() => RunSingle(test))
+                          onRemove  = reduce(() => RemoveTest(test))
+                          data      = test
+                          state     = (try (_assoc(test.id, state.tests)) {
+                                       | Not_found => Test.Untested
+                                      })
                         />)
                     |> List.reverse
                     |> _toArray
@@ -174,7 +183,7 @@ let make = (~data, ~url, ~updateStore, ~compilerResult, _children) => {
         switch compilerResult {
         | Ok(code)
         | Warning(code, _) => <JSBlock code />
-        | _ => ReasonReact.nullElement
+        | _                => ReasonReact.nullElement
         }
       )
     </div>

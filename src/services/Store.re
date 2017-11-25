@@ -32,17 +32,23 @@ include Persistence.Make({
   let reducer = state =>
     fun | AddTest => {
             ...state,
-            tests: [{ id: _nextId(state), code: "/* put sutff here */" }, ...state.tests]
+            tests:
+              [
+                { id: _nextId(state), code: "/* put sutff here */" },
+                ...state.tests
+              ]
           }
 
         | RemoveTest(test) => {
             ...state,
-            tests: List.filter(this => this.Test.id !== test.id, state.tests)
+            tests:
+              state.tests |> List.filter(this => this.Test.id !== test.id)
           }
 
         | UpdateTest(test) => {
           ...state,
-          tests: List.map(this => this.Test.id === test.id ? test : this, state.tests)
+          tests:
+            state.tests |> List.map(this => this.Test.id === test.id ? test : this)
         }
         
         | UpdateSetup(setup) => {

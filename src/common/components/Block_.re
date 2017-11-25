@@ -3,7 +3,7 @@ open Helpers;
 module Styles = BlockStyles;
 
 let renderHeader =
-  fun | `Text(str) => (str |> text)
+  fun | `Text(str)          => (str |> text)
       | `Elements(elements) => elements |> ReasonReact.arrayToElement;
 
 let renderFooter = 
@@ -15,7 +15,7 @@ let renderFooter =
 
 let makeClassName =
   fun | Some(className) => className ++ " " ++ Styles.root
-      | None => Styles.root;
+      | None            => Styles.root;
 
 let component = ReasonReact.statelessComponent("Block");
 let make = (~header, ~footer=?, ~className=?, children) => {

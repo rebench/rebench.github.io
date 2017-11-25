@@ -8,7 +8,7 @@ let root = css [
     transition "all 250ms";
     width "0";
     padding "0";
-    color "#888";
+    color "rgba(255, 255, 255, .75)";
   ]);
 
   Selector("& .tooltip", [
@@ -17,8 +17,8 @@ let root = css [
     zIndex "100";
     top "100%";
     right "1em";
-    background "rgba(0, 0, 0, .6)";
-    color "#aaa";
+    background "rgba(0, 0, 0, 1)";
+    color "#ccc";
     whiteSpace "nowrap";
     padding ".4em .8em";
     borderRadius ".25em";
@@ -33,7 +33,7 @@ let root = css [
       width "0";
       border ".5em solid transparent";
       (*pointerEvents "none";*)
-      borderBottomColor "rgba(0, 0, 0, .6)";
+      borderBottomColor "rgba(0, 0, 0, 1)";
       marginLeft ".5em";
     ]);
 
@@ -63,5 +63,3 @@ let root = css [
     ]);
   ])
 ]
-
-let button = ButtonStyles.normal

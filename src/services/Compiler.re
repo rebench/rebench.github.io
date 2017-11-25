@@ -42,18 +42,18 @@ let _reToML = reCode =>
   };
 
 let _compile = mlCode => {
-  let (res, warnings) = 
+  let (result, warnings) = 
     _captureConsoleErrors(() =>
       mlCode |> BS.compile
     );
 
-  res |> Result.map(code => (code, warnings))
+  result |> Result.map(code => (code, warnings))
 };
 
 let compile = (setup, tests) =>
   tests |> _assemble(setup)
         |> _reToML
         |> Result.flatMap(_compile)
-        |> fun | Result.Ok((code, None)) => Ok(code)
-               | Result.Ok((code, Some(warnings))) => Warning(code, warnings)
-               | Result.Error(message) => Error(message);
+        |> fun | Result.Ok((code, None))            => Ok(code)
+               | Result.Ok((code, Some(warnings)))  => Warning(code, warnings)
+               | Result.Error(message)              => Error(message);
