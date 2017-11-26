@@ -1,4 +1,5 @@
 let background = "#162228"
+let darkBackground = "#121c20"
 
 let panel = "#263238"
 let panelDark = "#212B30"

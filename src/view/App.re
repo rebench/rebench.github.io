@@ -1,7 +1,10 @@
 let _toArray = Array.of_list;
 let _assoc = List.assoc;
 let _remove_assoc = List.remove_assoc;
-open Rebase;
+open! Rebase;
+open! Helpers;
+
+module Styles = AppStyles;
 
 type t = {
   tests: list((Test.id, Test.state)),
@@ -145,7 +148,7 @@ let make = (~data: Store.data,
   },
 
   render: ({ reduce, state }) =>
-    <div>
+    <div className=Styles.root>
       <Toolbar onRunAll     = reduce(() => RunAll)
                onAdd        = reduce(() => AddTest)
                onClear      = reduce(() => Clear)
@@ -186,5 +189,34 @@ let make = (~data: Store.data,
         | _                => ReasonReact.nullElement
         }
       )
+
+      <footer className=Styles.footer>
+        <section>
+          <h1> ("Project" |> text) </h1>
+          <ul>
+            <li> <a href="https://github.com/rebench/rebench.github.io"> ("Source Code Repository" |> text) </a> </li>
+            <li> <a href="https://github.com/rebench/rebench.github.io/issues"> ("Support / Bug Tracker" |> text) </a> </li>
+          </ul>
+        </section>
+
+        <section>
+          <h1> ("Made with" |> text) </h1>
+          <ul>
+            <li> <a href="https://github.com/bucklescript/bucklescript"> ("BuckleScript" |> text) </a> </li>
+            <li> <a href="https://benchmarkjs.com/"> ("Benchmark.js" |> text) </a> </li>
+            <li> <a href="https://codemirror.net/"> ("CodeMirror" |> text) </a> </li>
+            <li> <a href="https://reasonml.github.io/reason-react/"> ("ReasonReact" |> text) </a> </li>
+            <li> <a href="https://github.com/threepointone/glamor"> ("glamor" |> text) </a> </li>
+          </ul>
+        </section>
+
+        <section>
+          <h1> ("Reason" |> text) </h1>
+          <ul>
+            <li> <a href="https://reasonml.github.io/guide"> ("Reason Guide" |> text) </a> </li>
+            <li> <a href="https://reasonml.github.io/try"> ("Reason Playground" |> text) </a> </li>
+          </ul>
+        </section>
+      </footer>
     </div>
 };

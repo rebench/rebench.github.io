@@ -1,7 +1,7 @@
 open Glamor
 
 let root = css [
-  margin "2em";
+  margin "1em 2em";
 
   Selector("&.s-not-even-close .score", [
     color Colors.red;

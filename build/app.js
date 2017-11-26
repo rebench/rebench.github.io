@@ -5851,6 +5851,8 @@ module.exports = reactProdInvariant;
 
 var background = "#162228";
 
+var darkBackground = "#121c20";
+
 var panel = "#263238";
 
 var panelDark = "#212B30";
@@ -5866,6 +5868,7 @@ var yellow = "#FFCB6D";
 var red = "#EC5F67";
 
 exports.background       = background;
+exports.darkBackground   = darkBackground;
 exports.panel            = panel;
 exports.panelDark        = panelDark;
 exports.highlightOverlay = highlightOverlay;
@@ -27819,9 +27822,11 @@ var Curry                   = __webpack_require__(4);
 var React                   = __webpack_require__(13);
 var Rebase                  = __webpack_require__(15);
 var Worker                  = __webpack_require__(150);
+var Helpers                 = __webpack_require__(33);
 var JSBlock                 = __webpack_require__(151);
 var Message                 = __webpack_require__(188);
 var Toolbar                 = __webpack_require__(190);
+var AppStyles               = __webpack_require__(303);
 var TestBlock               = __webpack_require__(194);
 var SetupBlock              = __webpack_require__(197);
 var ReasonReact             = __webpack_require__(10);
@@ -27903,7 +27908,9 @@ function make(data, url, updateStore, compilerResult, _) {
       if (exit === 1) {
         tmp$1 = ReasonReact.element(/* None */0, /* None */0, JSBlock.make(compilerResult[0], /* array */[]));
       }
-      return React.createElement("div", undefined, ReasonReact.element(/* None */0, /* None */0, Toolbar.make(Curry._1(reduce, (function () {
+      return React.createElement("div", {
+                  className: AppStyles.root
+                }, ReasonReact.element(/* None */0, /* None */0, Toolbar.make(Curry._1(reduce, (function () {
                                 return /* RunAll */2;
                               })), Curry._1(reduce, (function () {
                                 return /* AddTest */0;
@@ -27930,7 +27937,27 @@ function make(data, url, updateStore, compilerResult, _) {
                                                     })), Curry._1(reduce, (function () {
                                                       return /* RemoveTest */Block.__(1, [test]);
                                                     })), /* array */[]));
-                              }), data[/* tests */1]))), tmp$1);
+                              }), data[/* tests */1]))), tmp$1, React.createElement("footer", {
+                      className: AppStyles.footer
+                    }, React.createElement("section", undefined, React.createElement("h1", undefined, Helpers.text("Project")), React.createElement("ul", undefined, React.createElement("li", undefined, React.createElement("a", {
+                                      href: "https://github.com/rebench/rebench.github.io"
+                                    }, Helpers.text("Source Code Repository"))), React.createElement("li", undefined, React.createElement("a", {
+                                      href: "https://github.com/rebench/rebench.github.io/issues"
+                                    }, Helpers.text("Support / Bug Tracker"))))), React.createElement("section", undefined, React.createElement("h1", undefined, Helpers.text("Made with")), React.createElement("ul", undefined, React.createElement("li", undefined, React.createElement("a", {
+                                      href: "https://github.com/bucklescript/bucklescript"
+                                    }, Helpers.text("BuckleScript"))), React.createElement("li", undefined, React.createElement("a", {
+                                      href: "https://benchmarkjs.com/"
+                                    }, Helpers.text("Benchmark.js"))), React.createElement("li", undefined, React.createElement("a", {
+                                      href: "https://codemirror.net/"
+                                    }, Helpers.text("CodeMirror"))), React.createElement("li", undefined, React.createElement("a", {
+                                      href: "https://reasonml.github.io/reason-react/"
+                                    }, Helpers.text("ReasonReact"))), React.createElement("li", undefined, React.createElement("a", {
+                                      href: "https://github.com/threepointone/glamor"
+                                    }, Helpers.text("glamor"))))), React.createElement("section", undefined, React.createElement("h1", undefined, Helpers.text("Reason")), React.createElement("ul", undefined, React.createElement("li", undefined, React.createElement("a", {
+                                      href: "https://reasonml.github.io/guide"
+                                    }, Helpers.text("Reason Guide"))), React.createElement("li", undefined, React.createElement("a", {
+                                      href: "https://reasonml.github.io/try"
+                                    }, Helpers.text("Reason Playground")))))));
     });
   newrecord[/* initialState */10] = (function () {
       return /* record */[
@@ -28090,9 +28117,12 @@ var _assoc = List.assoc;
 
 var _remove_assoc = List.remove_assoc;
 
+var Styles = 0;
+
 exports._toArray           = _toArray;
 exports._assoc             = _assoc;
 exports._remove_assoc      = _remove_assoc;
+exports.Styles             = Styles;
 exports._recalculateScores = _recalculateScores;
 exports.component          = component;
 exports.make               = make;
@@ -39601,7 +39631,7 @@ var Colors = __webpack_require__(25);
 var Glamor = __webpack_require__(26);
 
 var root = Glamor.css(/* :: */[
-      Glamor.margin("2em"),
+      Glamor.margin("1em 2em"),
       /* :: */[
         /* Selector */Block.__(1, [
             "&.s-not-even-close .score",
@@ -53146,6 +53176,128 @@ var ReactDOMInvalidARIAHook = {
 
 module.exports = ReactDOMInvalidARIAHook;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 294 */,
+/* 295 */,
+/* 296 */,
+/* 297 */,
+/* 298 */,
+/* 299 */,
+/* 300 */,
+/* 301 */,
+/* 302 */,
+/* 303 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Block  = __webpack_require__(8);
+var Colors = __webpack_require__(25);
+var Glamor = __webpack_require__(26);
+
+var root = Glamor.css(/* :: */[
+      Glamor.background(Colors.background),
+      /* :: */[
+        Glamor.minHeight("100vh"),
+        /* :: */[
+          Glamor.display("flex"),
+          /* :: */[
+            Glamor.flexDirection("column"),
+            /* [] */0
+          ]
+        ]
+      ]
+    ]);
+
+var footer = Glamor.css(/* :: */[
+      Glamor.background(Colors.darkBackground),
+      /* :: */[
+        Glamor.padding("1em 0 2em"),
+        /* :: */[
+          Glamor.marginTop("auto"),
+          /* :: */[
+            Glamor.display("flex"),
+            /* :: */[
+              /* Selector */Block.__(1, [
+                  "& > section",
+                  /* :: */[
+                    Glamor.margin("0 2em"),
+                    /* :: */[
+                      Glamor.opacity(".5"),
+                      /* :: */[
+                        Glamor.transition("opacity .5s"),
+                        /* :: */[
+                          /* Selector */Block.__(1, [
+                              "&:hover",
+                              /* :: */[
+                                Glamor.opacity("1"),
+                                /* [] */0
+                              ]
+                            ]),
+                          /* :: */[
+                            /* Selector */Block.__(1, [
+                                "& h1",
+                                /* :: */[
+                                  Glamor.fontSize(".85em"),
+                                  /* :: */[
+                                    Glamor.color("rgba(255, 255, 255, .5)"),
+                                    /* :: */[
+                                      Glamor.textTransform("lowercase"),
+                                      /* :: */[
+                                        Glamor.fontVariant("small-caps"),
+                                        /* :: */[
+                                          Glamor.marginBottom(".35em"),
+                                          /* [] */0
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ]),
+                            /* :: */[
+                              /* Selector */Block.__(1, [
+                                  "& a",
+                                  /* :: */[
+                                    Glamor.color(Colors.text),
+                                    /* :: */[
+                                      Glamor.textDecoration("none"),
+                                      /* :: */[
+                                        Glamor.fontSize(".85rem"),
+                                        /* :: */[
+                                          /* Selector */Block.__(1, [
+                                              "&:hover",
+                                              /* :: */[
+                                                Glamor.color("white"),
+                                                /* [] */0
+                                              ]
+                                            ]),
+                                          /* [] */0
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]),
+                              /* [] */0
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]),
+              /* [] */0
+            ]
+          ]
+        ]
+      ]
+    ]);
+
+exports.root   = root;
+exports.footer = footer;
+/* root Not a pure module */
+
 
 /***/ })
 /******/ ]);

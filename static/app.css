@@ -1,7 +1,8 @@
-body {
-	background: #162228;
+html, body, #index {
+	background: #162228; /* 1px line of body background shines through on webkit */
+	min-height: 100%;
 	font-family: Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
-  font-size: 15px;
+	font-size: 15px;
 }
 
 .CodeMirror {
