@@ -7,6 +7,7 @@ module Button = {
   let make = Button.make(~style=`Dark) 
 };
 */
+
 let formatResult = ({hz, rme, sampleCount}) => {
   let hz      = hz |> Js.Float.toFixedWithPrecision(~digits=hz < 100. ? 2 : 0)
                    |> Utils.formatNumber;
@@ -20,12 +21,18 @@ let formatRelativeScore = score =>
   score == 0. ? "Fastest" : (Js.Float.toFixed(-.score) ++ "% slower");
 
 let getStateClass =
-  fun | Untested                            => " s-untested"
-      | Running(_)                          => " s-running"
-      | Complete(_, Some(s)) when s == 0.   => " s-complete s-fastest"
-      | Complete(_, Some(s)) when s >= -10. => " s-complete s-close"
-      | Complete(_, Some(s)) when s <= -50. => " s-complete s-not-even-close"
-      | Complete(_)                         => " s-complete";
+  fun | Untested                            => "s-untested"
+      | Running(_)                          => "s-running"
+      | Complete(_, Some(s)) when s == 0.   => "s-complete s-fastest"
+      | Complete(_, Some(s)) when s >= -10. => "s-complete s-close"
+      | Complete(_, Some(s)) when s <= -50. => "s-complete s-not-even-close"
+      | Complete(_)                         => "s-complete";
+
+let makeClassName = (state, isError) => classNames([
+    (Styles.root, true),
+    (getStateClass(state), true),
+    ("s-error", isError)
+  ]);
 
 let renderHeader = state => [|
   ("Test" |> text),
@@ -89,13 +96,18 @@ let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
   ...component,
 
   render: (_) =>
-    <Block_ className = (Styles.root ++ getStateClass(state))
-            header    = `Elements(renderHeader(state))
-            footer    = renderFooter(state, onRun, onRemove) >
+    <SyntaxChecker input=data.code wait=100>
+      ...(((isError, marks)) =>
 
-      <Editor value     = data.code
-              lang      = `RE
-              onChange  = (code => onChange({ ...data, code })) />
+        <Block_ className = makeClassName(state, isError)
+                header    = `Elements(renderHeader(state))
+                footer    = renderFooter(state, onRun, onRemove) >
 
-    </Block_>
+          <Editor value     = data.code
+                  lang      = `RE
+                  onChange  = (code => onChange({ ...data, code }))
+                  marks     />
+
+        </Block_>)
+    </SyntaxChecker>
 };

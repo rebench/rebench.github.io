@@ -1,3 +1,5 @@
+open Rebase;
+
 [%bs.raw {|require('codemirror/lib/codemirror.css')|}];
 [%bs.raw {|require('codemirror/theme/material.css')|}];
 [%bs.raw {|require('codemirror/mode/javascript/javascript')|}];
@@ -9,12 +11,41 @@ let _langToMode =
       | `RE => "rust" 
       | _   => "javascript";
 
-let component = ReasonReact.statelessComponent("Editor");
-let make = (~value, ~lang, ~defaultValue=?, ~readOnly=false, ~inputRef=?, ~onChange=?, _) => {
+type mark = {.
+  "from": {. "line": int, "ch": int },
+  "to": {. "line": int, "ch": int },
+  "options": {. "className": string, "title": string }
+};
+
+type state = {
+  editor: ref(option(CodeMirror.editor))
+};
+
+let setMarks = (editor, marks: list(mark)) =>
+  editor^ |> Option.forEach(
+    editor => 
+      marks |> List.toArray
+            |> CodeMirror.setMarks(editor)
+  );
+
+let component = ReasonReact.reducerComponent("Editor");
+let make = (~value, ~lang, ~defaultValue=?, ~marks=[], ~readOnly=false, ~inputRef=?, ~onChange=?, _) => {
   ...component,
-  render: (_) =>
+
+  initialState: () => {
+    editor: ref(None)
+  },
+
+  reducer: ((), _state) => ReasonReact.NoUpdate,
+
+  didUpdate: ({ newSelf }) => {
+    setMarks(newSelf.state.editor, marks);
+  },
+
+  render: ({ handle }) =>
     <CodeMirror
       value
+      editorDidMount=(handle((editor, { state }) => state.editor := Some(editor)))
       ref=?inputRef
       ?defaultValue
       ?onChange
@@ -25,4 +56,5 @@ let make = (~value, ~lang, ~defaultValue=?, ~readOnly=false, ~inputRef=?, ~onCha
         "readOnly":     Js.Boolean.to_js_boolean(readOnly)
       }
     />
+
 };

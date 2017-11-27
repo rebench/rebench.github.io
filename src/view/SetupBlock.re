@@ -6,7 +6,12 @@ let make = (~code, ~onChange, _children) => {
   ...component,
 
   render: (_) =>
-    <Block_ header=`Text("Setup") collapsible=true>
-      <Editor value=code lang=`RE onChange />
-    </Block_>
+    <SyntaxChecker input=code wait=100>
+      ...(((isError, marks)) =>
+
+        <Block_ className=(isError ? "s-error" : "") header=`Text("Setup") collapsible=true>
+          <Editor value=code lang=`RE onChange marks />
+        </Block_>)
+
+    </SyntaxChecker>
 };

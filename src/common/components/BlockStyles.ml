@@ -4,6 +4,7 @@ let root = css [
   background Colors.panel;
   overflow "auto"; (* contain child element margins *)
   margin "1em";
+  borderLeft ("2px solid transparent");
 
   Selector("& > header", [
     padding ".75em 1.25em";
@@ -27,6 +28,10 @@ let root = css [
 
   Selector("&.s-collapsed > main", [
     display "none";
+  ]);
+
+  Selector("&.s-error", [
+    borderLeft ("2px solid " ^ Colors.red);
   ]);
 ]
 

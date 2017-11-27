@@ -11,6 +11,11 @@ html, body, #index {
 	font-size: 14px;
 }
 
+.CodeMirror .syntax-error {
+	background: #EC5F67;
+	color: black;
+}
+
 .CodeMirror-gutter {
 	/*background: rgba(0, 0, 0, 0.1);*/
 }
