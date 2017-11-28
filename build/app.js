@@ -39650,7 +39650,10 @@ function make(onRunAll, onAdd, onClear, url, _) {
   newrecord[/* render */9] = (function () {
       return React.createElement("div", {
                   className: ToolbarStyles.root
-                }, ReasonReact.element(/* None */0, /* None */0, Button.make("Run All", /* Some */["play"], /* None */0, onRunAll, /* array */[])), ReasonReact.element(/* None */0, /* None */0, Button.make("Add", /* Some */["plus"], /* None */0, onAdd, /* array */[])), ReasonReact.element(/* None */0, /* None */0, Button.make("Clear", /* Some */["close"], /* None */0, onClear, /* array */[])), React.createElement("div", {
+                }, React.createElement("img", {
+                      className: "logo",
+                      src: "static/logo.svg"
+                    }), ReasonReact.element(/* None */0, /* None */0, Button.make("Run All", /* Some */["play"], /* None */0, onRunAll, /* array */[])), ReasonReact.element(/* None */0, /* None */0, Button.make("Add", /* Some */["plus"], /* None */0, onAdd, /* array */[])), ReasonReact.element(/* None */0, /* None */0, Button.make("Clear", /* Some */["close"], /* None */0, onClear, /* array */[])), React.createElement("div", {
                       className: ToolbarStyles.separator
                     }), ReasonReact.element(/* None */0, /* None */0, ShareButton.make(url, /* array */[])));
     });
@@ -39994,6 +39997,7 @@ exports.root = root;
 "use strict";
 
 
+var Block  = __webpack_require__(7);
 var Colors = __webpack_require__(21);
 var Glamor = __webpack_require__(22);
 
@@ -40001,7 +40005,22 @@ var root = Glamor.css(/* :: */[
       Glamor.background(Colors.panel),
       /* :: */[
         Glamor.display("flex"),
-        /* [] */0
+        /* :: */[
+          /* Selector */Block.__(1, [
+              "& > .logo",
+              /* :: */[
+                Glamor.width("45px"),
+                /* :: */[
+                  Glamor.objectFit("contain"),
+                  /* :: */[
+                    Glamor.objectPosition("left"),
+                    /* [] */0
+                  ]
+                ]
+              ]
+            ]),
+          /* [] */0
+        ]
       ]
     ]);
 

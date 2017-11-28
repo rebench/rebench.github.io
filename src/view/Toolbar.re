@@ -7,6 +7,8 @@ let make = (~onRunAll, ~onAdd, ~onClear, ~shareableUrl as url, _) => {
   render: (_) =>
     <div className=Styles.root>
 
+      <img className="logo" src="static/logo.svg" />
+
       <Button icon    = "play"
               label   = "Run All"
               onClick = onRunAll />
