@@ -3,7 +3,7 @@ open Glamor
 let root = css [
   background Colors.panel;
   overflow "auto"; (* contain child element margins *)
-  margin "1em";
+  margin "1em 0";
   borderLeft ("2px solid transparent");
 
   Selector("& > header", [

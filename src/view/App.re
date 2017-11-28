@@ -162,61 +162,65 @@ let make = (~data: Store.data,
         }
       )
 
-      <SetupBlock code      = data.Store.setup
-                  onChange  = reduce(code => UpdateSetup(code)) />
+      <WidthContainer>
+        <SetupBlock code      = data.Store.setup
+                    onChange  = reduce(code => UpdateSetup(code)) />
 
-      (
-        data.tests |> List.map(test =>
-                        <TestBlock
-                          key       = (test.Test.id |> Test.Id.toString)
-                          onChange  = reduce(changed => UpdateTest(changed))
-                          onRun     = reduce(() => RunSingle(test))
-                          onRemove  = reduce(() => RemoveTest(test))
-                          data      = test
-                          state     = (try (_assoc(test.id, state.tests)) {
-                                       | Not_found => Test.Untested
-                                      })
-                        />)
-                    |> List.reverse
-                    |> _toArray
-                    |> ReasonReact.arrayToElement
-      )
+        (
+          data.tests |> List.map(test =>
+                          <TestBlock
+                            key       = (test.Test.id |> Test.Id.toString)
+                            onChange  = reduce(changed => UpdateTest(changed))
+                            onRun     = reduce(() => RunSingle(test))
+                            onRemove  = reduce(() => RemoveTest(test))
+                            data      = test
+                            state     = (try (_assoc(test.id, state.tests)) {
+                                        | Not_found => Test.Untested
+                                        })
+                          />)
+                      |> List.reverse
+                      |> _toArray
+                      |> ReasonReact.arrayToElement
+        )
 
-      (
-        switch compilerResult {
-        | Ok(code)
-        | Warning(code, _) => <JSBlock code />
-        | _                => ReasonReact.nullElement
-        }
-      )
+        (
+          switch compilerResult {
+          | Ok(code)
+          | Warning(code, _) => <JSBlock code />
+          | _                => ReasonReact.nullElement
+          }
+        )
+      </WidthContainer>
 
       <footer className=Styles.footer>
-        <section>
-          <h1> ("Project" |> text) </h1>
-          <ul>
-            <li> <a href="https://github.com/rebench/rebench.github.io"> ("Source Code Repository" |> text) </a> </li>
-            <li> <a href="https://github.com/rebench/rebench.github.io/issues"> ("Support / Bug Tracker" |> text) </a> </li>
-          </ul>
-        </section>
+        <WidthContainer>
+          <section>
+            <h1> ("Project" |> text) </h1>
+            <ul>
+              <li> <a href="https://github.com/rebench/rebench.github.io"> ("Source Code Repository" |> text) </a> </li>
+              <li> <a href="https://github.com/rebench/rebench.github.io/issues"> ("Support / Bug Tracker" |> text) </a> </li>
+            </ul>
+          </section>
 
-        <section>
-          <h1> ("Made with" |> text) </h1>
-          <ul>
-            <li> <a href="https://github.com/bucklescript/bucklescript"> ("BuckleScript" |> text) </a> </li>
-            <li> <a href="https://benchmarkjs.com/"> ("Benchmark.js" |> text) </a> </li>
-            <li> <a href="https://codemirror.net/"> ("CodeMirror" |> text) </a> </li>
-            <li> <a href="https://reasonml.github.io/reason-react/"> ("ReasonReact" |> text) </a> </li>
-            <li> <a href="https://github.com/threepointone/glamor"> ("glamor" |> text) </a> </li>
-          </ul>
-        </section>
+          <section>
+            <h1> ("Made with" |> text) </h1>
+            <ul>
+              <li> <a href="https://github.com/bucklescript/bucklescript"> ("BuckleScript" |> text) </a> </li>
+              <li> <a href="https://benchmarkjs.com/"> ("Benchmark.js" |> text) </a> </li>
+              <li> <a href="https://codemirror.net/"> ("CodeMirror" |> text) </a> </li>
+              <li> <a href="https://reasonml.github.io/reason-react/"> ("ReasonReact" |> text) </a> </li>
+              <li> <a href="https://github.com/threepointone/glamor"> ("glamor" |> text) </a> </li>
+            </ul>
+          </section>
 
-        <section>
-          <h1> ("Reason" |> text) </h1>
-          <ul>
-            <li> <a href="https://reasonml.github.io/guide"> ("Reason Guide" |> text) </a> </li>
-            <li> <a href="https://reasonml.github.io/try"> ("Reason Playground" |> text) </a> </li>
-          </ul>
-        </section>
+          <section>
+            <h1> ("Reason" |> text) </h1>
+            <ul>
+              <li> <a href="https://reasonml.github.io/guide"> ("Reason Guide" |> text) </a> </li>
+              <li> <a href="https://reasonml.github.io/try"> ("Reason Playground" |> text) </a> </li>
+            </ul>
+          </section>
+        </WidthContainer>
       </footer>
     </div>
 };

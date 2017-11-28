@@ -14,7 +14,9 @@ let make = (~type_, ~message, _children) => {
       };
 
     <div className=style>
-      (message |> text)
+      <WidthContainer>
+        (message |> text)
+      </WidthContainer>
     </div>
   }
 };

@@ -6,23 +6,26 @@ let make = (~onRunAll, ~onAdd, ~onClear, ~shareableUrl as url, _) => {
   ...component,
   render: (_) =>
     <div className=Styles.root>
+      <WidthContainer>
 
-      <img className="logo" src="static/logo.svg" />
+        <img className="logo" src="static/logo.svg" />
 
-      <Button icon    = "play"
-              label   = "Run All"
-              onClick = onRunAll />
-      
-      <Button icon    = "plus"
-              label   = "Add"
-              onClick = onAdd />
+        <Button icon    = "play"
+                label   = "Run All"
+                onClick = onRunAll />
+        
+        <Button icon    = "plus"
+                label   = "Add"
+                onClick = onAdd />
 
-      <Button icon    = "close"
-              label   = "Clear"
-              onClick = onClear />
+        <Button icon    = "close"
+                label   = "Clear"
+                onClick = onClear />
 
-      <div className=Styles.separator />
+        <div className=Styles.separator />
 
-      <ShareButton url />
+        <ShareButton url />
+
+      </WidthContainer>
     </div>
 };
