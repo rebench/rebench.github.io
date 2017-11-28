@@ -1,5 +1,7 @@
 open Rebase;
 
+module Styles = EditorStyles;
+
 [%bs.raw {|require('codemirror/lib/codemirror.css')|}];
 [%bs.raw {|require('codemirror/theme/material.css')|}];
 [%bs.raw {|require('codemirror/mode/javascript/javascript')|}];
@@ -43,18 +45,20 @@ let make = (~value, ~lang, ~defaultValue=?, ~marks=[], ~readOnly=false, ~inputRe
   },
 
   render: ({ handle }) =>
-    <CodeMirror
-      value
-      editorDidMount=(handle((editor, { state }) => state.editor := Some(editor)))
-      ref=?inputRef
-      ?defaultValue
-      ?onChange
-      options={
-        "mode":         _langToMode(lang),
-        "theme":        "material",
-        "lineNumbers":  true,
-        "readOnly":     Js.Boolean.to_js_boolean(readOnly)
-      }
-    />
+    <div className=Styles.root>
+      <CodeMirror
+        value
+        editorDidMount=(handle((editor, { state }) => state.editor := Some(editor)))
+        ref=?inputRef
+        ?defaultValue
+        ?onChange
+        options={
+          "mode":         _langToMode(lang),
+          "theme":        "material",
+          "lineNumbers":  true,
+          "readOnly":     Js.Boolean.to_js_boolean(readOnly)
+        }
+      />
+    </div>
 
 };

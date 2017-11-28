@@ -4,18 +4,3 @@ html, body, #index {
 	font-family: Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
 	font-size: 15px;
 }
-
-.CodeMirror {
-	height: auto;
-	font-family: "SFMono-Regular", Consolas,"Roboto Mono","Droid Sans Mono","Liberation Mono",Menlo,Courier,monospace;
-	font-size: 14px;
-}
-
-.CodeMirror .syntax-error {
-	background: #EC5F67;
-	color: black;
-}
-
-.CodeMirror-gutter {
-	/*background: rgba(0, 0, 0, 0.1);*/
-}
