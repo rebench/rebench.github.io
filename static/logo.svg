@@ -14,7 +14,10 @@
    version="1.1"
    id="svg4669"
    sodipodi:docname="logo.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06">
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:export-filename="/home/glennsl/dev/remote/rebench/favicon.ico.png"
+   inkscape:export-xdpi="128"
+   inkscape:export-ydpi="128">
   <metadata
      id="metadata4675">
     <rdf:RDF>
@@ -62,7 +65,7 @@
        inkscape:locked="false" />
   </sodipodi:namedview>
   <rect
-     style="fill:#db4d3f;fill-opacity:1"
+     style="fill:#ffffff;fill-opacity:0"
      id="rect5220"
      width="24"
      height="24"
@@ -75,6 +78,6 @@
   <path
      d="m 13.65,5.725 h -3.3 v 1.1 h 3.3 z m -2.2,7.15 h 1.1 v -3.3 h -1.1 z m 4.4165,-3.6355 0.781,-0.781 C 16.411,8.178 16.1525,7.914 15.872,7.683 L 15.091,8.464 C 14.2385,7.782 13.166,7.375 12,7.375 c -2.7335,0 -4.95,2.2165 -4.95,4.95 0,2.7335 2.211,4.95 4.95,4.95 2.739,0 4.95,-2.2165 4.95,-4.95 0,-1.166 -0.407,-2.2385 -1.0835,-3.0855 z M 12,16.175 c -2.1285,0 -3.85,-1.7215 -3.85,-3.85 0,-2.1285 1.7215,-3.85 3.85,-3.85 2.1285,0 3.85,1.7215 3.85,3.85 0,2.1285 -1.7215,3.85 -3.85,3.85 z"
      id="path4667"
-     style="opacity:1;fill:#ffffff;fill-opacity:1;stroke-width:0.55000001"
+     style="opacity:1;fill:#db4d3f;fill-opacity:1;stroke-width:0.55000001"
      inkscape:connector-curvature="0" />
 </svg>
