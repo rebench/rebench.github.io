@@ -1,15 +1,27 @@
 open Rebase;
 
+module Decode = {
+  let success = json =>
+    Json.Decode.(
+      Result.Ok(
+        json |> field("js_code", string)
+      )
+    );
+
+  let error = json =>
+    Json.Decode.(
+      Result.Error(
+        json |> field("text", string)
+      )
+    );
+};
+
 [@bs.val] [@bs.scope ("window", "ocaml")] external compile : string => string = "";
 let compile : string => Result.t(string, string) = code =>
-  code |> compile
-       |> Js.Json.parseExn
-       |> Js.Json.classify /* TODO: use bs-json? */
-       |> fun | JSONString(err) => Result.Error(err)
-              | JSONObject(res) =>
-                Js.Dict.get(res, "js_code")
-                |> Option.flatMap(Js.Json.decodeString)
-                |> Option.mapOr(
-                    code => Result.Ok(code),
-                    Result.Error("Unrecognized compiler output"))
-              | _ => Result.Error("Unrecognized compiler output");
+  try (
+    code |> compile
+         |> Js.Json.parseExn
+         |> Json.Decode.either(Decode.success, Decode.error)
+  ) {
+  | Json.Decode.DecodeError(e) => Result.Error("Unrecognized compiler output: " ++ e);
+  }

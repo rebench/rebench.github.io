@@ -46,7 +46,7 @@ let make = (~url, _) => {
     <div className=(Styles.root ++ (state.showConfirmation ? " s-show-confirmation" : ""))>
 
       <input value    = url
-             ref      = handle((r, { state }) => state.inputRef := Js.Nullable.to_opt(r))
+             ref      = handle((r, { state }) => state.inputRef := Js.toOption(r))
              readOnly = Js.true_ />
 
       <Button icon      = "share"

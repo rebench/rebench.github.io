@@ -1,11 +1,13 @@
 open Rebase;
 
 let _toMark = error => {
-  "from": error##location |> Js.Nullable.to_opt |> Option.mapOr(location =>{
+  "from": error##location |> Js.toOption
+                          |> Option.mapOr(location => {
     "line": location##startLine - 2,
     "ch": location##startLineStartChar - 1
   }, { "line": 0, "ch": 0 }),
-  "to": error##location |> Js.Nullable.to_opt |> Option.mapOr(location =>{
+  "to": error##location |> Js.toOption
+                        |> Option.mapOr(location => {
     "line": location##endLine - 2,
     "ch": location##endLineEndChar
   }, { "line": 0, "ch": 1 }),

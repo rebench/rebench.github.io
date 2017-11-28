@@ -39981,145 +39981,44 @@ exports.debounce     = debounce;
 "use strict";
 
 
-var Block        = __webpack_require__(7);
-var Rebase       = __webpack_require__(13);
-var Js_json      = __webpack_require__(200);
-var Js_primitive = __webpack_require__(43);
+var Block       = __webpack_require__(7);
+var Js_exn      = __webpack_require__(33);
+var Json_decode = __webpack_require__(207);
+
+function success(json) {
+  return /* Ok */Block.__(0, [Json_decode.field("js_code", Json_decode.string, json)]);
+}
+
+function error(json) {
+  return /* Error */Block.__(1, [Json_decode.field("text", Json_decode.string, json)]);
+}
+
+var Decode = /* module */[
+  /* success */success,
+  /* error */error
+];
 
 function compile(code) {
-  var param = Js_json.classify(JSON.parse(window.ocaml.compile(code)));
-  if (typeof param === "number") {
-    return /* Error */Block.__(1, ["Unrecognized compiler output"]);
-  } else {
-    switch (param.tag | 0) {
-      case 0 : 
-          return /* Error */Block.__(1, [param[0]]);
-      case 2 : 
-          return Rebase.Option[/* mapOr */16]((function (code) {
-                        return /* Ok */Block.__(0, [code]);
-                      }), /* Error */Block.__(1, ["Unrecognized compiler output"]), Rebase.Option[/* flatMap */5](Js_json.decodeString, Js_primitive.undefined_to_opt(param[0]["js_code"])));
-      default:
-        return /* Error */Block.__(1, ["Unrecognized compiler output"]);
+  try {
+    return Json_decode.either(success, error)(JSON.parse(window.ocaml.compile(code)));
+  }
+  catch (raw_exn){
+    var exn = Js_exn.internalToOCamlException(raw_exn);
+    if (exn[0] === Json_decode.DecodeError) {
+      return /* Error */Block.__(1, ["Unrecognized compiler output: " + exn[1]]);
+    } else {
+      throw exn;
     }
   }
 }
 
+exports.Decode  = Decode;
 exports.compile = compile;
 /* No side effect */
 
 
 /***/ }),
-/* 200 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Block = __webpack_require__(7);
-
-function classify(x) {
-  var ty = typeof x;
-  if (ty === "string") {
-    return /* JSONString */Block.__(0, [x]);
-  } else if (ty === "number") {
-    return /* JSONNumber */Block.__(1, [x]);
-  } else if (ty === "boolean") {
-    if (x === true) {
-      return /* JSONTrue */1;
-    } else {
-      return /* JSONFalse */0;
-    }
-  } else if (x === null) {
-    return /* JSONNull */2;
-  } else if (Array.isArray(x)) {
-    return /* JSONArray */Block.__(3, [x]);
-  } else {
-    return /* JSONObject */Block.__(2, [x]);
-  }
-}
-
-function test(x, v) {
-  switch (v) {
-    case 0 : 
-        return +(typeof x === "string");
-    case 1 : 
-        return +(typeof x === "number");
-    case 2 : 
-        if (x !== null && typeof x === "object") {
-          return 1 - +Array.isArray(x);
-        } else {
-          return /* false */0;
-        }
-    case 3 : 
-        return +Array.isArray(x);
-    case 4 : 
-        return +(typeof x === "boolean");
-    case 5 : 
-        return +(x === null);
-    
-  }
-}
-
-function decodeString(json) {
-  if (typeof json === "string") {
-    return /* Some */[json];
-  } else {
-    return /* None */0;
-  }
-}
-
-function decodeNumber(json) {
-  if (typeof json === "number") {
-    return /* Some */[json];
-  } else {
-    return /* None */0;
-  }
-}
-
-function decodeObject(json) {
-  if (typeof json === "object" && !Array.isArray(json) && json !== null) {
-    return /* Some */[json];
-  } else {
-    return /* None */0;
-  }
-}
-
-function decodeArray(json) {
-  if (Array.isArray(json)) {
-    return /* Some */[json];
-  } else {
-    return /* None */0;
-  }
-}
-
-function decodeBoolean(json) {
-  if (typeof json === "boolean") {
-    return /* Some */[json];
-  } else {
-    return /* None */0;
-  }
-}
-
-function decodeNull(json) {
-  if (json === null) {
-    return /* Some */[null];
-  } else {
-    return /* None */0;
-  }
-}
-
-exports.classify      = classify;
-exports.test          = test;
-exports.decodeString  = decodeString;
-exports.decodeNumber  = decodeNumber;
-exports.decodeObject  = decodeObject;
-exports.decodeArray   = decodeArray;
-exports.decodeBoolean = decodeBoolean;
-exports.decodeNull    = decodeNull;
-/* No side effect */
-
-
-/***/ }),
+/* 200 */,
 /* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
