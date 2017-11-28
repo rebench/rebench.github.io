@@ -22254,7 +22254,7 @@ var widthContainer = Glamor.css(/* :: */[
         /* :: */[
           Glamor.minWidth("600px"),
           /* :: */[
-            Glamor.margin("auto"),
+            Glamor.margin("0 auto"),
             /* [] */0
           ]
         ]
