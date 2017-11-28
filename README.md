@@ -1,1 +1,7 @@
 # re:bench
+
+Benchmarks done Reasonably - https://rebench.github.io/
+
+## Examples
+
+[Array iteration](https://rebench.github.io/?rebench-data=NoIgNgpgLgBAhgJwXAnjAvDAgk1A6ASwDsCoAKARgAYaAaGIjAPgYEoBuAHSMlgGcA9gFsIAMUaYCzGFIBUMAMwx5ADhgAfFgQDmRAQgjsQtYKAAsxkADN9MMlOIwqMKAJjUaMALTvWMAN7cMDCCIuJkOMgoeACuRHxwVhAA+trQZIhR9ASsHNwAviAAuiYgCpY2CHYOjM6u7jTOPhR+gYwhwmJEGbgowARFeUSFJaAATJaZqBosAFJ8eJH4lQCicADGABZkoV0cxaUUk70zMPOLvXhCcAAOO53i+0XPQA)
