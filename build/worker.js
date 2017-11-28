@@ -65,7 +65,7 @@
 /************************************************************************/
 /******/ ({
 
-/***/ 122:
+/***/ 123:
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -633,7 +633,7 @@ onmessage = ({data}) => {
       // Lazy define.
       createFunction = function(args, body) {
         var result,
-            anchor = __webpack_require__(42) ? __webpack_require__(122) : Benchmark,
+            anchor = __webpack_require__(42) ? __webpack_require__(123) : Benchmark,
             prop = uid + 'createFunction';
 
         runScript((__webpack_require__(42) ? 'define.amd.' : 'Benchmark.') + prop + '=function(' + args + '){' + body + '}');
@@ -780,7 +780,7 @@ onmessage = ({data}) => {
      * @param {string} code The code to run.
      */
     function runScript(code) {
-      var anchor = __webpack_require__(42) ? __webpack_require__(122) : Benchmark,
+      var anchor = __webpack_require__(42) ? __webpack_require__(123) : Benchmark,
           script = doc.createElement('script'),
           sibling = doc.getElementsByTagName('script')[0],
           parent = sibling.parentNode,
