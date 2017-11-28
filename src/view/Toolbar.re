@@ -8,7 +8,7 @@ let make = (~onRunAll, ~onAdd, ~onClear, ~shareableUrl as url, _) => {
     <div className=Styles.root>
       <WidthContainer>
 
-        <img className="logo" src="static/logo.svg" />
+        <img className="logo" src="static/logo.svg" title="re:bench" alt="re:bench" />
 
         <Button icon    = "play"
                 label   = "Run All"

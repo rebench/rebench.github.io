@@ -22,7 +22,7 @@ include Persistence.Make({
   type nonrec action = action;
 
   let default = () => {
-    setup: "/* code goes here */",
+    setup: "/* shared code goes here */",
     tests: [
       { id: Test.Id.fromInt(2), code: "Js.String.make(42)" },
       { id: Test.Id.fromInt(1), code: "string_of_int(42)" }
@@ -34,7 +34,7 @@ include Persistence.Make({
             ...state,
             tests:
               [
-                { id: _nextId(state), code: "/* put sutff here */" },
+                { id: _nextId(state), code: "/* put stuff here */" },
                 ...state.tests
               ]
           }

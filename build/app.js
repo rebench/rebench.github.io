@@ -22166,11 +22166,13 @@ exports.make          = make;
 "use strict";
 
 
-var Curry       = __webpack_require__(4);
-var Rebase      = __webpack_require__(12);
-var CodeMirror  = __webpack_require__(183);
-var Js_boolean  = __webpack_require__(55);
-var ReasonReact = __webpack_require__(9);
+var Curry        = __webpack_require__(4);
+var React        = __webpack_require__(13);
+var Rebase       = __webpack_require__(12);
+var CodeMirror   = __webpack_require__(183);
+var Js_boolean   = __webpack_require__(55);
+var ReasonReact  = __webpack_require__(9);
+var EditorStyles = __webpack_require__(301);
 
 ((__webpack_require__(186)));
 
@@ -22210,15 +22212,17 @@ function make(value, lang, defaultValue, $staropt$star, $staropt$star$1, inputRe
       return setMarks(param[/* newSelf */1][/* state */2][/* editor */0], marks);
     });
   newrecord[/* render */9] = (function (param) {
-      return ReasonReact.element(/* None */0, inputRef, CodeMirror.make(/* None */0, /* Some */[value], defaultValue, /* Some */[Curry._1(param[/* handle */0], (function (editor, param) {
-                              param[/* state */2][/* editor */0][0] = /* Some */[editor];
-                              return /* () */0;
-                            }))], onChange, /* Some */[{
-                        mode: _langToMode(lang),
-                        theme: "material",
-                        lineNumbers: /* true */1,
-                        readOnly: Js_boolean.to_js_boolean(readOnly)
-                      }], /* array */[]));
+      return React.createElement("div", {
+                  className: EditorStyles.root
+                }, ReasonReact.element(/* None */0, inputRef, CodeMirror.make(/* None */0, /* Some */[value], defaultValue, /* Some */[Curry._1(param[/* handle */0], (function (editor, param) {
+                                  param[/* state */2][/* editor */0][0] = /* Some */[editor];
+                                  return /* () */0;
+                                }))], onChange, /* Some */[{
+                            mode: _langToMode(lang),
+                            theme: "material",
+                            lineNumbers: /* true */1,
+                            readOnly: Js_boolean.to_js_boolean(readOnly)
+                          }], /* array */[])));
     });
   newrecord[/* initialState */10] = (function () {
       return /* record */[/* editor */[/* None */0]];
@@ -22229,6 +22233,9 @@ function make(value, lang, defaultValue, $staropt$star, $staropt$star$1, inputRe
   return newrecord;
 }
 
+var Styles = 0;
+
+exports.Styles      = Styles;
 exports._langToMode = _langToMode;
 exports.setMarks    = setMarks;
 exports.component   = component;
@@ -39707,6 +39714,8 @@ function make(onRunAll, onAdd, onClear, url, _) {
                 }, ReasonReact.element(/* None */0, /* None */0, WidthContainer.make(/* array */[
                           React.createElement("img", {
                                 className: "logo",
+                                title: "re:bench",
+                                alt: "re:bench",
                                 src: "static/logo.svg"
                               }),
                           ReasonReact.element(/* None */0, /* None */0, Button.make("Run All", /* Some */["play"], /* None */0, onRunAll, /* array */[])),
@@ -42659,7 +42668,7 @@ function _nextId(data) {
 
 function $$default() {
   return /* record */[
-          /* setup */"/* code goes here */",
+          /* setup */"/* shared code goes here */",
           /* tests : :: */[
             /* record */[
               /* id */Test.Id[/* fromInt */1](2),
@@ -42686,7 +42695,7 @@ function reducer(state, param) {
               /* tests : :: */[
                 /* record */[
                   /* id */_nextId(state),
-                  /* code */"/* put sutff here */"
+                  /* code */"/* put stuff here */"
                 ],
                 state[/* tests */1]
               ]
@@ -53432,6 +53441,54 @@ var ReactDOMInvalidARIAHook = {
 
 module.exports = ReactDOMInvalidARIAHook;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 296 */,
+/* 297 */,
+/* 298 */,
+/* 299 */,
+/* 300 */,
+/* 301 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Block  = __webpack_require__(7);
+var Glamor = __webpack_require__(19);
+
+var root = Glamor.css(/* :: */[
+      /* Selector */Block.__(1, [
+          "& .CodeMirror",
+          /* :: */[
+            Glamor.height("auto"),
+            /* :: */[
+              Glamor.fontFamily("\"SFMono-Regular\", Consolas,\"Roboto Mono\",\"Droid Sans Mono\",\"Liberation Mono\",Menlo,Courier,monospace"),
+              /* :: */[
+                Glamor.fontSize("14px"),
+                /* [] */0
+              ]
+            ]
+          ]
+        ]),
+      /* :: */[
+        /* Selector */Block.__(1, [
+            "& .CodeMirror .syntax-error",
+            /* :: */[
+              Glamor.background("#EC5F67"),
+              /* :: */[
+                Glamor.color("black"),
+                /* [] */0
+              ]
+            ]
+          ]),
+        /* [] */0
+      ]
+    ]);
+
+exports.root = root;
+/* root Not a pure module */
+
 
 /***/ })
 /******/ ]);
