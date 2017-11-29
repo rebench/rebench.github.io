@@ -6396,6 +6396,10 @@ var yellow = "#FFCB6D";
 
 var red = "#EC5F67";
 
+var reason = "#DD4C39";
+
+var javascript = "#F7E018";
+
 exports.background       = background;
 exports.darkBackground   = darkBackground;
 exports.panel            = panel;
@@ -6405,6 +6409,8 @@ exports.text             = text;
 exports.green            = green;
 exports.yellow           = yellow;
 exports.red              = red;
+exports.reason           = reason;
+exports.javascript       = javascript;
 /* No side effect */
 
 
@@ -22186,10 +22192,10 @@ var EditorStyles = __webpack_require__(301);
 
 function _langToMode(param) {
   if (param !== 17247) {
-    if (param !== 18355) {
-      return "javascript";
-    } else {
+    if (param >= 18355) {
       return "rust";
+    } else {
+      return "javascript";
     }
   } else {
     return "mllike";
@@ -22300,14 +22306,6 @@ var Helpers      = __webpack_require__(28);
 var ReasonReact  = __webpack_require__(9);
 var ButtonStyles = __webpack_require__(195);
 
-function makeClassName(param) {
-  if (param >= 758939798) {
-    return ButtonStyles.dark;
-  } else {
-    return ButtonStyles.normal;
-  }
-}
-
 function makeIcon(param) {
   if (param) {
     return ReasonReact.element(/* None */0, /* None */0, Icon.make(param[0], /* array */[]));
@@ -22319,11 +22317,23 @@ function makeIcon(param) {
 var component = ReasonReact.statelessComponent("Button");
 
 function make(label, icon, $staropt$star, onClick, _) {
-  var style = $staropt$star ? $staropt$star[0] : /* Normal */-453122489;
+  var className = $staropt$star ? $staropt$star[0] : "";
   var newrecord = component.slice();
   newrecord[/* render */9] = (function () {
       return React.createElement("button", {
-                  className: makeClassName(style),
+                  className: Helpers.classNames(/* :: */[
+                        /* tuple */[
+                          ButtonStyles.normal,
+                          /* true */1
+                        ],
+                        /* :: */[
+                          /* tuple */[
+                            className,
+                            /* true */1
+                          ],
+                          /* [] */0
+                        ]
+                      ]),
                   onClick: (function () {
                       return Curry._1(onClick, /* () */0);
                     })
@@ -22334,11 +22344,10 @@ function make(label, icon, $staropt$star, onClick, _) {
 
 var Styles = 0;
 
-exports.Styles        = Styles;
-exports.makeClassName = makeClassName;
-exports.makeIcon      = makeIcon;
-exports.component     = component;
-exports.make          = make;
+exports.Styles    = Styles;
+exports.makeIcon  = makeIcon;
+exports.component = component;
+exports.make      = make;
 /* component Not a pure module */
 
 
@@ -25318,13 +25327,13 @@ function _toMark(error) {
         };
 }
 
-function compute(input) {
-  var param = Compiler.checkSyntax(input);
-  if (param.tag) {
+function compute(param) {
+  var param$1 = Compiler.checkSyntax(param[0], param[1]);
+  if (param$1.tag) {
     return /* tuple */[
             /* true */1,
             /* :: */[
-              _toMark(param[0]),
+              _toMark(param$1[0]),
               /* [] */0
             ]
           ];
@@ -25362,11 +25371,6 @@ var Js_exn = __webpack_require__(25);
 var Rebase = __webpack_require__(12);
 var Reason = __webpack_require__(204);
 
-function _applyTemplate(param) {
-  var name = Test.Id[/* generateFunctionName */3](param[/* id */0]);
-  return "let " + (String(name) + (" = () => {\n  " + (String(param[/* code */1]) + "\n};\n")));
-}
-
 
   function _captureConsoleErrors(f) {
     let errors = "";
@@ -25381,10 +25385,18 @@ function _applyTemplate(param) {
 
 ;
 
-function _assemble(setup, tests) {
-  return Rebase.List[/* reduce */0]((function (acc, $$this) {
-                return acc + $$this;
-              }), setup, Rebase.List[/* reverse */14](Rebase.List[/* map */2](_applyTemplate, tests)));
+function _mlToRE(reCode) {
+  try {
+    return /* Ok */Block.__(0, [Reason.printRE(Reason.parseML(reCode))]);
+  }
+  catch (raw_exn){
+    var exn = Js_exn.internalToOCamlException(raw_exn);
+    if (exn[0] === Js_exn.$$Error) {
+      return /* Error */Block.__(1, [exn[1]]);
+    } else {
+      throw exn;
+    }
+  }
 }
 
 function _reToML(reCode) {
@@ -25401,6 +25413,22 @@ function _reToML(reCode) {
   }
 }
 
+function _applyTemplate(param) {
+  var code = param[/* code */2];
+  var name = Test.Id[/* generateFunctionName */3](param[/* id */0]);
+  if (param[/* language */1] >= 18355) {
+    return "let " + (String(name) + (" = () => {\n  " + (String(code) + "\n};\n")));
+  } else {
+    return "let " + (String(name) + (" = () => {\n  [%raw {|" + (String(code) + "|}]\n};\n")));
+  }
+}
+
+function _assemble(setup, tests) {
+  return Rebase.List[/* reduce */0]((function (acc, $$this) {
+                return acc + $$this;
+              }), setup, Rebase.List[/* reverse */14](Rebase.List[/* map */2](_applyTemplate, tests)));
+}
+
 function _compile(mlCode) {
   var match = _captureConsoleErrors((function () {
           return BS.compile(mlCode);
@@ -25414,9 +25442,10 @@ function _compile(mlCode) {
               }), match[0]);
 }
 
-function checkSyntax(code) {
+function checkSyntax(language, code) {
   return _reToML(_applyTemplate(/* record */[
                   /* id */Test.Id[/* fromInt */1](0),
+                  /* language */language,
                   /* code */code
                 ]));
 }
@@ -25443,9 +25472,10 @@ function compile(setup, tests) {
   }
 }
 
+exports._mlToRE        = _mlToRE;
+exports._reToML        = _reToML;
 exports._applyTemplate = _applyTemplate;
 exports._assemble      = _assemble;
-exports._reToML        = _reToML;
 exports._compile       = _compile;
 exports.checkSyntax    = checkSyntax;
 exports.compile        = compile;
@@ -28481,6 +28511,12 @@ function make(data, url, updateStore, compilerResult, _) {
                                                                 return /* RunSingle */Block.__(3, [test]);
                                                               })), Curry._1(reduce, (function () {
                                                                 return /* RemoveTest */Block.__(1, [test]);
+                                                              })), Curry._1(reduce, (function (language) {
+                                                                return /* UpdateTest */Block.__(0, [/* record */[
+                                                                            /* id */test[/* id */0],
+                                                                            /* language */language,
+                                                                            /* code */test[/* code */2]
+                                                                          ]]);
                                                               })), /* array */[]));
                                         }), data[/* tests */1]))),
                           tmp$1
@@ -39757,22 +39793,25 @@ var common_001 = /* :: */[
   /* :: */[
     Glamor.padding("1em"),
     /* :: */[
-      /* Selector */Block.__(1, [
-          "& .mdi",
-          /* :: */[
-            Glamor.marginRight(".25em"),
-            /* [] */0
-          ]
-        ]),
+      Glamor.cursor("pointer"),
       /* :: */[
         /* Selector */Block.__(1, [
-            "&:hover",
+            "& .mdi",
             /* :: */[
-              Glamor.background(Colors.highlightOverlay),
+              Glamor.marginRight(".25em"),
               /* [] */0
             ]
           ]),
-        /* [] */0
+        /* :: */[
+          /* Selector */Block.__(1, [
+              "&:hover",
+              /* :: */[
+                Glamor.background(Colors.highlightOverlay),
+                /* [] */0
+              ]
+            ]),
+          /* [] */0
+        ]
       ]
     ]
   ]
@@ -40243,8 +40282,10 @@ var React           = __webpack_require__(13);
 var Block_          = __webpack_require__(58);
 var Button          = __webpack_require__(61);
 var Editor          = __webpack_require__(59);
+var Rebase          = __webpack_require__(12);
 var Helpers         = __webpack_require__(28);
 var ReasonReact     = __webpack_require__(9);
+var SelectButton    = __webpack_require__(302);
 var SyntaxChecker   = __webpack_require__(94);
 var TestBlockStyles = __webpack_require__(206);
 
@@ -40319,54 +40360,80 @@ function makeClassName(state, isError) {
             ]);
 }
 
-function renderHeader(state) {
-  var tmp;
-  if (typeof state === "number") {
-    tmp = null;
-  } else if (state.tag) {
-    var match = state[1];
-    tmp = match ? React.createElement("span", undefined, Helpers.text(" - "), React.createElement("span", {
-                className: "score"
-              }, Helpers.text(formatRelativeScore(match[0])))) : null;
-  } else {
-    tmp = null;
-  }
-  return /* array */[
-          Helpers.text("Test"),
-          tmp
-        ];
-}
+var LanguageSelectButton = SelectButton.Make(/* module */[]);
 
-function renderFooter(state, onRun, onRemove) {
-  var tmp;
-  tmp = typeof state === "number" ? React.createElement("div", {
-          className: TestBlockStyles.state + " s-untested"
-        }) : (
-      state.tag ? React.createElement("div", {
-              className: TestBlockStyles.state + " s-complete"
-            }, ReasonReact.element(/* None */0, /* None */0, Icon.make("check", /* array */[])), Helpers.text(formatResult(state[0]))) : React.createElement("div", {
-              className: TestBlockStyles.state + " s-running"
-            }, ReasonReact.element(/* None */0, /* None */0, Icon.make("history", /* array */[])), Helpers.text(formatResult(state[0])))
-    );
-  return /* array */[
-          ReasonReact.element(/* None */0, /* None */0, Button.make("Run", /* Some */["play"], /* None */0, onRun, /* array */[])),
-          ReasonReact.element(/* None */0, /* None */0, Button.make("Remove", /* Some */["close"], /* None */0, onRemove, /* array */[])),
-          tmp
-        ];
+var languageMenuItems = Rebase.List[/* map */2]((function (lang) {
+        return /* record */[
+                /* label */lang >= 18355 ? "Reason" : "JavaScript",
+                /* value */lang
+              ];
+      }), /* :: */[
+      /* RE */18355,
+      /* :: */[
+        /* JS */16585,
+        /* [] */0
+      ]
+    ]);
+
+function getLanguageButtonClassName(param) {
+  if (param >= 18355) {
+    return "m-language-reason";
+  } else {
+    return "m-language-javascript";
+  }
 }
 
 var component = ReasonReact.statelessComponent("TestBlock");
 
-function make(data, state, onChange, onRun, onRemove, _) {
+function make(data, state, onChange, onRun, onRemove, onLanguageChange, _) {
+  var renderHeader = function () {
+    var tmp;
+    if (typeof state === "number") {
+      tmp = null;
+    } else if (state.tag) {
+      var match = state[1];
+      tmp = match ? React.createElement("span", undefined, Helpers.text(" - "), React.createElement("span", {
+                  className: "score"
+                }, Helpers.text(formatRelativeScore(match[0])))) : null;
+    } else {
+      tmp = null;
+    }
+    return /* array */[
+            Helpers.text("Test"),
+            tmp
+          ];
+  };
+  var renderFooter = function () {
+    var tmp;
+    tmp = typeof state === "number" ? React.createElement("div", {
+            className: TestBlockStyles.state + " s-untested"
+          }) : (
+        state.tag ? React.createElement("div", {
+                className: TestBlockStyles.state + " s-complete"
+              }, ReasonReact.element(/* None */0, /* None */0, Icon.make("check", /* array */[])), Helpers.text(formatResult(state[0]))) : React.createElement("div", {
+                className: TestBlockStyles.state + " s-running"
+              }, ReasonReact.element(/* None */0, /* None */0, Icon.make("history", /* array */[])), Helpers.text(formatResult(state[0])))
+      );
+    return /* array */[
+            ReasonReact.element(/* None */0, /* None */0, Curry._5(LanguageSelectButton[/* make */1], languageMenuItems, data[/* language */1], /* Some */[getLanguageButtonClassName(data[/* language */1])], onLanguageChange, /* array */[])),
+            ReasonReact.element(/* None */0, /* None */0, Button.make("Run", /* Some */["play"], /* None */0, onRun, /* array */[])),
+            ReasonReact.element(/* None */0, /* None */0, Button.make("Remove", /* Some */["close"], /* None */0, onRemove, /* array */[])),
+            tmp
+          ];
+  };
   var newrecord = component.slice();
   newrecord[/* render */9] = (function () {
-      return ReasonReact.element(/* None */0, /* None */0, Curry._3(SyntaxChecker.make, data[/* code */1], 100, (function (param) {
+      return ReasonReact.element(/* None */0, /* None */0, Curry._3(SyntaxChecker.make, /* tuple */[
+                      data[/* language */1],
+                      data[/* code */2]
+                    ], 100, (function (param) {
                         return ReasonReact.element(/* None */0, /* None */0, Block_.make(/* `Elements */[
                                         -579472809,
-                                        renderHeader(state)
-                                      ], /* Some */[renderFooter(state, onRun, onRemove)], /* Some */[makeClassName(state, param[0])], /* None */0, /* array */[ReasonReact.element(/* None */0, /* None */0, Editor.make(data[/* code */1], /* RE */18355, /* None */0, /* Some */[param[1]], /* None */0, /* None */0, /* Some */[(function (code) {
+                                        renderHeader(/* () */0)
+                                      ], /* Some */[renderFooter(/* () */0)], /* Some */[makeClassName(state, param[0])], /* None */0, /* array */[ReasonReact.element(/* None */0, /* None */0, Editor.make(data[/* code */2], data[/* language */1], /* None */0, /* Some */[param[1]], /* None */0, /* None */0, /* Some */[(function (code) {
                                                       return Curry._1(onChange, /* record */[
                                                                   /* id */data[/* id */0],
+                                                                  /* language */data[/* language */1],
                                                                   /* code */code
                                                                 ]);
                                                     })], /* array */[]))]));
@@ -40377,16 +40444,17 @@ function make(data, state, onChange, onRun, onRemove, _) {
 
 var Styles = 0;
 
-exports.Styles              = Styles;
-exports.formatResult        = formatResult;
-exports.formatRelativeScore = formatRelativeScore;
-exports.getStateClass       = getStateClass;
-exports.makeClassName       = makeClassName;
-exports.renderHeader        = renderHeader;
-exports.renderFooter        = renderFooter;
-exports.component           = component;
-exports.make                = make;
-/* component Not a pure module */
+exports.Styles                     = Styles;
+exports.formatResult               = formatResult;
+exports.formatRelativeScore        = formatRelativeScore;
+exports.getStateClass              = getStateClass;
+exports.makeClassName              = makeClassName;
+exports.LanguageSelectButton       = LanguageSelectButton;
+exports.languageMenuItems          = languageMenuItems;
+exports.getLanguageButtonClassName = getLanguageButtonClassName;
+exports.component                  = component;
+exports.make                       = make;
+/* LanguageSelectButton Not a pure module */
 
 
 /***/ }),
@@ -42573,7 +42641,25 @@ var root = Glamor.css(/* :: */[
                 /* [] */0
               ]
             ]),
-          /* [] */0
+          /* :: */[
+            /* Selector */Block.__(1, [
+                "& button.m-language-reason",
+                /* :: */[
+                  Glamor.color(Colors.reason),
+                  /* [] */0
+                ]
+              ]),
+            /* :: */[
+              /* Selector */Block.__(1, [
+                  "& button.m-language-javascript",
+                  /* :: */[
+                    Glamor.color(Colors.javascript),
+                    /* [] */0
+                  ]
+                ]),
+              /* [] */0
+            ]
+          ]
         ]
       ]
     ]);
@@ -42633,7 +42719,10 @@ var component = ReasonReact.statelessComponent("SetupBlock");
 function make(code, onChange, _) {
   var newrecord = component.slice();
   newrecord[/* render */9] = (function () {
-      return ReasonReact.element(/* None */0, /* None */0, Curry._3(SyntaxChecker.make, code, 100, (function (param) {
+      return ReasonReact.element(/* None */0, /* None */0, Curry._3(SyntaxChecker.make, /* tuple */[
+                      /* JS */16585,
+                      code
+                    ], 100, (function (param) {
                         return ReasonReact.element(/* None */0, /* None */0, Block_.make(/* `Text */[
                                         936573133,
                                         "Setup"
@@ -42672,11 +42761,13 @@ function $$default() {
           /* tests : :: */[
             /* record */[
               /* id */Test.Id[/* fromInt */1](2),
+              /* language : RE */18355,
               /* code */"Js.String.make(42)"
             ],
             /* :: */[
               /* record */[
                 /* id */Test.Id[/* fromInt */1](1),
+                /* language : RE */18355,
                 /* code */"string_of_int(42)"
               ],
               /* [] */0
@@ -42695,6 +42786,7 @@ function reducer(state, param) {
               /* tests : :: */[
                 /* record */[
                   /* id */_nextId(state),
+                  /* language : RE */18355,
                   /* code */"/* put stuff here */"
                 ],
                 state[/* tests */1]
@@ -42735,14 +42827,14 @@ function reducer(state, param) {
 }
 
 function serialize(param) {
-  return JSON.stringify(Model.Encode[/* state */2](/* tuple */[
+  return JSON.stringify(Model.Encode[/* state */4](/* tuple */[
                   param[/* setup */0],
                   param[/* tests */1]
                 ]));
 }
 
 function deserialize(data) {
-  var match = Model.Decode[/* state */2](JSON.parse(data));
+  var match = Model.Decode[/* state */4](JSON.parse(data));
   return /* record */[
           /* setup */match[0],
           /* tests */match[1]
@@ -42791,13 +42883,64 @@ var Curry       = __webpack_require__(4);
 var Json_decode = __webpack_require__(96);
 var Json_encode = __webpack_require__(210);
 
+function tuple3(decodeA, decodeB, decodeC, json) {
+  if (Array.isArray(json)) {
+    var length = json.length;
+    if (length === 3) {
+      return /* tuple */[
+              Curry._1(decodeA, json[0]),
+              Curry._1(decodeB, json[1]),
+              Curry._1(decodeC, json[2])
+            ];
+    } else {
+      throw [
+            Json_decode.DecodeError,
+            "Expected array of length 2, got array of length " + (String(length) + "")
+          ];
+    }
+  } else {
+    throw [
+          Json_decode.DecodeError,
+          "Expected array, got " + JSON.stringify(json)
+        ];
+  }
+}
+
 var id = Json_decode.string;
 
+function language(json) {
+  var language$1 = Json_decode.string(json);
+  switch (language$1) {
+    case "js" : 
+        return /* JS */16585;
+    case "re" : 
+        return /* RE */18355;
+    default:
+      throw [
+            Json_decode.DecodeError,
+            "Unknown language: " + (String(language$1) + "")
+          ];
+  }
+}
+
 function test(json) {
-  var match = Json_decode.pair(id, Json_decode.string, json);
+  var match = Json_decode.either((function (param) {
+            return tuple3(id, language, Json_decode.string, param);
+          }), (function (param) {
+            return Json_decode.map((function (param) {
+                          return /* tuple */[
+                                  param[0],
+                                  /* RE */18355,
+                                  param[1]
+                                ];
+                        }), (function (param) {
+                          return Json_decode.pair(id, Json_decode.string, param);
+                        }), param);
+          }))(json);
   return /* record */[
           /* id */match[0],
-          /* code */match[1]
+          /* language */match[1],
+          /* code */match[2]
         ];
 }
 
@@ -42808,21 +42951,40 @@ function state(json) {
 }
 
 var Decode = /* module */[
+  /* tuple3 */tuple3,
   /* id */id,
+  /* language */language,
   /* test */test,
   /* state */state
 ];
+
+function tuple3$1(encodeA, encodeB, encodeC, param) {
+  return /* array */[
+          Curry._1(encodeA, param[0]),
+          Curry._1(encodeB, param[1]),
+          Curry._1(encodeC, param[2])
+        ];
+}
 
 function id$1(value) {
   return Curry._1(Test.Id[/* toString */2], value);
 }
 
+function language$1(value) {
+  if (value >= 18355) {
+    return "re";
+  } else {
+    return "js";
+  }
+}
+
 function test$1(value) {
-  return Json_encode.pair(id$1, (function (prim) {
+  return tuple3$1(id$1, language$1, (function (prim) {
                 return prim;
               }), /* tuple */[
               value[/* id */0],
-              value[/* code */1]
+              value[/* language */1],
+              value[/* code */2]
             ]);
 }
 
@@ -42835,7 +42997,9 @@ function state$1(value) {
 }
 
 var Encode = /* module */[
+  /* tuple3 */tuple3$1,
   /* id */id$1,
+  /* language */language$1,
   /* test */test$1,
   /* state */state$1
 ];
@@ -53488,6 +53652,222 @@ var root = Glamor.css(/* :: */[
 
 exports.root = root;
 /* root Not a pure module */
+
+
+/***/ }),
+/* 302 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Block              = __webpack_require__(7);
+var Curry              = __webpack_require__(4);
+var React              = __webpack_require__(13);
+var Button             = __webpack_require__(61);
+var Rebase             = __webpack_require__(12);
+var Helpers            = __webpack_require__(28);
+var ReasonReact        = __webpack_require__(9);
+var OnClickOutside     = __webpack_require__(304);
+var SelectButtonStyles = __webpack_require__(303);
+
+function Make() {
+  var component = ReasonReact.reducerComponent("SelectButton");
+  var make = function (items, selected, $staropt$star, onSelect, _) {
+    var className = $staropt$star ? $staropt$star[0] : "";
+    var newrecord = component.slice();
+    newrecord[/* render */9] = (function (param) {
+        var reduce = param[/* reduce */1];
+        var match = param[/* state */2][/* isOpen */0];
+        return React.createElement("div", {
+                    className: SelectButtonStyles.root
+                  }, ReasonReact.element(/* None */0, /* None */0, OnClickOutside.make(Curry._1(reduce, (function () {
+                                  return /* OutsideClicked */1;
+                                })), /* array */[
+                            ReasonReact.element(/* None */0, /* None */0, Button.make(Rebase.Option[/* getOrRaise */15](Rebase.List[/* find */7]((function (item) {
+                                                  return +(item[/* value */1] === selected);
+                                                }), items))[/* label */0], /* None */0, /* Some */[className], Curry._1(reduce, (function () {
+                                            return /* ButtonClicked */0;
+                                          })), /* array */[])),
+                            React.createElement("menu", {
+                                  className: SelectButtonStyles.menu + (
+                                    match !== 0 ? " s-open" : ""
+                                  )
+                                }, React.createElement("ul", undefined, Rebase.List[/* toArray */16](Rebase.List[/* map */2]((function (item) {
+                                                return React.createElement("li", {
+                                                            key: item[/* label */0],
+                                                            onClick: Curry._1(reduce, (function () {
+                                                                    return /* ItemSelected */[item];
+                                                                  }))
+                                                          }, Helpers.text(item[/* label */0]));
+                                              }), items))))
+                          ])));
+      });
+    newrecord[/* initialState */10] = (function () {
+        return /* record */[/* isOpen : false */0];
+      });
+    newrecord[/* reducer */12] = (function (action, state) {
+        if (typeof action === "number") {
+          if (action !== 0) {
+            return /* Update */Block.__(0, [/* record */[/* isOpen : false */0]]);
+          } else {
+            return /* Update */Block.__(0, [/* record */[/* isOpen */1 - state[/* isOpen */0]]]);
+          }
+        } else {
+          var item = action[0];
+          return /* UpdateWithSideEffects */Block.__(3, [
+                    /* record */[/* isOpen : false */0],
+                    (function () {
+                        return Curry._1(onSelect, item[/* value */1]);
+                      })
+                  ]);
+        }
+      });
+    return newrecord;
+  };
+  return /* module */[
+          /* component */component,
+          /* make */make
+        ];
+}
+
+var Styles = 0;
+
+exports.Styles = Styles;
+exports.Make   = Make;
+/* react Not a pure module */
+
+
+/***/ }),
+/* 303 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Block  = __webpack_require__(7);
+var Colors = __webpack_require__(22);
+var Glamor = __webpack_require__(19);
+
+var root = Glamor.css(/* [] */0);
+
+var menu = Glamor.css(/* :: */[
+      Glamor.position("absolute"),
+      /* :: */[
+        Glamor.zIndex("100"),
+        /* :: */[
+          Glamor.display("none"),
+          /* :: */[
+            Glamor.transform("translateX(-2px)"),
+            /* :: */[
+              Glamor.background(Colors.panel),
+              /* :: */[
+                Glamor.borderTop("1px solid" + Colors.background),
+                /* :: */[
+                  Glamor.boxShadow("2px 2px 1px 0 rgba(0, 0, 0, .25)"),
+                  /* :: */[
+                    /* Selector */Block.__(1, [
+                        "&.s-open",
+                        /* :: */[
+                          Glamor.display("block"),
+                          /* [] */0
+                        ]
+                      ]),
+                    /* :: */[
+                      /* Selector */Block.__(1, [
+                          "& > ul > li",
+                          /* :: */[
+                            Glamor.padding("1em"),
+                            /* :: */[
+                              Glamor.cursor("pointer"),
+                              /* :: */[
+                                /* Selector */Block.__(1, [
+                                    "&:hover",
+                                    /* :: */[
+                                      Glamor.background(Colors.highlightOverlay),
+                                      /* [] */0
+                                    ]
+                                  ]),
+                                /* [] */0
+                              ]
+                            ]
+                          ]
+                        ]),
+                      /* [] */0
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]);
+
+exports.root = root;
+exports.menu = menu;
+/* root Not a pure module */
+
+
+/***/ }),
+/* 304 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var Curry       = __webpack_require__(4);
+var React       = __webpack_require__(13);
+var Rebase      = __webpack_require__(12);
+var ReasonReact = __webpack_require__(9);
+
+var component = ReasonReact.reducerComponent("OnClickOutside");
+
+function make(onClick, children) {
+  var newrecord = component.slice();
+  newrecord[/* didMount */4] = (function (self) {
+      var listener = function ($$event) {
+        return Rebase.Option[/* forEach */8]((function (rootEl) {
+                      if ($$event.target.contains(rootEl)) {
+                        return Curry._1(onClick, /* () */0);
+                      } else {
+                        return 0;
+                      }
+                    }), self[/* state */2][/* rootRef */0][0]);
+      };
+      self[/* state */2][/* listener */1][0] = /* Some */[listener];
+      document.addEventListener("mousedown", listener);
+      return /* NoUpdate */0;
+    });
+  newrecord[/* willUnmount */6] = (function (self) {
+      return Rebase.Option[/* forEach */8]((function (listener) {
+                    document.addEventListener("mousedown", listener);
+                    return /* () */0;
+                  }), self[/* state */2][/* listener */1][0]);
+    });
+  newrecord[/* render */9] = (function (param) {
+      return React.createElement("div", {
+                  ref: Curry._1(param[/* handle */0], (function (r, param) {
+                          param[/* state */2][/* rootRef */0][0] = (r == null) ? /* None */0 : [r];
+                          return /* () */0;
+                        }))
+                }, children);
+    });
+  newrecord[/* initialState */10] = (function () {
+      return /* record */[
+              /* rootRef */[/* None */0],
+              /* listener */[/* None */0]
+            ];
+    });
+  newrecord[/* reducer */12] = (function (_, _$1) {
+      return /* NoUpdate */0;
+    });
+  return newrecord;
+}
+
+exports.component = component;
+exports.make      = make;
+/* component Not a pure module */
 
 
 /***/ })

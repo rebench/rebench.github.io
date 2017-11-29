@@ -4,6 +4,7 @@ let common = [
   background "red";
   color Colors.text;
   padding "1em";
+  cursor "pointer";
 
   Selector("& .mdi", [
     marginRight ".25em";

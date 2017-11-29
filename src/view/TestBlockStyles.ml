@@ -1,7 +1,6 @@
 open Glamor
 
 let root = css [
-
   Selector("&.s-not-even-close .score", [
     color Colors.red;
   ]);
@@ -12,6 +11,16 @@ let root = css [
 
   Selector("&.s-fastest .score", [
     color Colors.green;
+  ]);
+
+  Selector("& button.m-language-reason", [
+    color Colors.reason;
+    (*borderTop ("1px solid " ^ Colors.reason)*)
+  ]);
+
+  Selector("& button.m-language-javascript", [
+    color Colors.javascript;
+    (*borderTop ("1px solid" ^ Colors.javascript)*)
   ]);
 ]
 

@@ -18,10 +18,10 @@ let _toMark = error => {
 };
 
 include Debounce.Make({
-  type input = string;
+  type input = (Test.language, string);
   type output = (bool, list(Editor.mark));
-  let compute = input =>
-    input |> Compiler.checkSyntax
-          |> fun | Result.Ok(_) => (false, [])
-                 | Result.Error(error) => (true, [error |> _toMark]);
+  let compute = ((language, code)) =>
+    code |> Compiler.checkSyntax(language)
+         |> fun | Result.Ok(_) => (false, [])
+                | Result.Error(error) => (true, [error |> _toMark]);
 });

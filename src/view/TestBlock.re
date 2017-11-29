@@ -34,80 +34,107 @@ let makeClassName = (state, isError) => classNames([
     ("s-error", isError)
   ]);
 
-let renderHeader = state => [|
-  ("Test" |> text),
-  (
-    switch state {
-    | Complete(_, Some(score)) =>
-      <span>
-        (" - " |> text)
-        <span className="score">
-          (
-            score |> formatRelativeScore
-                  |> text
-          )
-        </span>
-      </span>
-    | _ => ReasonReact.nullElement
-    }
-  )
-|];
 
-let renderFooter = (state, onRun, onRemove) => [|
 
-  <Button icon    = "play"
-          label   = "Run"
-          onClick = onRun />,
+module LanguageSelectButton = SelectButton.Make({
+  type value = Test.language;
+});
 
-  <Button icon    = "close"
-          label   = "Remove"
-          onClick = onRemove />,
+let languageMenuItems =
+  [`RE, `JS] |> List.map(lang =>
+    LanguageSelectButton.{
+      label: lang |> fun | `RE => "Reason"
+                         | `JS => "JavaScript",
+      value: lang
+    });
 
-  (
-    switch state {
-    
-    | Untested =>
-      <div className=(Styles.state ++ " s-untested") />
+let getLanguageButtonClassName =
+  fun | `RE => "m-language-reason"
+      | `JS => "m-language-javascript";
 
-    | Running(result) =>
-      <div className=(Styles.state ++ " s-running")>
-        <Icon name="history" />
-        (
-          result |> formatResult
-                 |> text
-        )
-      </div>
 
-    | Complete(result, _) =>
-      <div className=(Styles.state ++ " s-complete")>
-        <Icon name="check" />
-        (
-          result |> formatResult
-                 |> text
-        )
-      </div>
-
-    }
-  )
-|];
 
 let component = ReasonReact.statelessComponent("TestBlock");
-let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, _children) => {
-  ...component,
+let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, ~onLanguageChange, _children) => {
 
-  render: (_) =>
-    <SyntaxChecker input=data.code wait=100>
-      ...(((isError, marks)) =>
+  let renderHeader = () => [|
+    ("Test" |> text),
+    (
+      switch state {
+      | Complete(_, Some(score)) =>
+        <span>
+          (" - " |> text)
+          <span className="score">
+            (
+              score |> formatRelativeScore
+                    |> text
+            )
+          </span>
+        </span>
+      | _ => ReasonReact.nullElement
+      }
+    )
+  |];
 
-        <Block_ className = makeClassName(state, isError)
-                header    = `Elements(renderHeader(state))
-                footer    = renderFooter(state, onRun, onRemove) >
+  let renderFooter = () => [|
+    <LanguageSelectButton className = getLanguageButtonClassName(data.language)
+                          selected  = data.language
+                          onSelect  = onLanguageChange
+                          items     = languageMenuItems />,
 
-          <Editor value     = data.code
-                  lang      = `RE
-                  onChange  = (code => onChange({ ...data, code }))
-                  marks     />
+    <Button icon    = "play"
+            label   = "Run"
+            onClick = onRun />,
 
-        </Block_>)
-    </SyntaxChecker>
+    <Button icon    = "close"
+            label   = "Remove"
+            onClick = onRemove />,
+
+    (
+      switch state {
+      
+      | Untested =>
+        <div className=(Styles.state ++ " s-untested") />
+
+      | Running(result) =>
+        <div className=(Styles.state ++ " s-running")>
+          <Icon name="history" />
+          (
+            result |> formatResult
+                  |> text
+          )
+        </div>
+
+      | Complete(result, _) =>
+        <div className=(Styles.state ++ " s-complete")>
+          <Icon name="check" />
+          (
+            result |> formatResult
+                  |> text
+          )
+        </div>
+
+      }
+    )
+  |];
+
+  {
+    ...component,
+
+    render: (_) =>
+      <SyntaxChecker input=(data.language, data.code) wait=100>
+        ...(((isError, marks)) =>
+
+          <Block_ className = makeClassName(state, isError)
+                  header    = `Elements(renderHeader())
+                  footer    = renderFooter() >
+
+            <Editor value     = data.code
+                    lang      = data.language
+                    onChange  = (code => onChange({ ...data, code }))
+                    marks     />
+
+          </Block_>)
+      </SyntaxChecker>
+  }
 };

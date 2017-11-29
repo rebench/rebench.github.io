@@ -11,7 +11,7 @@ module Styles = EditorStyles;
 let _langToMode =
   fun | `ML => "mllike"
       | `RE => "rust" 
-      | _   => "javascript";
+      | `JS => "javascript";
 
 type mark = {.
   "from": {. "line": int, "ch": int },

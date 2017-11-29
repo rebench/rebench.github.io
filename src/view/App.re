@@ -167,20 +167,23 @@ let make = (~data: Store.data,
                     onChange  = reduce(code => UpdateSetup(code)) />
 
         (
-          data.tests |> List.map(test =>
-                          <TestBlock
-                            key       = (test.Test.id |> Test.Id.toString)
-                            onChange  = reduce(changed => UpdateTest(changed))
-                            onRun     = reduce(() => RunSingle(test))
-                            onRemove  = reduce(() => RemoveTest(test))
-                            data      = test
-                            state     = (try (_assoc(test.id, state.tests)) {
-                                        | Not_found => Test.Untested
-                                        })
-                          />)
-                      |> List.reverse
-                      |> _toArray
-                      |> ReasonReact.arrayToElement
+          data.tests
+            |> List.map(test =>
+                <TestBlock
+                  key       = (test.Test.id |> Test.Id.toString)
+                  onChange  = reduce(changed => UpdateTest(changed))
+                  onRun     = reduce(() => RunSingle(test))
+                  onRemove  = reduce(() => RemoveTest(test))
+                  onLanguageChange
+                            = reduce(language => UpdateTest({ ...test, language }))
+                  data      = test
+                  state     = (try (_assoc(test.id, state.tests)) {
+                              | Not_found => Test.Untested
+                              })
+                />)
+            |> List.reverse
+            |> _toArray
+            |> ReasonReact.arrayToElement
         )
 
         (

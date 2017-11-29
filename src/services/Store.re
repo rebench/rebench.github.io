@@ -24,8 +24,8 @@ include Persistence.Make({
   let default = () => {
     setup: "/* shared code goes here */",
     tests: [
-      { id: Test.Id.fromInt(2), code: "Js.String.make(42)" },
-      { id: Test.Id.fromInt(1), code: "string_of_int(42)" }
+      { id: Test.Id.fromInt(2), language: `RE, code: "Js.String.make(42)" },
+      { id: Test.Id.fromInt(1), language: `RE, code: "string_of_int(42)" }
     ],
   };
 
@@ -34,7 +34,7 @@ include Persistence.Make({
             ...state,
             tests:
               [
-                { id: _nextId(state), code: "/* put stuff here */" },
+                { id: _nextId(state), language: `RE, code: "/* put stuff here */" },
                 ...state.tests
               ]
           }

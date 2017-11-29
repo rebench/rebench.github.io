@@ -6,12 +6,6 @@ type result =
   | Error(string)
 ;
 
-let _applyTemplate = ({ Test.id, code }) => {
-  let name = Test.Id.generateFunctionName(id);
-{j|let $name = () => {
-  $code
-};
-|j}};
 
 [%%raw {|
   function _captureConsoleErrors(f) {
@@ -27,29 +21,44 @@ let _applyTemplate = ({ Test.id, code }) => {
 |}];
 [@bs.val] external _captureConsoleErrors : (unit => 'a) => ('a, option(string)) = "";
 
-type refmtError = {.
-  "message": string,
-  "location": Js.nullable({.
-    "startLine": int,
-    "startLineStartChar": int,
-    "endLine": int,
-    "endLineEndChar": int
-  })
-};
-external jsExnToRefmtError : Js.Exn.t => refmtError = "%identity";
-
-let _assemble = (setup, tests) =>
-  tests |> List.map(_applyTemplate)
-        |> List.reverse
-        |> List.reduce((acc, this) => acc ++ this, setup);
+let _mlToRE = reCode =>
+  try (Result.Ok(
+    reCode |> Refmt.parseML
+           |> Refmt.printRE
+  )) {
+  | Js.Exn.Error(e) => Result.Error(e |> Refmt.errorFromExn)
+  };
 
 let _reToML = reCode =>
   try (Result.Ok(
     reCode |> Refmt.parseRE
            |> Refmt.printML
   )) {
-  | Js.Exn.Error(e) => Result.Error(e |> jsExnToRefmtError)
+  | Js.Exn.Error(e) => Result.Error(e |> Refmt.errorFromExn)
   };
+
+let _applyTemplate = ({ Test.id, language, code }) => {
+  let name = Test.Id.generateFunctionName(id);
+
+  switch language {
+  | `RE =>
+{j|let $name = () => {
+  $code
+};
+|j}
+
+  | `JS =>
+{j|let $name = () => {
+  [%raw {|$code|}]
+};
+|j}
+  }
+};
+
+let _assemble = (setup, tests) =>
+  tests |> List.map(_applyTemplate)
+        |> List.reverse
+        |> List.reduce((acc, this) => acc ++ this, setup);
 
 let _compile = mlCode => {
   let (result, warnings) = 
@@ -60,8 +69,8 @@ let _compile = mlCode => {
   result |> Result.map(code => (code, warnings))
 };
 
-let checkSyntax = code =>
-  _applyTemplate({ id: Test.Id.fromInt(0), code })
+let checkSyntax = (language, code) =>
+  _applyTemplate({ id: Test.Id.fromInt(0), language, code })
     |> _reToML;
 
 let compile = (setup, tests) =>
