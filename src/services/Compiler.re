@@ -51,28 +51,24 @@ let _reToML = reCode =>
   | Js.Exn.Error(e) => Result.Error(e |> Refmt.errorFromExn)
   };
 
-let _applyTemplate = ({ Test.id, language, code }) => {
-  let name = Test.Id.generateFunctionName(id);
-
+let _applyTemplate = ({ Test.language, code }) => {
   switch language {
   | `RE =>
-{j|let $name = () => {
+{j|let __test__ = () => {
   $code
 };
 |j}
 
   | `JS =>
-{j|let $name = () => {
+{j|let __test__ = () => {
   [%raw {|$code|}]
 };
 |j}
   }
 };
 
-let _assemble = (setup, tests) =>
-  tests |> List.map(_applyTemplate)
-        |> List.reverse
-        |> List.reduce((acc, this) => acc ++ this, setup);
+let _assemble = (setup, test) =>
+  setup ++ "\n" ++ _applyTemplate(test);
 
 let _compile = mlCode => {
   let (result, warnings) = 
@@ -127,8 +123,8 @@ let checkSyntax = (language, code): option(syntaxError) =>
     }
   };
 
-let compile = (setup, tests) =>
-  tests |> _assemble(setup)
+let compile = (setup, test) =>
+  _assemble(setup, test)
         |> _reToML
         |> (fun | Result.Error(e) => Result.Error(e##message)
                 | Result.Ok(code) => Result.Ok(code))

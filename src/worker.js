@@ -2,15 +2,18 @@ importScripts('../static/stdlibBundle.js');
 
 const Benchmark = require('benchmark');
 
-onmessage = ({data}) => {
-  exports = {};
-  eval(data.code);
-
+onmessage = ({ data }) => {
   var suite = new Benchmark.Suite;
 
-  data.tests.forEach(({ name, fn }) =>
+  data.forEach(({ name, code }) =>
     suite.add(name, {
-      fn: exports[fn],
+      setup: `
+        var exports = this.exports = {};
+        ${code}
+      `,
+      fn: function () {
+        this.exports.__test__();
+      },
       onCycle: ({ target: { name, hz, stats }}) => {
         postMessage({ type: "caseCycle", contents: {
           id: name,
@@ -18,7 +21,8 @@ onmessage = ({data}) => {
           sampleCount: stats.sample.length,
           rme: stats.rme
         }})
-      }
+      },
+      onError: console.log
     }));
 
   suite.on('cycle', function({ target: { name, hz, stats }}) {

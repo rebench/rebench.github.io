@@ -3,7 +3,7 @@ open Rebase;
 
 module Message = {
   type send =
-    | Run(string, list(Test.id));
+    | Run(list((Test.id, string)));
 
   type receive =
     | CaseCycle(Test.id, Test.result)
@@ -35,17 +35,14 @@ module Message = {
     }
   };
   
-  let _encodeToSend : send => {. "code": string, "tests": array({. "name": Test.id, "fn": string }) } =
-    fun | Run(code, tests) => { 
-            "code": code,
-            "tests":
-              tests |> _toArray
-                    |> Js.Array.reverseInPlace
-                    |> Array.map(id => {
-                         "name": id,
-                         "fn": Test.Id.generateFunctionName(id)
-                       })
-          };
+  let _encodeToSend : send => array({. "name": Test.id, "code": string }) =
+    fun | Run(tests) =>
+            tests |> _toArray
+                  |> Js.Array.reverseInPlace
+                  |> Array.map(((id, code)) => {
+                        "name": id,
+                        "code"
+                      })
 };
 
 type _worker;
@@ -53,7 +50,7 @@ type _worker;
 [@bs.new] external _makeWorker : string => _worker = "Worker";
 [@bs.set] external _onmessage : _worker => (Js.t({..}) => unit) => unit = "onmessage";
 [@bs.set] external _onerror : _worker => (string => unit) => unit = "onerror";
-[@bs.send] external _postMessage : _worker => Js.t({..}) => unit = "postMessage";
+[@bs.send] external _postMessage : _worker => 'a => unit = "postMessage";
 
 type t = {
   postMessage: Message.send => unit

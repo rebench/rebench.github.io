@@ -6,7 +6,7 @@ open! Helpers;
 
 module Styles = AppStyles;
 
-type t = {
+type state = {
   tests: list((Test.id, Test.state)),
   worker: ref(Worker.t)
 };
@@ -41,7 +41,6 @@ let component = ReasonReact.reducerComponent("App");
 let make = (~data: Store.data,
             ~url,
             ~updateStore,
-            ~compilerResult: Compiler.result,
             _children) => {
   ...component,
 
@@ -62,11 +61,12 @@ let make = (~data: Store.data,
 
   reducer: (action, state) => {
     let run = tests =>
-      switch compilerResult {
-      | Ok(code) | Warning(code, _) =>
-        state.worker^.postMessage(Run(code, tests));
-      | _ => ()
-      };
+      tests |> List.map((test: Test.t) => (test.id, Compiler.compile(data.setup, test)))
+            |> List.map(
+                 fun | (id, Compiler.Ok(code)) => (id, code)
+                     | (id, Warning(code, _))  => (id, code)
+                     | (id, _)                 => (id, "throw Error('failed to compile');"))
+            |> tests => state.worker^.postMessage(Run(tests));
 
     switch action {
     
@@ -114,12 +114,12 @@ let make = (~data: Store.data,
     
     | RunAll =>
       ReasonReact.SideEffects(
-        _self => run(data.tests |> List.map(this => this.Test.id))
+        _self => run(data.tests)
       )
   
     | RunSingle(test) =>
       ReasonReact.SideEffects(
-        _self => run([test.id])
+        _self => run([test])
       )
   
     | WorkerMessage(CaseCycle(id, result)) =>
@@ -154,6 +154,7 @@ let make = (~data: Store.data,
                onClear      = reduce(() => Clear)
                shareableUrl = url />
 
+      /*
       (
         switch compilerResult {
         | Error(message)      => <Message type_=`Error message />
@@ -161,6 +162,7 @@ let make = (~data: Store.data,
         | _                   => ReasonReact.nullElement
         }
       )
+      */
 
       <WidthContainer>
         <SetupBlock code      = data.Store.setup
@@ -185,7 +187,7 @@ let make = (~data: Store.data,
             |> _toArray
             |> ReasonReact.arrayToElement
         )
-
+        /*
         (
           switch compilerResult {
           | Ok(code)
@@ -193,6 +195,7 @@ let make = (~data: Store.data,
           | _                => ReasonReact.nullElement
           }
         )
+        */
       </WidthContainer>
 
       <footer className=Styles.footer>
