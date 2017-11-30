@@ -7,3 +7,8 @@ let classNames = items =>
         |> List.filter(s => s !== "")
         |> List.toArray
         |> Js.Array.joinWith(" ");
+
+let log = value => {
+  Js.log(value);
+  value
+};

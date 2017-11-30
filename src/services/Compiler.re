@@ -6,6 +6,20 @@ type result =
   | Error(string)
 ;
 
+type location = {
+  line: int,
+  column: int
+};
+
+type range = {
+  from: location,
+  to_: location
+};
+
+type syntaxError = {
+  message: string,
+  range: option(range)
+};
 
 [%%raw {|
   function _captureConsoleErrors(f) {
@@ -69,9 +83,49 @@ let _compile = mlCode => {
   result |> Result.map(code => (code, warnings))
 };
 
-let checkSyntax = (language, code) =>
-  _applyTemplate({ id: Test.Id.fromInt(0), language, code })
-    |> _reToML;
+[@bs.get] external loc : Js.Exn.t => {. "line": int, "column": int } = "";
+
+let checkSyntax = (language, code): option(syntaxError) =>
+  switch language {
+  | `RE => 
+    _applyTemplate({ id: Test.Id.fromInt(0), language: `RE, code })
+      |> _reToML
+      |> fun | Result.Ok(_) => None
+             | Result.Error(e) => Some({
+               message: e##message,
+               range: e##location |> Js.toOption |> Option.map(location => {
+                 from: {
+                   line: location##startLine - 2,
+                   column: location##startLineStartChar - 1
+                 },
+                 to_: {
+                   line: location##endLine - 2,
+                   column: location##endLineEndChar
+                 }
+               })
+             });
+
+  | `JS =>
+    switch (Acorn.parse(code)) {
+    | exception Js.Exn.Error(e) => Js.Exn.message(e) |> Option.map(message => {
+        message,
+        range: loc(e) |> loc => Some({
+          from: {
+            line: loc##line - 1,
+            column: loc##column
+          },
+          to_: {
+            line: loc##line - 1,
+            column: loc##column + 1
+          }
+        })
+      })
+    | _ => {
+      [%raw "0"]; /* TODO: Workaround for BS bug: https://github.com/BuckleScript/bucklescript/issues/2316 */
+      None
+    } 
+    }
+  };
 
 let compile = (setup, tests) =>
   tests |> _assemble(setup)
