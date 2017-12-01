@@ -1,6 +1,16 @@
 open Glamor
 
 let root = css [
+  Selector("& > main", [
+    display "flex";
+
+    Selector("& > *", [
+      flexGrow "1";
+      flexBasis "0";
+      width "50%";
+    ]);
+  ]);
+
   Selector("&.s-not-even-close .score", [
     color Colors.red;
   ]);

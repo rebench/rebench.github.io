@@ -9,7 +9,8 @@
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webpack": "webpack -w"
+    "webpack": "webpack -w",
+    "serve": "python -m http.server"
   },
   "keywords": [],
   "author": "",

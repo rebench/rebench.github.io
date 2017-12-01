@@ -7,6 +7,8 @@ module Styles = EditorStyles;
 [%bs.raw {|require('codemirror/mode/javascript/javascript')|}];
 [%bs.raw {|require('codemirror/mode/rust/rust')|}];
 [%bs.raw {|require('codemirror/mode/mllike/mllike')|}];
+[%bs.raw {|require('codemirror/addon/scroll/simplescrollbars.js')|}];
+[%bs.raw {|require('codemirror/addon/scroll/simplescrollbars.css')|}];
 
 let _langToMode =
   fun | `ML => "mllike"
@@ -53,10 +55,11 @@ let make = (~value, ~lang, ~defaultValue=?, ~marks=[], ~readOnly=false, ~inputRe
         ?defaultValue
         ?onChange
         options={
-          "mode":         _langToMode(lang),
-          "theme":        "material",
-          "lineNumbers":  true,
-          "readOnly":     Js.Boolean.to_js_boolean(readOnly)
+          "mode":           _langToMode(lang),
+          "theme":          "material",
+          "lineNumbers":    true,
+          "readOnly":       Js.Boolean.to_js_boolean(readOnly),
+          "scrollbarStyle": "simple"
         }
       />
     </div>

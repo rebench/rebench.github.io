@@ -4,3 +4,15 @@ html, body, #index {
 	font-family: Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
 	font-size: 15px;
 }
+
+.CodeMirror-simplescroll-horizontal div, .CodeMirror-simplescroll-vertical div {
+  background: #212B30;
+  border: none;
+}
+
+.CodeMirror-simplescroll-horizontal, .CodeMirror-simplescroll-vertical {
+  position: absolute;
+  z-index: 6;
+  background: #222E34;
+}
+

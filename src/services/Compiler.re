@@ -132,3 +132,11 @@ let compile = (setup, test) =>
         |> fun | Result.Ok((code, None))            => Ok(code)
                | Result.Ok((code, Some(warnings)))  => Warning(code, warnings)
                | Result.Error(message)              => Error(message);
+
+
+include Debounce.Make({
+  type input = (string, Test.t);
+  type output = result;
+  let compute = ((setup, test)) =>
+    compile(setup, test);
+});

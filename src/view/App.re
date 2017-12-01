@@ -179,6 +179,7 @@ let make = (~data: Store.data,
                   onLanguageChange
                             = reduce(language => UpdateTest({ ...test, language }))
                   data      = test
+                  setup     = data.setup
                   state     = (try (_assoc(test.id, state.tests)) {
                               | Not_found => Test.Untested
                               })

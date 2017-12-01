@@ -55,7 +55,7 @@ let getLanguageButtonClassName =
 
 
 let component = ReasonReact.statelessComponent("TestBlock");
-let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, ~onLanguageChange, _children) => {
+let make = (~setup, ~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, ~onLanguageChange, _children) => {
 
   let renderHeader = () => [|
     ("Test" |> text),
@@ -101,7 +101,7 @@ let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, ~onLanguageChan
           <Icon name="history" />
           (
             result |> formatResult
-                  |> text
+                   |> text
           )
         </div>
 
@@ -110,7 +110,7 @@ let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, ~onLanguageChan
           <Icon name="check" />
           (
             result |> formatResult
-                  |> text
+                   |> text
           )
         </div>
 
@@ -124,7 +124,6 @@ let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, ~onLanguageChan
     render: (_) =>
       <SyntaxChecker input=(data.language, data.code) wait=100>
         ...(((isError, marks)) =>
-
           <Block_ className = makeClassName(state, isError)
                   header    = `Elements(renderHeader())
                   footer    = renderFooter() >
@@ -133,6 +132,23 @@ let make = (~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, ~onLanguageChan
                     lang      = data.language
                     onChange  = (code => onChange({ ...data, code }))
                     marks     />
+
+            <Compiler input=(setup, data) wait=300>
+              ...(compilerResult =>
+                  switch compilerResult {
+                  | Compiler.Ok(code)
+                  | Compiler.Warning(code, _) =>
+                      <Editor value     = code
+                              lang      = `JS
+                              readOnly  = true />
+
+                  | Error(message) =>
+                    <div>
+                      (message |> text)
+                    </div>
+                  }
+                )
+            </Compiler>
 
           </Block_>)
       </SyntaxChecker>
