@@ -2,11 +2,14 @@ open! Rebase;
 open! Helpers;
 module Styles = TestBlockStyles;
 open Test;
-/*
-module Button = { 
-  let make = Button.make(~style=`Dark) 
+
+type state = {
+  showOutput: bool
 };
-*/
+
+type action =
+  | ToggleOutput
+;
 
 let formatResult = ({hz, rme, sampleCount}) => {
   let hz      = hz |> Js.Float.toFixedWithPrecision(~digits=hz < 100. ? 2 : 0)
@@ -35,7 +38,6 @@ let makeClassName = (state, isError) => classNames([
   ]);
 
 
-
 module LanguageSelectButton = SelectButton.Make({
   type value = Test.language;
 });
@@ -53,35 +55,83 @@ let getLanguageButtonClassName =
       | `JS => "m-language-javascript";
 
 
+let component = ReasonReact.reducerComponent("TestBlock");
+let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRemove, ~onLanguageChange, _children) => {
 
-let component = ReasonReact.statelessComponent("TestBlock");
-let make = (~setup, ~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, ~onLanguageChange, _children) => {
-
-  let renderHeader = () => [|
-    ("Test" |> text),
-    (
-      switch state {
-      | Complete(_, Some(score)) =>
-        <span>
-          (" - " |> text)
-          <span className="score">
-            (
-              score |> formatRelativeScore
-                    |> text
-            )
-          </span>
+  let renderRelativeScore = () =>
+    switch testState {
+    | Complete(_, Some(score)) =>
+      <span>
+        (" - " |> text)
+        <span className="score">
+          (
+            score |> formatRelativeScore
+                  |> text
+          )
         </span>
-      | _ => ReasonReact.nullElement
-      }
-    )
-  |];
+      </span>
+    | _ => ReasonReact.nullElement
+    };
+
+
+  let renderResult = () =>
+    switch testState {
+    
+    | Untested =>
+      <div className=(Styles.state ++ " s-untested") />
+
+    | Running(result) =>
+      <div className=(Styles.state ++ " s-running")>
+        <Icon name="history" />
+        (
+          result |> formatResult
+                 |> text
+        )
+      </div>
+
+    | Complete(result, _) =>
+      <div className=(Styles.state ++ " s-complete")>
+        <Icon name="check" />
+        (
+          result |> formatResult
+                 |> text
+        )
+      </div>
+
+    };
+
+
+  let renderHeader = ({ ReasonReact.reduce, state }) =>
+    <div className=Styles.header>
+
+      <div className="box">
+        <LanguageSelectButton className = getLanguageButtonClassName(data.language)
+                              selected  = data.language
+                              onSelect  = onLanguageChange
+                              items     = languageMenuItems
+                              renderButtonLabel
+                                        = (item => switch item.value {
+                                                  | `RE => "re"
+                                                  | `JS => "js"
+                                                  } |> text) /> 
+      </div>
+
+      <div className="title">
+        ("test" |> text)
+        (renderRelativeScore())
+      </div>
+
+      <div className="box right">
+        <Button label     = "output"
+                icon      = (state.showOutput ? "chevron-up" : "chevron-down")
+                alignIcon = `Right
+                onClick   = reduce(() => ToggleOutput) />
+      </div>
+
+    </div>;
+
 
   let renderFooter = () => [|
-    <LanguageSelectButton className = getLanguageButtonClassName(data.language)
-                          selected  = data.language
-                          onSelect  = onLanguageChange
-                          items     = languageMenuItems />,
-
     <Button icon    = "play"
             label   = "Run"
             onClick = onRun />,
@@ -90,42 +140,25 @@ let make = (~setup, ~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, ~onLang
             label   = "Remove"
             onClick = onRemove />,
 
-    (
-      switch state {
-      
-      | Untested =>
-        <div className=(Styles.state ++ " s-untested") />
-
-      | Running(result) =>
-        <div className=(Styles.state ++ " s-running")>
-          <Icon name="history" />
-          (
-            result |> formatResult
-                   |> text
-          )
-        </div>
-
-      | Complete(result, _) =>
-        <div className=(Styles.state ++ " s-complete")>
-          <Icon name="check" />
-          (
-            result |> formatResult
-                   |> text
-          )
-        </div>
-
-      }
-    )
+    renderResult()
   |];
+
 
   {
     ...component,
 
-    render: (_) =>
+    initialState: () => { showOutput: false },
+    reducer: (action, state) => 
+      switch action {
+      | ToggleOutput =>
+        ReasonReact.Update({ showOutput: !state.showOutput })
+      },
+
+    render: ({ state } as self) =>
       <SyntaxChecker input=(data.language, data.code) wait=100>
         ...(((isError, marks)) =>
-          <Block_ className = makeClassName(state, isError)
-                  header    = `Elements(renderHeader())
+          <Block_ className = makeClassName(testState, isError)
+                  header    = `Element(renderHeader(self))
                   footer    = renderFooter() >
 
             <Editor value     = data.code
@@ -133,22 +166,24 @@ let make = (~setup, ~data: Test.t, ~state, ~onChange, ~onRun, ~onRemove, ~onLang
                     onChange  = (code => onChange({ ...data, code }))
                     marks     />
 
-            <Compiler input=(setup, data) wait=300>
-              ...(compilerResult =>
-                  switch compilerResult {
-                  | Compiler.Ok(code)
-                  | Compiler.Warning(code, _) =>
-                      <Editor value     = code
-                              lang      = `JS
-                              readOnly  = true />
+            (
+              if (state.showOutput) {
+                <Compiler input=(setup, data) wait=300>
+                  ...(compilerResult =>
+                      switch compilerResult {
+                      | Compiler.Ok(code)
+                      | Compiler.Warning(code, _) =>
+                        <Editor value=code lang=`JS readOnly=true />
 
-                  | Error(message) =>
-                    <div>
-                      (message |> text)
-                    </div>
-                  }
-                )
-            </Compiler>
+                      | Error(message) =>
+                        <div> (message |> text) </div>
+                      }
+                    )
+                </Compiler>
+              } else {
+                ReasonReact.nullElement
+              }
+            )
 
           </Block_>)
       </SyntaxChecker>

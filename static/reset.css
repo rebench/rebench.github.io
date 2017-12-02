@@ -47,6 +47,11 @@ table {
 }
 button, input, select {
 	border: none;
+	background: none;
+}
+
+button::-moz-focus-inner {
+  border: 0;
 }
 
 *:focus {

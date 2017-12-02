@@ -1,13 +1,16 @@
 open Glamor
 
 let common = [
-  background "red";
   color Colors.text;
   padding "1em";
   cursor "pointer";
 
-  Selector("& .mdi", [
+  Selector("&.m-icon-left .mdi", [
     marginRight ".25em";
+  ]);
+
+  Selector("&.m-icon-right .mdi", [
+    marginLeft ".5em";
   ]);
 
   Selector("&:hover", [

@@ -68,7 +68,10 @@ let _applyTemplate = ({ Test.language, code }) => {
 };
 
 let _assemble = (setup, test) =>
-  setup ++ "\n" ++ _applyTemplate(test);
+  /*"[@bs.config {no_export: no_export}];" ++*/
+  setup ++ "\n" ++
+  _applyTemplate(test)
+;
 
 let _compile = mlCode => {
   let (result, warnings) = 

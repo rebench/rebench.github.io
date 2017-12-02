@@ -24,7 +24,13 @@ module Make(Config: Config) = {
   ;
 
   let component = ReasonReact.reducerComponent("SelectButton");
-  let make = (~items, ~selected, ~className="", ~onSelect, _) => {
+  let make = (~items,
+              ~selected,
+              ~className          = "",
+              ~renderButtonLabel  = item => item.label |> text,
+              ~renderItem         = item => item.label |> text,
+              ~onSelect,
+              _) => {
     ...component,
 
     initialState: () => {
@@ -49,17 +55,21 @@ module Make(Config: Config) = {
       <div className=Styles.root>
         <OnClickOutside onClick=reduce(() => OutsideClicked)>
            
-          <Button className
-                  onClick = reduce((_) => ButtonClicked)
-                  label   = (items |> List.find(item => item.value === selected) |> Option.getOrRaise).label />
+          <button className onClick = reduce((_) => ButtonClicked)>
+            (
+              items |> List.find(item => item.value === selected)
+                    |> Option.getOrRaise
+                    |> renderButtonLabel
+            )
+          </button>
 
           <menu className=(Styles.menu ++ (state.isOpen ? " s-open" : ""))>
             <ul>
               (
                 items |> List.map(item =>
                           <li key     = item.label
-                              onClick = reduce((_) => ItemSelected(item)) >
-                            (item.label |> text)
+                              onClick = reduce(_e => ItemSelected(item)) >
+                            (renderItem(item))
                           </li>
                         )
                       |> List.toArray

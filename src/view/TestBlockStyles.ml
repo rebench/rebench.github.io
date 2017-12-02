@@ -5,8 +5,7 @@ let root = css [
     display "flex";
 
     Selector("& > *", [
-      flexGrow "1";
-      flexBasis "0";
+      flex "1";
       width "50%";
     ]);
   ]);
@@ -33,6 +32,47 @@ let root = css [
     (*borderTop ("1px solid" ^ Colors.javascript)*)
   ]);
 ]
+
+let header = css [
+  fontSize ".85em";
+  color Colors.text;
+  textTransform "lowercase";
+  fontVariant "small-caps";
+  display "flex";
+  justifyContent "space-between";
+  alignItems "baseline";
+
+  Selector("& button", [
+    padding ".75em";
+    cursor "pointer";
+
+    Selector("& .mdi:before", [
+      transform "translateY(2px)"; (* alignment fix due to the lowercase small-caps styling *)
+      opacity ".35";
+    ]);
+
+    Selector("&:hover", [
+      background Colors.highlightOverlay;
+    ]);
+  ]);
+
+  Selector("& > .box", [
+    display "flex";
+    flex "1";
+
+    Selector("&.right", [
+      justifyContent "end";
+    ]);
+  ]);
+
+  Selector("& > .title", [
+    display "inline-block";
+    padding ".75em";
+    textAlign "center";
+    flex "1";
+  ]);
+]
+
 
 let state = css [
   padding ".75em 1em";

@@ -6,14 +6,6 @@ let root = css [
   margin "1em 0";
   borderLeft ("2px solid transparent");
 
-  Selector("& > header", [
-    padding ".75em 1.25em";
-    fontSize ".85em";
-    color Colors.text;
-    textTransform "lowercase";
-    fontVariant "small-caps";
-  ]);
-
   Selector("&.collapsible > header", [
     Selector("&:hover", [
       background Colors.panelDark;
@@ -34,6 +26,16 @@ let root = css [
     borderLeft ("2px solid " ^ Colors.red);
   ]);
 ]
+
+let textHeader = css [
+  padding ".75em 1.25em";
+  fontSize ".85em";
+  color Colors.text;
+  textTransform "lowercase";
+  fontVariant "small-caps";
+  textAlign "center";
+]
+
 
 let footer = css [
   display "flex";

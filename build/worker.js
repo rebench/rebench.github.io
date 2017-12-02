@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 298);
+/******/ 	return __webpack_require__(__webpack_require__.s = 300);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 123:
+/***/ 124:
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -75,12 +75,12 @@ module.exports = __webpack_amd_options__;
 
 /***/ }),
 
-/***/ 298:
+/***/ 300:
 /***/ (function(module, exports, __webpack_require__) {
 
 importScripts('../static/stdlibBundle.js');
 
-const Benchmark = __webpack_require__(299);
+const Benchmark = __webpack_require__(301);
 
 onmessage = ({ data }) => {
   var suite = new Benchmark.Suite;
@@ -121,7 +121,7 @@ onmessage = ({ data }) => {
 
 /***/ }),
 
-/***/ 299:
+/***/ 301:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var require;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -637,7 +637,7 @@ onmessage = ({ data }) => {
       // Lazy define.
       createFunction = function(args, body) {
         var result,
-            anchor = __webpack_require__(41) ? __webpack_require__(123) : Benchmark,
+            anchor = __webpack_require__(41) ? __webpack_require__(124) : Benchmark,
             prop = uid + 'createFunction';
 
         runScript((__webpack_require__(41) ? 'define.amd.' : 'Benchmark.') + prop + '=function(' + args + '){' + body + '}');
@@ -784,7 +784,7 @@ onmessage = ({ data }) => {
      * @param {string} code The code to run.
      */
     function runScript(code) {
-      var anchor = __webpack_require__(41) ? __webpack_require__(123) : Benchmark,
+      var anchor = __webpack_require__(41) ? __webpack_require__(124) : Benchmark,
           script = doc.createElement('script'),
           sibling = doc.getElementsByTagName('script')[0],
           parent = sibling.parentNode,
@@ -2923,7 +2923,7 @@ onmessage = ({ data }) => {
   // Some AMD build optimizers, like r.js, check for condition patterns like the following:
   if (true) {
     // Define as an anonymous module so, through path mapping, it can be aliased.
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(301), __webpack_require__(302)], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, platform) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(303), __webpack_require__(304)], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, platform) {
       return runInContext({
         '_': _,
         'platform': platform
@@ -2950,11 +2950,11 @@ onmessage = ({ data }) => {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(35)(module), __webpack_require__(34)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(36)(module), __webpack_require__(35)))
 
 /***/ }),
 
-/***/ 300:
+/***/ 302:
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -2963,11 +2963,11 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 300;
+webpackEmptyContext.id = 302;
 
 /***/ }),
 
-/***/ 301:
+/***/ 303:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -20056,11 +20056,11 @@ webpackEmptyContext.id = 300;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34), __webpack_require__(35)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(35), __webpack_require__(36)(module)))
 
 /***/ }),
 
-/***/ 302:
+/***/ 304:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -21282,11 +21282,11 @@ webpackEmptyContext.id = 300;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(35)(module), __webpack_require__(34)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(36)(module), __webpack_require__(35)))
 
 /***/ }),
 
-/***/ 34:
+/***/ 35:
 /***/ (function(module, exports) {
 
 var g;
@@ -21314,7 +21314,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 35:
+/***/ 36:
 /***/ (function(module, exports) {
 
 module.exports = function(module) {

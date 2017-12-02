@@ -11,8 +11,8 @@ type action =
 ;
 
 let renderHeader =
-  fun | `Text(str)          => (str |> text)
-      | `Elements(elements) => elements |> ReasonReact.arrayToElement;
+  fun | `Text(str)        => <div className=Styles.textHeader> (str |> text) </div>
+      | `Element(element) => element;
 
 let renderFooter = 
   fun | Some(elements) =>

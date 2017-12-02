@@ -1,7 +1,7 @@
 open Glamor
 
 let root = css [
-
+  display "inline-block";
 ]
 
 let menu = css [
