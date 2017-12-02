@@ -9,8 +9,7 @@ let menu = css [
   zIndex "100";
   display "none";
   transform "translateX(-2px)";
-  background Colors.panel;
-  borderTop ("1px solid" ^ Colors.background);
+  background Colors.panelDark;
   boxShadow "2px 2px 1px 0 rgba(0, 0, 0, .25)";
 
   Selector("&.s-open", [

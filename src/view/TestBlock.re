@@ -39,19 +39,21 @@ let makeClassName = (state, isError) => classNames([
 
 
 module LanguageSelectButton = SelectButton.Make({
-  type value = Test.language;
+  type value = Syntax.language;
 });
 
 let languageMenuItems =
-  [`RE, `JS] |> List.map(lang =>
+  [`RE, `ML, `JS] |> List.map(lang =>
     LanguageSelectButton.{
       label: lang |> fun | `RE => "Reason"
+                         | `ML => "OCaml"
                          | `JS => "JavaScript",
       value: lang
     });
 
 let getLanguageButtonClassName =
   fun | `RE => "m-language-reason"
+      | `ML => "m-language-ocaml"
       | `JS => "m-language-javascript";
 
 
@@ -112,6 +114,7 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
                               renderButtonLabel
                                         = (item => switch item.value {
                                                   | `RE => "re"
+                                                  | `ML => "ml"
                                                   | `JS => "js"
                                                   } |> text) /> 
       </div>

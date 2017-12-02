@@ -16,7 +16,7 @@ let _toMark = (error: Compiler.syntaxError) => {
 };
 
 include Debounce.Make({
-  type input = (Test.language, string);
+  type input = (Syntax.language, string);
   type output = (bool, list(Editor.mark));
   let compute = ((language, code)) =>
     code |> Compiler.checkSyntax(language)

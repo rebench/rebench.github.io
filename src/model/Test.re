@@ -21,11 +21,10 @@ module Id : {
 };
 
 type id = Id.t;
-type language = [`RE | `JS];
 
 type t = {
   id,
-  language,
+  language: Syntax.language,
   code: string
 };
 

@@ -13,4 +13,5 @@ let yellow = "#FFCB6D"
 let red = "#EC5F67"
 
 let reason = "#DD4C39"
+let ocaml = "#C87A27"
 let javascript = "#F7E018"

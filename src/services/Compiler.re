@@ -53,24 +53,28 @@ let _reToML = reCode =>
 
 let _applyTemplate = ({ Test.language, code }) => {
   switch language {
-  | `RE =>
+  | `RE => Result.Ok(
 {j|let __test__ = () => {
   $code
-};|j}
+};|j})
 
-  | `JS =>
+  | `ML =>
+{j|let __test__ () = (
+  $code
+)|j} |> _mlToRE
+
+  | `JS => Result.Ok(
 {j|[%%raw {|function __test__() {
 $code
 }
 
-exports.__test__ = __test__|}];|j}
+exports.__test__ = __test__|}];|j})
   }
 };
 
 let _assemble = (setup, test) =>
   /*"[@bs.config {no_export: no_export}];" ++*/
-  setup ++ "\n" ++
-  _applyTemplate(test)
+  _applyTemplate(test) |> Result.map(code => setup ++ "\n" ++ code)
 ;
 
 let _compile = mlCode => {
@@ -88,7 +92,24 @@ let checkSyntax = (language, code): option(syntaxError) =>
   switch language {
   | `RE => 
     _applyTemplate({ id: Test.Id.fromInt(0), language: `RE, code })
-      |> _reToML
+      |> Result.flatMap(_reToML)
+      |> fun | Result.Ok(_) => None
+             | Result.Error(e) => Some({
+               message: e##message,
+               range: e##location |> Js.toOption |> Option.map(location => {
+                 from: {
+                   line: location##startLine - 2,
+                   column: location##startLineStartChar - 1
+                 },
+                 to_: {
+                   line: location##endLine - 2,
+                   column: location##endLineEndChar
+                 }
+               })
+             });
+
+  | `ML => 
+    _applyTemplate({ id: Test.Id.fromInt(0), language: `ML, code })
       |> fun | Result.Ok(_) => None
              | Result.Error(e) => Some({
                message: e##message,
@@ -128,7 +149,7 @@ let checkSyntax = (language, code): option(syntaxError) =>
 
 let compile = (setup, test) =>
   _assemble(setup, test)
-        |> _reToML
+        |> Result.flatMap(_reToML)
         |> (fun | Result.Error(e) => Result.Error(e##message)
                 | Result.Ok(code) => Result.Ok(code))
         |> Result.flatMap(_compile)

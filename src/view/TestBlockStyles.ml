@@ -24,12 +24,14 @@ let root = css [
 
   Selector("& button.m-language-reason", [
     color Colors.reason;
-    (*borderTop ("1px solid " ^ Colors.reason)*)
+  ]);
+
+  Selector("& button.m-language-ocaml", [
+    color Colors.ocaml;
   ]);
 
   Selector("& button.m-language-javascript", [
     color Colors.javascript;
-    (*borderTop ("1px solid" ^ Colors.javascript)*)
   ]);
 ]
 

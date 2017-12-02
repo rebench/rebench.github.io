@@ -6398,6 +6398,8 @@ var red = "#EC5F67";
 
 var reason = "#DD4C39";
 
+var ocaml = "#C87A27";
+
 var javascript = "#F7E018";
 
 exports.background       = background;
@@ -6410,6 +6412,7 @@ exports.green            = green;
 exports.yellow           = yellow;
 exports.red              = red;
 exports.reason           = reason;
+exports.ocaml            = ocaml;
 exports.javascript       = javascript;
 /* No side effect */
 
@@ -22207,15 +22210,22 @@ function _reToML(reCode) {
 
 function _applyTemplate(param) {
   var code = param[/* code */2];
-  if (param[/* language */1] >= 18355) {
-    return "let __test__ = () => {\n  " + (String(code) + "\n};");
+  var language = param[/* language */1];
+  if (language !== 17247) {
+    if (language >= 18355) {
+      return /* Ok */Block.__(0, ["let __test__ = () => {\n  " + (String(code) + "\n};")]);
+    } else {
+      return /* Ok */Block.__(0, ["[%%raw {|function __test__() {\n" + (String(code) + "\n}\n\nexports.__test__ = __test__|}];")]);
+    }
   } else {
-    return "[%%raw {|function __test__() {\n" + (String(code) + "\n}\n\nexports.__test__ = __test__|}];");
+    return _mlToRE("let __test__ () = (\n  " + (String(code) + "\n)"));
   }
 }
 
 function _assemble(setup, test) {
-  return setup + ("\n" + _applyTemplate(test));
+  return Rebase.Result[/* map */3]((function (code) {
+                return setup + ("\n" + code);
+              }), _applyTemplate(test));
 }
 
 function _compile(mlCode) {
@@ -22232,16 +22242,80 @@ function _compile(mlCode) {
 }
 
 function checkSyntax(language, code) {
-  if (language >= 18355) {
-    var param = _reToML(_applyTemplate(/* record */[
-              /* id */Test.Id[/* fromInt */1](0),
-              /* language : RE */18355,
-              /* code */code
-            ]));
-    if (param.tag) {
-      var e = param[0];
+  if (language !== 17247) {
+    if (language >= 18355) {
+      var param = Rebase.Result[/* flatMap */6](_reToML, _applyTemplate(/* record */[
+                /* id */Test.Id[/* fromInt */1](0),
+                /* language : RE */18355,
+                /* code */code
+              ]));
+      if (param.tag) {
+        var e = param[0];
+        return /* Some */[/* record */[
+                  /* message */e.message,
+                  /* range */Rebase.Option[/* map */2]((function ($$location) {
+                          return /* record */[
+                                  /* from : record */[
+                                    /* line */$$location.startLine - 2 | 0,
+                                    /* column */$$location.startLineStartChar - 1 | 0
+                                  ],
+                                  /* to_ : record */[
+                                    /* line */$$location.endLine - 2 | 0,
+                                    /* column */$$location.endLineEndChar
+                                  ]
+                                ];
+                        }), Js_primitive.null_undefined_to_opt(e.location))
+                ]];
+      } else {
+        return /* None */0;
+      }
+    } else {
+      var exit = 0;
+      var val;
+      try {
+        val = Acorn.parse(code);
+        exit = 1;
+      }
+      catch (raw_exn){
+        var exn = Js_exn.internalToOCamlException(raw_exn);
+        if (exn[0] === Js_exn.$$Error) {
+          var e$1 = exn[1];
+          return Rebase.Option[/* map */2]((function (message) {
+                        var loc = e$1.loc;
+                        return /* record */[
+                                /* message */message,
+                                /* range : Some */[/* record */[
+                                    /* from : record */[
+                                      /* line */loc.line - 1 | 0,
+                                      /* column */loc.column
+                                    ],
+                                    /* to_ : record */[
+                                      /* line */loc.line - 1 | 0,
+                                      /* column */loc.column + 1 | 0
+                                    ]
+                                  ]]
+                              ];
+                      }), Js_primitive.undefined_to_opt(e$1.message));
+        } else {
+          throw exn;
+        }
+      }
+      if (exit === 1) {
+        ((0));
+        return /* None */0;
+      }
+      
+    }
+  } else {
+    var param$1 = _applyTemplate(/* record */[
+          /* id */Test.Id[/* fromInt */1](0),
+          /* language : ML */17247,
+          /* code */code
+        ]);
+    if (param$1.tag) {
+      var e$2 = param$1[0];
       return /* Some */[/* record */[
-                /* message */e.message,
+                /* message */e$2.message,
                 /* range */Rebase.Option[/* map */2]((function ($$location) {
                         return /* record */[
                                 /* from : record */[
@@ -22253,52 +22327,16 @@ function checkSyntax(language, code) {
                                   /* column */$$location.endLineEndChar
                                 ]
                               ];
-                      }), Js_primitive.null_undefined_to_opt(e.location))
+                      }), Js_primitive.null_undefined_to_opt(e$2.location))
               ]];
     } else {
       return /* None */0;
     }
-  } else {
-    var exit = 0;
-    var val;
-    try {
-      val = Acorn.parse(code);
-      exit = 1;
-    }
-    catch (raw_exn){
-      var exn = Js_exn.internalToOCamlException(raw_exn);
-      if (exn[0] === Js_exn.$$Error) {
-        var e$1 = exn[1];
-        return Rebase.Option[/* map */2]((function (message) {
-                      var loc = e$1.loc;
-                      return /* record */[
-                              /* message */message,
-                              /* range : Some */[/* record */[
-                                  /* from : record */[
-                                    /* line */loc.line - 1 | 0,
-                                    /* column */loc.column
-                                  ],
-                                  /* to_ : record */[
-                                    /* line */loc.line - 1 | 0,
-                                    /* column */loc.column + 1 | 0
-                                  ]
-                                ]]
-                            ];
-                    }), Js_primitive.undefined_to_opt(e$1.message));
-      } else {
-        throw exn;
-      }
-    }
-    if (exit === 1) {
-      ((0));
-      return /* None */0;
-    }
-    
   }
 }
 
 function compile(setup, test) {
-  var param = _reToML(_assemble(setup, test));
+  var param = Rebase.Result[/* flatMap */6](_reToML, _assemble(setup, test));
   var tmp;
   tmp = param.tag ? /* Error */Block.__(1, [param[0].message]) : /* Ok */Block.__(0, [param[0]]);
   var param$1 = Rebase.Result[/* flatMap */6](_compile, tmp);
@@ -44054,22 +44092,31 @@ var LanguageSelectButton = SelectButton.Make(/* module */[]);
 
 var languageMenuItems = Rebase.List[/* map */2]((function (lang) {
         return /* record */[
-                /* label */lang >= 18355 ? "Reason" : "JavaScript",
+                /* label */lang !== 17247 ? (
+                    lang >= 18355 ? "Reason" : "JavaScript"
+                  ) : "OCaml",
                 /* value */lang
               ];
       }), /* :: */[
       /* RE */18355,
       /* :: */[
-        /* JS */16585,
-        /* [] */0
+        /* ML */17247,
+        /* :: */[
+          /* JS */16585,
+          /* [] */0
+        ]
       ]
     ]);
 
 function getLanguageButtonClassName(param) {
-  if (param >= 18355) {
-    return "m-language-reason";
+  if (param !== 17247) {
+    if (param >= 18355) {
+      return "m-language-reason";
+    } else {
+      return "m-language-javascript";
+    }
   } else {
-    return "m-language-javascript";
+    return "m-language-ocaml";
   }
 }
 
@@ -44115,7 +44162,9 @@ function make(setup, data, testState, onChange, onRun, onRemove, onLanguageChang
                     className: "box"
                   }, ReasonReact.element(/* None */0, /* None */0, Curry._7(LanguageSelectButton[/* make */1], languageMenuItems, data[/* language */1], /* Some */[getLanguageButtonClassName(data[/* language */1])], /* Some */[(function (item) {
                                 var match = item[/* value */1];
-                                return Helpers.text(match >= 18355 ? "re" : "js");
+                                return Helpers.text(match !== 17247 ? (
+                                              match >= 18355 ? "re" : "js"
+                                            ) : "ml");
                               })], /* None */0, onLanguageChange, /* array */[]))), React.createElement("div", {
                     className: "title"
                   }, Helpers.text("test"), renderRelativeScore(/* () */0)), React.createElement("div", {
@@ -46773,41 +46822,38 @@ var menu = Glamor.css(/* :: */[
           /* :: */[
             Glamor.transform("translateX(-2px)"),
             /* :: */[
-              Glamor.background(Colors.panel),
+              Glamor.background(Colors.panelDark),
               /* :: */[
-                Glamor.borderTop("1px solid" + Colors.background),
+                Glamor.boxShadow("2px 2px 1px 0 rgba(0, 0, 0, .25)"),
                 /* :: */[
-                  Glamor.boxShadow("2px 2px 1px 0 rgba(0, 0, 0, .25)"),
+                  /* Selector */Block.__(1, [
+                      "&.s-open",
+                      /* :: */[
+                        Glamor.display("block"),
+                        /* [] */0
+                      ]
+                    ]),
                   /* :: */[
                     /* Selector */Block.__(1, [
-                        "&.s-open",
+                        "& > ul > li",
                         /* :: */[
-                          Glamor.display("block"),
-                          /* [] */0
-                        ]
-                      ]),
-                    /* :: */[
-                      /* Selector */Block.__(1, [
-                          "& > ul > li",
+                          Glamor.padding("1em"),
                           /* :: */[
-                            Glamor.padding("1em"),
+                            Glamor.cursor("pointer"),
                             /* :: */[
-                              Glamor.cursor("pointer"),
-                              /* :: */[
-                                /* Selector */Block.__(1, [
-                                    "&:hover",
-                                    /* :: */[
-                                      Glamor.background(Colors.highlightOverlay),
-                                      /* [] */0
-                                    ]
-                                  ]),
-                                /* [] */0
-                              ]
+                              /* Selector */Block.__(1, [
+                                  "&:hover",
+                                  /* :: */[
+                                    Glamor.background(Colors.highlightOverlay),
+                                    /* [] */0
+                                  ]
+                                ]),
+                              /* [] */0
                             ]
                           ]
-                        ]),
-                      /* [] */0
-                    ]
+                        ]
+                      ]),
+                    /* [] */0
                   ]
                 ]
               ]
@@ -46887,13 +46933,22 @@ var root = Glamor.css(/* :: */[
                 ]),
               /* :: */[
                 /* Selector */Block.__(1, [
-                    "& button.m-language-javascript",
+                    "& button.m-language-ocaml",
                     /* :: */[
-                      Glamor.color(Colors.javascript),
+                      Glamor.color(Colors.ocaml),
                       /* [] */0
                     ]
                   ]),
-                /* [] */0
+                /* :: */[
+                  /* Selector */Block.__(1, [
+                      "& button.m-language-javascript",
+                      /* :: */[
+                        Glamor.color(Colors.javascript),
+                        /* [] */0
+                      ]
+                    ]),
+                  /* [] */0
+                ]
               ]
             ]
           ]
@@ -47246,6 +47301,8 @@ function language(json) {
   switch (language$1) {
     case "js" : 
         return /* JS */16585;
+    case "ml" : 
+        return /* ML */17247;
     case "re" : 
         return /* RE */18355;
     default:
@@ -47304,10 +47361,14 @@ function id$1(value) {
 }
 
 function language$1(value) {
-  if (value >= 18355) {
-    return "re";
+  if (value !== 17247) {
+    if (value >= 18355) {
+      return "re";
+    } else {
+      return "js";
+    }
   } else {
-    return "js";
+    return "ml";
   }
 }
 
