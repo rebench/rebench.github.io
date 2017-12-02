@@ -6,7 +6,7 @@ let make = (~code, ~onChange, _children) => {
   ...component,
 
   render: (_) =>
-    <SyntaxChecker input=(`JS, code) wait=100>
+    <SyntaxChecker input=(`RE, code) wait=100>
       ...(((isError, marks)) =>
 
         <Block_ className=(isError ? "s-error" : "") header=`Text("Setup") collapsible=true>

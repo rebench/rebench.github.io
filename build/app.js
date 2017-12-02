@@ -47053,7 +47053,7 @@ function make(code, onChange, _) {
   var newrecord = component.slice();
   newrecord[/* render */9] = (function () {
       return ReasonReact.element(/* None */0, /* None */0, Curry._3(SyntaxChecker.make, /* tuple */[
-                      /* JS */16585,
+                      /* RE */18355,
                       code
                     ], 100, (function (param) {
                         return ReasonReact.element(/* None */0, /* None */0, Block_.make(/* `Text */[
