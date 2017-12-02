@@ -22208,9 +22208,9 @@ function _reToML(reCode) {
 function _applyTemplate(param) {
   var code = param[/* code */2];
   if (param[/* language */1] >= 18355) {
-    return "let __test__ = () => {\n  " + (String(code) + "\n};\n");
+    return "let __test__ = () => {\n  " + (String(code) + "\n};");
   } else {
-    return "let __test__ = () => {\n  [%raw {|" + (String(code) + "|}]\n};\n");
+    return "[%%raw {|function __test__() {\n" + (String(code) + "\n}\n\nexports.__test__ = __test__|}];");
   }
 }
 

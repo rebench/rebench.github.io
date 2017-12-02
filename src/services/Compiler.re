@@ -56,14 +56,14 @@ let _applyTemplate = ({ Test.language, code }) => {
   | `RE =>
 {j|let __test__ = () => {
   $code
-};
-|j}
+};|j}
 
   | `JS =>
-{j|let __test__ = () => {
-  [%raw {|$code|}]
-};
-|j}
+{j|[%%raw {|function __test__() {
+$code
+}
+
+exports.__test__ = __test__|}];|j}
   }
 };
 
