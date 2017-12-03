@@ -17,11 +17,32 @@ module Decode = {
 };
 
 [@bs.val] [@bs.scope ("window", "ocaml")] external compile : string => string = "";
-let compile : string => Result.t(string, string) = code =>
-  try (
-    code |> compile
-         |> Js.Json.parseExn
+
+[%%raw {|
+  function _captureConsoleErrors(f) {
+    let errors = "";
+    const _consoleError = console.error;
+    console.error = (...args) => args.forEach(argument => errors += argument + `\n`);
+
+    let res = f();
+
+    console.error = _consoleError;
+    return [res, errors ? [errors] : 0];
+  }
+|}];
+[@bs.val] external _captureConsoleErrors : (unit => 'a) => ('a, option(string)) = "";
+
+let compile : string => Result.t((string, option(string)), string) = code =>
+  try {
+    let (json, warnings) = 
+      _captureConsoleErrors(() =>
+        code |> compile
+      );
+    
+    json |> Js.Json.parseExn
          |> Json.Decode.either(Decode.success, Decode.error)
-  ) {
-  | Json.Decode.DecodeError(e) => Result.Error("Unrecognized compiler output: " ++ e);
+         |> result => result |> Result.map(code => (code, warnings));
+  } {
+  | Json.Decode.DecodeError(e) =>
+    Result.Error("Unrecognized compiler output: " ++ e);
   }

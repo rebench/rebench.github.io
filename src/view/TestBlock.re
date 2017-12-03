@@ -37,17 +37,14 @@ let makeClassName = (state, isError) => classNames([
     ("s-error", isError)
   ]);
 
-
 module LanguageSelectButton = SelectButton.Make({
-  type value = Syntax.language;
+  type value = Language.t;
 });
 
 let languageMenuItems =
   [`RE, `ML, `JS] |> List.map(lang =>
     LanguageSelectButton.{
-      label: lang |> fun | `RE => "Reason"
-                         | `ML => "OCaml"
-                         | `JS => "JavaScript",
+      label: lang |> Language.name,
       value: lang
     });
 
@@ -75,7 +72,6 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
     | _ => ReasonReact.nullElement
     };
 
-
   let renderResult = () =>
     switch testState {
     
@@ -102,21 +98,17 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
 
     };
 
-
   let renderHeader = ({ ReasonReact.reduce, state }) =>
     <div className=Styles.header>
 
       <div className="box">
-        <LanguageSelectButton className = getLanguageButtonClassName(data.language)
-                              selected  = data.language
-                              onSelect  = onLanguageChange
-                              items     = languageMenuItems
-                              renderButtonLabel
-                                        = (item => switch item.value {
-                                                  | `RE => "re"
-                                                  | `ML => "ml"
-                                                  | `JS => "js"
-                                                  } |> text) /> 
+        <LanguageSelectButton
+            className         = getLanguageButtonClassName(data.language)
+            selected          = data.language
+            onSelect          = onLanguageChange
+            items             = languageMenuItems
+            renderButtonLabel = (item => item.value |> Language.abbreviation
+                                                    |> text) /> 
       </div>
 
       <div className="title">
@@ -133,9 +125,8 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
 
     </div>;
 
-
   let renderFooter = () => [|
-    <Button icon    = "play"
+    <Button icon    = "chevron-right"
             label   = "Run"
             onClick = onRun />,
 
@@ -145,7 +136,6 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
 
     renderResult()
   |];
-
 
   {
     ...component,
@@ -188,7 +178,8 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
               }
             )
 
-          </Block_>)
+          </Block_>
+        )
       </SyntaxChecker>
   }
 };

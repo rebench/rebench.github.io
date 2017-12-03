@@ -19,7 +19,7 @@ module Decode = {
   let id: Js.Json.t => Test.id = json => 
     json |> Json.Decode.string |> Obj.magic;
 
-  let language: Js.Json.t => Syntax.language = json =>
+  let language: Js.Json.t => Language.t = json =>
     switch (Json.Decode.string(json)) {
     | "re" => `RE
     | "ml" => `ML
@@ -49,7 +49,7 @@ module Encode = {
   let id: Test.id => Js.Json.t = value =>
     value |> Test.Id.toString |> Json.Encode.string;
 
-  let language: Syntax.language => Js.Json.t = value =>
+  let language: Language.t => Js.Json.t = value =>
     Json.Encode.string(switch value {
     | `RE => "re"
     | `ML => "ml"

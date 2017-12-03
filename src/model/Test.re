@@ -24,7 +24,7 @@ type id = Id.t;
 
 type t = {
   id,
-  language: Syntax.language,
+  language: Language.t,
   code: string
 };
 

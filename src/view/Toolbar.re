@@ -10,7 +10,7 @@ let make = (~onRunAll, ~onAdd, ~onClear, ~shareableUrl as url, _) => {
 
         <img className="logo" src="static/logo.svg" title="re:bench" alt="re:bench" />
 
-        <Button icon    = "play"
+        <Button icon    = "chevron-right"
                 label   = "Run All"
                 onClick = onRunAll />
         

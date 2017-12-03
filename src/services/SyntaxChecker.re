@@ -1,11 +1,11 @@
 open Rebase;
 
-let _toMark = (error: Compiler.syntaxError) => {
-  "from": error.range |> Option.mapOr((range: Compiler.range) => {
+let _toMark = (error: Syntax.Error.t) => {
+  "from": error.range |> Option.mapOr((range: Syntax.Error.range) => {
     "line": range.from.line,
     "ch": range.from.column
   }, { "line": 0, "ch": 0 }),
-  "to": error.range |> Option.mapOr((range: Compiler.range) => {
+  "to": error.range |> Option.mapOr((range: Syntax.Error.range) => {
     "line": range.to_.line,
     "ch": range.to_.column
   }, { "line": 0, "ch": 1 }),
@@ -16,10 +16,10 @@ let _toMark = (error: Compiler.syntaxError) => {
 };
 
 include Debounce.Make({
-  type input = (Syntax.language, string);
+  type input = (Language.t, string);
   type output = (bool, list(Editor.mark));
   let compute = ((language, code)) =>
-    code |> Compiler.checkSyntax(language)
+    code |> Syntax.check(language)
          |> fun | None => (false, [])
                 | Some(error) => (true, [error |> _toMark]);
 });
