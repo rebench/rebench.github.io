@@ -1,15 +1,25 @@
 open! Rebase;
 open! Helpers;
 
+module SyntaxChecker = Debounce.Make({
+  type input = (string);
+  type output = (option(string), list(Editor.mark));
+  let compute = code =>
+    code |> Compiler.checkSetup
+         |> fun | Compiler.Ok(_)
+                | Compiler.Warning(_, _) => (None, [])
+                | Compiler.Error(error, marks) => (Some(error), marks);
+});
+
 let component = ReasonReact.statelessComponent("SetupBlock");
 let make = (~code, ~onChange, _children) => {
   ...component,
 
   render: (_) =>
-    <SyntaxChecker input=(`RE, code) wait=100>
+    <SyntaxChecker input=code wait=100>
       ...(((error, marks)) =>
 
-        <Block_ error header=`Text("Setup") collapsible=true>
+        <Block_ ?error header=`Text("Setup") collapsible=true>
           <Editor value=code lang=`RE onChange marks />
         </Block_>)
 

@@ -53,6 +53,23 @@ let getLanguageButtonClassName =
       | `ML => "m-language-ocaml"
       | `JS => "m-language-javascript";
 
+let getError =
+  fun | Compiler.Ok(_)
+      | Compiler.Warning(_, _) => None
+      | Error(error, _)        => Some(error);
+
+let getMarks =
+  fun | Compiler.Ok(_)
+      | Compiler.Warning(_, _) => []
+      | Error(_, marks) => marks;
+
+
+module TestCompiler = Debounce.Make({
+  type input = (string, Test.t);
+  type output = Compiler.result;
+  let compute = ((setup, test)) =>
+    Compiler.compileTest(setup, test);
+});
 
 let component = ReasonReact.reducerComponent("TestBlock");
 let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRemove, ~onLanguageChange, _children) => {
@@ -154,32 +171,28 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
       },
 
     render: ({ state } as self) =>
-      <SyntaxChecker input=(data.language, data.code) wait=100>
-        ...(((error, marks)) =>
+      <TestCompiler input=(setup, data) wait=300>
+        ...(compilerResult =>
           <Block_ className = makeClassName(testState)
                   header    = `Element(renderHeader(self))
                   footer    = renderFooter()
-                  error     >
+                  error     = ?getError(compilerResult) >
 
             <Editor value     = data.code
                     lang      = data.language
                     onChange  = (code => onChange({ ...data, code }))
-                    marks     />
+                    marks     = getMarks(compilerResult) />
 
             (
               if (state.showOutput) {
-                <Compiler input=(setup, data) wait=300>
-                  ...(compilerResult =>
-                      switch compilerResult {
-                      | Compiler.Ok(code)
-                      | Compiler.Warning(code, _) =>
-                        <Editor value=code lang=`JS readOnly=true />
+                switch compilerResult {
+                | Compiler.Ok(code)
+                | Compiler.Warning(code, _) =>
+                  <Editor value=code lang=`JS readOnly=true />
 
-                      | Error(message) =>
-                        <div> (message |> text) </div>
-                      }
-                    )
-                </Compiler>
+                | Error(message, _) =>
+                  <div> (message |> text) </div>
+                }
               } else {
                 ReasonReact.nullElement
               }
@@ -187,6 +200,6 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
 
           </Block_>
         )
-      </SyntaxChecker>
+      </TestCompiler>
   }
 };

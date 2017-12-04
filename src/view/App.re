@@ -60,7 +60,7 @@ let make = (~data: Store.data,
 
   reducer: (action, state) => {
     let run = tests =>
-      tests |> List.map((test: Test.t) => (test.id, Compiler.compile(data.setup, test)))
+      tests |> List.map((test: Test.t) => (test.id, Compiler.compileTest(data.setup, test)))
             |> List.map(
                  fun | (id, Compiler.Ok(code)) => (id, code)
                      | (id, Warning(code, _))  => (id, code)
