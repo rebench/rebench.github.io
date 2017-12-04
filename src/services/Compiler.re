@@ -77,7 +77,7 @@ let _check = (language, code) =>
   | `RE => 
     Template.apply(language, code)
       |> Refmt.parseRE
-      |> Result.map2(_ast => code, e => SyntaxError.fromRefmt(e));
+      |> Result.map2(ast => ast |> Refmt.printRE, e => SyntaxError.fromRefmt(e));
 
   | `ML => 
     Template.apply(language, code)

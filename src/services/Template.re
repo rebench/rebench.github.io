@@ -1,7 +1,7 @@
 let apply = (language, code) => {
   switch language {
   | `RE =>
-{j|let __test__ = () => {
+{j|let __test__ = () => {();
   $code
 };|j}
 

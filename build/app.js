@@ -22241,8 +22241,8 @@ function _assemble(setup, code) {
 function _check(language, code) {
   if (language !== 17247) {
     if (language >= 18355) {
-      return Rebase.Result[/* map2 */0]((function () {
-                    return code;
+      return Rebase.Result[/* map2 */0]((function (ast) {
+                    return Reason.printRE(ast);
                   }), fromRefmt, Refmt.parseRE(Template.apply(language, code)));
     } else {
       var exit = 0;
@@ -43886,7 +43886,7 @@ function addLooseExports(parse, Parser$$1, plugins$$1) {
 function apply(language, code) {
   if (language !== 17247) {
     if (language >= 18355) {
-      return "let __test__ = () => {\n  " + (String(code) + "\n};");
+      return "let __test__ = () => {();\n  " + (String(code) + "\n};");
     } else {
       return "[%%raw {|function __test__() {\n" + (String(code) + "\n}\n\nexports.__test__ = __test__|}];");
     }
