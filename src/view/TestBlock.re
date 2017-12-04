@@ -26,15 +26,15 @@ let formatRelativeScore = score =>
 let getStateClass =
   fun | Untested                            => "s-untested"
       | Running(_)                          => "s-running"
+      | Error(_)                            => "s-error"
       | Complete(_, Some(s)) when s == 0.   => "s-complete s-fastest"
       | Complete(_, Some(s)) when s >= -10. => "s-complete s-close"
       | Complete(_, Some(s)) when s <= -50. => "s-complete s-not-even-close"
       | Complete(_)                         => "s-complete";
 
-let makeClassName = (state, isError) => classNames([
+let makeClassName = (state) => classNames([
     (Styles.root, true),
-    (getStateClass(state), true),
-    ("s-error", isError)
+    (getStateClass(state), true)
   ]);
 
 module LanguageSelectButton = SelectButton.Make({
@@ -85,6 +85,12 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
           result |> formatResult
                  |> text
         )
+      </div>
+
+    | Error(error) =>
+      <div className=(Styles.state ++ " s-error")>
+        <Icon name="alert-circle-outline" />
+        (error |> text)
       </div>
 
     | Complete(result, _) =>
@@ -149,10 +155,11 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
 
     render: ({ state } as self) =>
       <SyntaxChecker input=(data.language, data.code) wait=100>
-        ...(((isError, marks)) =>
-          <Block_ className = makeClassName(testState, isError)
+        ...(((error, marks)) =>
+          <Block_ className = makeClassName(testState)
                   header    = `Element(renderHeader(self))
-                  footer    = renderFooter() >
+                  footer    = renderFooter()
+                  error     >
 
             <Editor value     = data.code
                     lang      = data.language

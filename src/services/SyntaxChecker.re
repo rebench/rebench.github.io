@@ -17,9 +17,9 @@ let _toMark = (error: Syntax.Error.t) => {
 
 include Debounce.Make({
   type input = (Language.t, string);
-  type output = (bool, list(Editor.mark));
+  type output = (option(string), list(Editor.mark));
   let compute = ((language, code)) =>
     code |> Syntax.check(language)
-         |> fun | None => (false, [])
-                | Some(error) => (true, [error |> _toMark]);
+         |> fun | None => (None, [])
+                | Some(error) => (Some(error.message), [error |> _toMark]);
 });

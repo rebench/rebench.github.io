@@ -59,7 +59,7 @@ let check = (language, code): option(Error.t) =>
     Template.apply(language, code)
       |> Refmt.parseML
       |> fun | Result.Ok(_) => None
-             | Result.Error(e) => Some(Error.fromRefmt(e));
+             | Result.Error(e) => Some(Error.fromRefmt(e |> Helpers.log));
 
   | `JS =>
     switch (Acorn.parse(code)) {

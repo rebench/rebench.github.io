@@ -30,7 +30,7 @@ let makeClassName = (~className="", collapsible, state) =>
   ]);
 
 let component = ReasonReact.reducerComponent("Block");
-let make = (~header, ~footer=?, ~className=?, ~collapsible=false, children) => {
+let make = (~header, ~footer=?, ~className=?, ~error, ~collapsible=false, children) => {
   ...component,
 
   initialState: () => { collapsed: false },
@@ -53,6 +53,13 @@ let make = (~header, ~footer=?, ~className=?, ~collapsible=false, children) => {
       <main>
         (children |> ReasonReact.arrayToElement)
       </main>
+
+      (
+        switch error {
+        | Some(error) => <Message message=error type_=`Error />
+        | None => ReasonReact.nullElement
+        }
+      )
 
       (renderFooter(footer))
 

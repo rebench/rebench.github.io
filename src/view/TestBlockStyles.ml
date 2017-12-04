@@ -87,6 +87,10 @@ let state = css [
     color Colors.yellow;
   ]);
 
+  Selector("&.s-error .mdi", [
+    color Colors.red;
+  ]);
+
   Selector("&.s-complete .mdi", [
     color Colors.green;
   ]);

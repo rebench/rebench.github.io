@@ -46,15 +46,14 @@ let make = (~data: Store.data,
 
   initialState: () => {
     tests: [],
-    worker: ref(Worker.make(~onMessage=Js.log, ~onError=Js.log)) /* TODO: a bit hacky default */
+    worker: ref(Worker.make(~onMessage=Js.log)) /* TODO: a bit hacky default */
   },
 
   didMount: ({ reduce, state }) => {
     ReasonReact.Update({
       ...state,
       worker: ref(Worker.make(
-        ~onMessage  = reduce(message => WorkerMessage(message)),
-        ~onError    = Js.log
+        ~onMessage  = reduce(message => WorkerMessage(message))
       ))
     })
   },
@@ -122,12 +121,22 @@ let make = (~data: Store.data,
         _self => run([test])
       )
   
-    | WorkerMessage(CaseCycle(id, result)) =>
+    | WorkerMessage(TestCycle(id, result)) =>
       ReasonReact.Update({
         ...state,
         tests:
           [
             (id, Test.Running(result)),
+            ..._remove_assoc(id, state.tests)
+          ]
+      })
+
+    | WorkerMessage(TestError(id, error)) =>
+      ReasonReact.Update({
+        ...state,
+        tests:
+          [
+            (id, Test.Error(error)),
             ..._remove_assoc(id, state.tests)
           ]
       })
@@ -144,6 +153,11 @@ let make = (~data: Store.data,
   
     | WorkerMessage(SuiteComplete) =>
       ReasonReact.NoUpdate
+
+    | WorkerMessage(WorkerError(error)) =>
+      ReasonReact.SideEffects(
+        _self => Js.log(error)
+      )
     }
   },
 
@@ -154,16 +168,6 @@ let make = (~data: Store.data,
                onClear      = reduce(() => Clear)
                shareableUrl = url />
 
-      /*
-      (
-        switch compilerResult {
-        | Error(message)      => <Message type_=`Error message />
-        | Warning(_, message) => <Message type_=`Warning message />
-        | _                   => ReasonReact.nullElement
-        }
-      )
-      */
-
       <WidthContainer>
         <SetupBlock code      = data.Store.setup
                     onChange  = reduce(code => UpdateSetup(code)) />
@@ -172,31 +176,22 @@ let make = (~data: Store.data,
           data.tests
             |> List.map(test =>
                 <TestBlock
-                  key       = (test.Test.id |> Test.Id.toString)
-                  onChange  = reduce(changed => UpdateTest(changed))
-                  onRun     = reduce(() => RunSingle(test))
-                  onRemove  = reduce(() => RemoveTest(test))
-                  onLanguageChange
-                            = reduce(language => UpdateTest({ ...test, language }))
-                  data      = test
-                  setup     = data.setup
-                  state     = (try (_assoc(test.id, state.tests)) {
-                              | Not_found => Test.Untested
-                              })
+                    key       = (test.Test.id |> Test.Id.toString)
+                    onChange  = reduce(changed => UpdateTest(changed))
+                    onRun     = reduce(() => RunSingle(test))
+                    onRemove  = reduce(() => RemoveTest(test))
+                    onLanguageChange
+                              = reduce(language => UpdateTest({ ...test, language }))
+                    data      = test
+                    setup     = data.setup
+                    state     = (try (_assoc(test.id, state.tests)) {
+                                | Not_found => Test.Untested
+                                })
                 />)
             |> List.reverse
             |> _toArray
             |> ReasonReact.arrayToElement
         )
-        /*
-        (
-          switch compilerResult {
-          | Ok(code)
-          | Warning(code, _) => <JSBlock code />
-          | _                => ReasonReact.nullElement
-          }
-        )
-        */
       </WidthContainer>
 
       <footer className=Styles.footer>

@@ -37,5 +37,6 @@ type result = {
 type state =
   | Untested
   | Running(result)
+  | Error(string)
   | Complete(result, option(float)) /* TODO: should ideally not be option */
 ;

@@ -17,7 +17,9 @@ type error = {.
 [@bs.val] [@bs.module "reason"] external printRE : ast => string = "";
 
 let _wrap: ('a => 'b) => 'a => Result.t('b, error) = (f, x) =>
-  Result.wrap(() => f(x)) |> Obj.magic;
+  try (Result.Ok(f(x))) {
+  | Js.Exn.Error(e) => Result.Error(Obj.magic(e))
+  };
 
 let parseML = _wrap(parseML);
 let parseRE = _wrap(parseRE);

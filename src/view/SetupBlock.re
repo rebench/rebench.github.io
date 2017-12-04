@@ -7,9 +7,9 @@ let make = (~code, ~onChange, _children) => {
 
   render: (_) =>
     <SyntaxChecker input=(`RE, code) wait=100>
-      ...(((isError, marks)) =>
+      ...(((error, marks)) =>
 
-        <Block_ className=(isError ? "s-error" : "") header=`Text("Setup") collapsible=true>
+        <Block_ error header=`Text("Setup") collapsible=true>
           <Editor value=code lang=`RE onChange marks />
         </Block_>)
 

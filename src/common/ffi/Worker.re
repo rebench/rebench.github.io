@@ -6,9 +6,11 @@ module Message = {
     | Run(list((Test.id, string)));
 
   type receive =
-    | CaseCycle(Test.id, Test.result)
+    | TestCycle(Test.id, Test.result)
+    | TestError(Test.id, string)
     | SuiteCycle(Test.id, Test.result)
-    | SuiteComplete;
+    | SuiteComplete
+    | WorkerError(string);
 
   let _decodeReceived = message => {
     let data = message##data##contents;
@@ -21,8 +23,11 @@ module Message = {
 
     switch message##data##_type {
     
-    | "caseCycle" =>
-      CaseCycle(data##id, makeResult())
+    | "testCycle" =>
+      TestCycle(data##id, makeResult())
+
+    | "testError" =>
+      TestError(data##id, data##error)
 
     | "suiteCycle" =>
       SuiteCycle(data##id, makeResult())
@@ -56,19 +61,21 @@ type t = {
   postMessage: Message.send => unit
 };
 
-let make = (~onMessage, ~onError) => {
+let make = (~onMessage) => {
   let timeoutId = ref(None);
   let worker = _makeWorker("../build/worker.js");
 
   _onmessage(worker, message => {
-    if (message##_type == "end") {
+    switch message##_type {
+    | "end" =>
       timeoutId.contents |> Option.forEach(Js.Global.clearTimeout);
-    } else {
+
+    | _ =>
       message |> Message._decodeReceived
-              |> onMessage;
+              |> onMessage
     }
   });
-  _onerror(worker, onError);
+  _onerror(worker, e => onMessage(WorkerError(e)));
 
   {
     postMessage: message =>

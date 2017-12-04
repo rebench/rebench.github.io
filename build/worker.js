@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 304);
+/******/ 	return __webpack_require__(__webpack_require__.s = 306);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -75,17 +75,17 @@ module.exports = __webpack_amd_options__;
 
 /***/ }),
 
-/***/ 304:
+/***/ 306:
 /***/ (function(module, exports, __webpack_require__) {
 
 importScripts('../static/stdlibBundle.js');
 
-const Benchmark = __webpack_require__(305);
+const Benchmark = __webpack_require__(307);
 
 onmessage = ({ data }) => {
   var suite = new Benchmark.Suite;
 
-  data.forEach(({ name, code }) =>
+  data.forEach(({ name, code }) => {
     suite.add(name, {
       setup: `
         var exports = this.exports = {};
@@ -94,34 +94,43 @@ onmessage = ({ data }) => {
       fn: function () {
         this.exports.__test__();
       },
-      onCycle: ({ target: { name, hz, stats }}) => {
-        postMessage({ type: "caseCycle", contents: {
-          id: name,
-          hz: hz,
-          sampleCount: stats.sample.length,
-          rme: stats.rme
-        }})
+      onCycle: ({ target: { name, hz, stats, error }}) => {
+        if (!error) {
+          postMessage({ type: "testCycle", contents: {
+            id: name,
+            hz: hz,
+            sampleCount: stats.sample.length,
+            rme: stats.rme
+          }})
+        }
       },
-      onError: console.log
-    }));
+      onError: e => {
+        postMessage({ type: "testError", contents: { id: name, error: String(e.message) }})
+      }
+    })
+  });
 
-  suite.on('cycle', function({ target: { name, hz, stats }}) {
-    postMessage({ type: "suiteCycle", contents: {
-      id: name,
-      hz: hz,
-      sampleCount: stats.sample.length,
-      rme: stats.rme
-    }})
+  suite.on('cycle', ({ target: { name, hz, stats, error }}) => {
+    if (!error) {
+      postMessage({ type: "suiteCycle", contents: {
+        id: name,
+        hz: hz,
+        sampleCount: stats.sample.length,
+        rme: stats.rme
+      }})
+    }
   })
-  .on('complete', function() {
-    postMessage({ type: "complete", contents: this.filter('fastest').map('name') })
+  .on('complete', function ({ target: { error }}) {
+    if (!error) {
+      postMessage({ type: "complete", contents: this.filter('fastest').map('name') });
+    }
   })
   .run({ 'async': true });
 };
 
 /***/ }),
 
-/***/ 305:
+/***/ 307:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var require;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -2923,7 +2932,7 @@ onmessage = ({ data }) => {
   // Some AMD build optimizers, like r.js, check for condition patterns like the following:
   if (true) {
     // Define as an anonymous module so, through path mapping, it can be aliased.
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(307), __webpack_require__(308)], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, platform) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(309), __webpack_require__(310)], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, platform) {
       return runInContext({
         '_': _,
         'platform': platform
@@ -2954,7 +2963,7 @@ onmessage = ({ data }) => {
 
 /***/ }),
 
-/***/ 306:
+/***/ 308:
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -2963,11 +2972,11 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 306;
+webpackEmptyContext.id = 308;
 
 /***/ }),
 
-/***/ 307:
+/***/ 309:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -20060,7 +20069,7 @@ webpackEmptyContext.id = 306;
 
 /***/ }),
 
-/***/ 308:
+/***/ 310:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*!
