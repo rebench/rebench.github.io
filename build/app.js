@@ -47176,7 +47176,7 @@ var header = Glamor.css(/* :: */[
                                 /* Selector */Block.__(1, [
                                     "&.right",
                                     /* :: */[
-                                      Glamor.justifyContent("end"),
+                                      Glamor.justifyContent("flex-end"),
                                       /* [] */0
                                     ]
                                   ]),
