@@ -63,7 +63,7 @@ let header = css [
     flex "1";
 
     Selector("&.right", [
-      justifyContent "end";
+      justifyContent "flex-end";
     ]);
   ]);
 
