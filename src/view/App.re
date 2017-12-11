@@ -22,7 +22,7 @@ type actions =
   | WorkerMessage(Worker.Message.receive)
 ;
 
-let _recalculateScores = (tests) => {
+let _recalculateScores = tests => {
   let fastest =
     tests |> List.map(
               fun | (_, Test.Complete({ hz }, _)) => Some(hz)

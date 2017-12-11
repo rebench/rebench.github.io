@@ -46,7 +46,7 @@ let make = (~header, ~footer=?, ~className=?, ~error=?, ~collapsible=false, chil
   render: ({ reduce, state }) =>
     <section className=makeClassName(~className?, collapsible, state)>
 
-      <header onClick=reduce((_) => HeaderClicked)>
+      <header onClick=reduce(_e => HeaderClicked)>
         (renderHeader(header))
       </header>
 

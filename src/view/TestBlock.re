@@ -11,7 +11,7 @@ type action =
   | ToggleOutput
 ;
 
-let formatResult = ({hz, rme, sampleCount}) => {
+let formatResult = ({ hz, rme, sampleCount }) => {
   let hz      = hz |> Js.Float.toFixedWithPrecision(~digits=hz < 100. ? 2 : 0)
                    |> Utils.formatNumber;
   let rme     = rme |> Js.Float.toFixedWithPrecision(~digits=2);
@@ -32,7 +32,7 @@ let getStateClass =
       | Complete(_, Some(s)) when s <= -50. => "s-complete s-not-even-close"
       | Complete(_)                         => "s-complete";
 
-let makeClassName = (state) => classNames([
+let makeClassName = state => classNames([
     (Styles.root, true),
     (getStateClass(state), true)
   ]);

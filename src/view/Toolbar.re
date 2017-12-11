@@ -4,7 +4,7 @@ module Styles = ToolbarStyles;
 let component = ReasonReact.statelessComponent("Toolbar");
 let make = (~onRunAll, ~onAdd, ~onClear, ~shareableUrl as url, _) => {
   ...component,
-  render: (_) =>
+  render: _self =>
     <div className=Styles.root>
       <WidthContainer>
 

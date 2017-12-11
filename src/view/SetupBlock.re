@@ -15,7 +15,7 @@ let component = ReasonReact.statelessComponent("SetupBlock");
 let make = (~code, ~onChange, _children) => {
   ...component,
 
-  render: (_) =>
+  render: _self =>
     <SyntaxChecker input=code wait=100>
       ...(((error, marks)) =>
 
