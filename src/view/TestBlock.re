@@ -1,7 +1,7 @@
 open! Rebase;
 open! Helpers;
 module Styles = TestBlockStyles;
-open Test;
+open! Test;
 
 type state = {
   showOutput: bool

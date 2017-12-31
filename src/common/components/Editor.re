@@ -28,7 +28,7 @@ type state = {
 let setMarks = (editor, marks: list(mark)) =>
   editor^ |> Option.forEach(
     editor => 
-      marks |> List.toArray
+      marks |> Array.fromList
             |> CodeMirror.setMarks(editor)
   );
 

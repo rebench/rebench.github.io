@@ -72,7 +72,7 @@ module Make(Config: Config) = {
                             (renderItem(item))
                           </li>
                         )
-                      |> List.toArray
+                      |> Array.fromList
                       |> ReasonReact.arrayToElement
               )
             </ul>

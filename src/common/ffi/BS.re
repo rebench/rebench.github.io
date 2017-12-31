@@ -3,14 +3,14 @@ open Rebase;
 module Decode = {
   let success = json =>
     Json.Decode.(
-      Result.Ok(
+      Ok(
         json |> field("js_code", string)
       )
     );
 
   let error = json =>
     Json.Decode.(
-      Result.Error(
+      Error(
         json |> field("text", string)
       )
     );
@@ -44,5 +44,5 @@ let compile : string => Result.t((string, option(string)), string) = code =>
          |> result => result |> Result.map(code => (code, warnings));
   } {
   | Json.Decode.DecodeError(e) =>
-    Result.Error("Unrecognized compiler output: " ++ e);
+    Error("Unrecognized compiler output: " ++ e);
   }

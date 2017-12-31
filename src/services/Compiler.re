@@ -87,38 +87,38 @@ let _check = (language, code) =>
   | `JS =>
     switch (Acorn.parse(code)) {
     | exception Js.Exn.Error(e) =>
-      Result.Error(SyntaxError.fromAcorn(e))
+      Error(SyntaxError.fromAcorn(e))
     | _ => {
       [%raw "0"]; /* TODO: Workaround for BS bug: https://github.com/BuckleScript/bucklescript/issues/2316 */
-      Result.Ok(Template.apply(`JS, code))
+      Ok(Template.apply(`JS, code))
     } 
     }
   };
 
 let checkSetup = code =>
   code |> Refmt.parseRE
-       |> fun | Result.Ok(ast) =>
+       |> fun | Ok(ast) =>
                 ast |> Refmt.printML
                     |> BS.compile
-                    |> (fun | Result.Ok((code, None))           => Ok(code)
-                            | Result.Ok((code, Some(warnings))) => Warning(code, warnings)
-                            | Result.Error(message)             => Error(message, []))
-              | Result.Error(e) =>
+                    |> (fun | Ok((code, None))           => Ok(code)
+                            | Ok((code, Some(warnings))) => Warning(code, warnings)
+                            | Error(message)             => Error(message, []))
+              | Error(e) =>
                 e |> SyntaxError.fromRefmt
                   |> e => Error(e.message, [e |> SyntaxError.toMark]);
 
 let compileTest = (setup, test) =>
   _check(test.Test.language, test.code)
-  |> (fun | Result.Error(e) => Error(e.message, [e |> SyntaxError.toMark])
-          | Result.Ok(code) =>
+  |> (fun | Error(e) => Error(e.message, [e |> SyntaxError.toMark])
+          | Ok(code) =>
             _assemble(setup, code)
             |> Refmt.parseRE
             |> Result.map(Refmt.printML)
-            |> (fun | Result.Error(e) => Result.Error(e##message)
-                    | Result.Ok(code) => Result.Ok(code))
+            |> (fun | Error(e) => Rebase.Error(e##message)
+                    | Ok(code) => Ok(code))
             |> Result.flatMap(BS.compile)
-            |> (fun | Result.Ok((code, None))           => Ok(code)
-                    | Result.Ok((code, Some(warnings))) => Warning(code, warnings)
-                    | Result.Error(message)             => Error(message, [])));
+            |> (fun | Ok((code, None))           => Ok(code)
+                    | Ok((code, Some(warnings))) => Warning(code, warnings)
+                    | Error(message)             => Error(message, [])));
 
 
