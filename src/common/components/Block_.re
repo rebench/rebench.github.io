@@ -54,12 +54,9 @@ let make = (~header, ~footer=?, ~className=?, ~error=?, ~collapsible=false, chil
         (children |> ReasonReact.arrayToElement)
       </main>
 
-      (
-        switch error {
-        | Some(error) => <Message message=error type_=`Error />
-        | None => ReasonReact.nullElement
-        }
-      )
+      <Control.IfSome option=error>
+        ...(error => <Message message=error type_=`Error />)
+      </Control.IfSome>
 
       (renderFooter(footer))
 

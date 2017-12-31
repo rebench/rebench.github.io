@@ -35,9 +35,7 @@ let make = (~onClick, /*~enabled=true,*/ children) => {
   },
   /*didUpdate: ([oldSelf, newSelf]) =>,*/
   willUnmount: self => {
-    self.state.listener^ |> Option.forEach(listener =>
-      addEventListener("mousedown", listener)
-    );
+    self.state.listener^ |> Option.forEach(addEventListener("mousedown"));
   },
 
   render: ({ handle }) =>

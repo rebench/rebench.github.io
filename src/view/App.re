@@ -172,26 +172,23 @@ let make = (~data: Store.data,
         <SetupBlock code      = data.Store.setup
                     onChange  = reduce(code => UpdateSetup(code)) />
 
-        (
-          data.tests
-            |> List.map(test =>
-                <TestBlock
-                    key       = (test.Test.id |> Test.Id.toString)
-                    onChange  = reduce(changed => UpdateTest(changed))
-                    onRun     = reduce(() => RunSingle(test))
-                    onRemove  = reduce(() => RemoveTest(test))
-                    onLanguageChange
-                              = reduce(language => UpdateTest({ ...test, language }))
-                    data      = test
-                    setup     = data.setup
-                    state     = (try (_assoc(test.id, state.tests)) {
-                                | Not_found => Test.Untested
-                                })
-                />)
-            |> List.reverse
-            |> _toArray
-            |> ReasonReact.arrayToElement
-        )
+        <Control.MapList items=(data.tests |> List.reverse)>
+          ...(test =>
+            <TestBlock
+                key       = (test.Test.id |> Test.Id.toString)
+                onChange  = reduce(changed => UpdateTest(changed))
+                onRun     = reduce(() => RunSingle(test))
+                onRemove  = reduce(() => RemoveTest(test))
+                onLanguageChange
+                          = reduce(language => UpdateTest({ ...test, language }))
+                data      = test
+                setup     = data.setup
+                state     = (try (_assoc(test.id, state.tests)) {
+                            | Not_found => Test.Untested
+                            })
+            />
+          )
+        </Control.MapList>
       </WidthContainer>
 
       <footer className=Styles.footer>

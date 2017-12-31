@@ -174,8 +174,8 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
                     onChange  = (code => onChange({ ...data, code }))
                     marks     = getMarks(compilerResult) />
 
-            (
-              if (state.showOutput) {
+            <Control.If cond=state.showOutput>
+              ...(() =>
                 switch compilerResult {
                 | Compiler.Ok(code)
                 | Compiler.Warning(code, _) =>
@@ -184,11 +184,8 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
                 | Error(message, _) =>
                   <div> (message |> text) </div>
                 }
-              } else {
-                ReasonReact.nullElement
-              }
-            )
-
+              )
+            </Control.If>
           </Block_>
         )
       </TestCompiler>

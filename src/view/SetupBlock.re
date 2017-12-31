@@ -7,7 +7,7 @@ module SyntaxChecker = Debounce.Make({
   let compute = code =>
     code |> Compiler.checkSetup
          |> fun | Compiler.Ok(_)
-                | Compiler.Warning(_, _) => (None, [])
+                | Compiler.Warning(_, _)       => (None, [])
                 | Compiler.Error(error, marks) => (Some(error), marks);
 });
 

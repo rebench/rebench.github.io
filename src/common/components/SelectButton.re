@@ -65,16 +65,14 @@ module Make(Config: Config) = {
 
           <menu className=(Styles.menu ++ (state.isOpen ? " s-open" : ""))>
             <ul>
-              (
-                items |> List.map(item =>
-                          <li key     = item.label
-                              onClick = reduce(_e => ItemSelected(item)) >
-                            (renderItem(item))
-                          </li>
-                        )
-                      |> Array.fromList
-                      |> ReasonReact.arrayToElement
-              )
+              <Control.MapList items>
+                ...(item =>
+                  <li key     = item.label
+                      onClick = reduce(_e => ItemSelected(item)) >
+                    (renderItem(item))
+                  </li>
+                )
+              </Control.MapList>
             </ul>
           </menu>
 

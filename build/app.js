@@ -6259,27 +6259,38 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 "use strict";
 
 
+var Curry  = __webpack_require__(0);
 var Rebase = __webpack_require__(5);
 
 function text(prim) {
   return prim;
 }
 
-function classNames(items) {
-  return Rebase.$$String[/* joinWith */11](" ", Rebase.List[/* filter */10]((function (s) {
-                    return +(s !== "");
-                  }), Rebase.List[/* map */0]((function (param) {
-                        if (param[1] !== 0) {
-                          return param[0];
-                        } else {
-                          return "";
-                        }
-                      }), items)));
-}
+var partial_arg = Rebase.List[/* map */0];
+
+var partial_arg$1 = Rebase.List[/* filter */10];
+
+var partial_arg$2 = Rebase.$$String[/* joinWith */11];
+
+var classNames = Curry._2(Rebase.Fn[/* >> */6], Curry._2(Rebase.Fn[/* >> */6], (function (param) {
+            return partial_arg((function (param) {
+                          if (param[1] !== 0) {
+                            return param[0];
+                          } else {
+                            return "";
+                          }
+                        }), param);
+          }), (function (param) {
+            return partial_arg$1((function (s) {
+                          return +(s !== "");
+                        }), param);
+          })), (function (param) {
+        return partial_arg$2(" ", param);
+      }));
 
 exports.text       = text;
 exports.classNames = classNames;
-/* No side effect */
+/* classNames Not a pure module */
 
 
 /***/ }),
@@ -18078,7 +18089,7 @@ function make(label, icon, $staropt$star, $staropt$star$1, onClick, _) {
       var match = +(alignIcon === /* Left */847852583);
       var match$1 = +(alignIcon === /* Right */-57574468);
       return React.createElement("button", {
-                  className: Helpers.classNames(/* :: */[
+                  className: Curry._1(Helpers.classNames, /* :: */[
                         /* tuple */[
                           ButtonStyles.normal,
                           /* true */1
@@ -21094,6 +21105,7 @@ rHa=Ys[3],sHa=Zs[10],tHa=Zs[9],uHa=Ys[10],vHa=Ys[9];ri(yGa,function(a){return Ns
 var Block       = __webpack_require__(1);
 var Curry       = __webpack_require__(0);
 var React       = __webpack_require__(2);
+var Control     = __webpack_require__(154);
 var Helpers     = __webpack_require__(12);
 var Message     = __webpack_require__(115);
 var BlockStyles = __webpack_require__(117);
@@ -21121,7 +21133,7 @@ function renderFooter(param) {
 
 function makeClassName($staropt$star, collapsible, state) {
   var className = $staropt$star ? $staropt$star[0] : "";
-  return Helpers.classNames(/* :: */[
+  return Curry._1(Helpers.classNames, /* :: */[
               /* tuple */[
                 BlockStyles.root,
                 /* true */1
@@ -21160,7 +21172,9 @@ function make(header, footer, className, error, $staropt$star, children) {
                       onClick: Curry._1(param[/* reduce */1], (function () {
                               return /* HeaderClicked */0;
                             }))
-                    }, renderHeader(header)), React.createElement("main", undefined, children), error ? ReasonReact.element(/* None */0, /* None */0, Message.make(/* Error */106380200, error[0], /* array */[])) : null, renderFooter(footer));
+                    }, renderHeader(header)), React.createElement("main", undefined, children), ReasonReact.element(/* None */0, /* None */0, Control.IfSome[/* make */1](error, (function (error) {
+                            return ReasonReact.element(/* None */0, /* None */0, Message.make(/* Error */106380200, error, /* array */[]));
+                          }))), renderFooter(footer));
     });
   newrecord[/* initialState */10] = (function () {
       return /* record */[/* collapsed : false */0];
@@ -21682,6 +21696,7 @@ var Curry                   = __webpack_require__(0);
 var React                   = __webpack_require__(2);
 var Rebase                  = __webpack_require__(5);
 var Worker                  = __webpack_require__(74);
+var Control                 = __webpack_require__(154);
 var Helpers                 = __webpack_require__(12);
 var Toolbar                 = __webpack_require__(75);
 var Compiler                = __webpack_require__(33);
@@ -21749,32 +21764,32 @@ function make(data, url, updateStore, _) {
                           ReasonReact.element(/* None */0, /* None */0, SetupBlock.make(data[/* setup */0], Curry._1(reduce, (function (code) {
                                           return /* UpdateSetup */Block.__(2, [code]);
                                         })), /* array */[])),
-                          $$Array.of_list(Rebase.List[/* reverse */20](Rebase.List[/* map */0]((function (test) {
-                                          var tmp;
-                                          try {
-                                            tmp = List.assoc(test[/* id */0], state[/* tests */0]);
-                                          }
-                                          catch (exn){
-                                            if (exn === Caml_builtin_exceptions.not_found) {
-                                              tmp = /* Untested */0;
-                                            } else {
-                                              throw exn;
-                                            }
-                                          }
-                                          return ReasonReact.element(/* Some */[Curry._1(Test.Id[/* toString */2], test[/* id */0])], /* None */0, TestBlock.make(data[/* setup */0], test, tmp, Curry._1(reduce, (function (changed) {
-                                                                return /* UpdateTest */Block.__(0, [changed]);
-                                                              })), Curry._1(reduce, (function () {
-                                                                return /* RunSingle */Block.__(3, [test]);
-                                                              })), Curry._1(reduce, (function () {
-                                                                return /* RemoveTest */Block.__(1, [test]);
-                                                              })), Curry._1(reduce, (function (language) {
-                                                                return /* UpdateTest */Block.__(0, [/* record */[
-                                                                            /* id */test[/* id */0],
-                                                                            /* language */language,
-                                                                            /* code */test[/* code */2]
-                                                                          ]]);
-                                                              })), /* array */[]));
-                                        }), data[/* tests */1])))
+                          ReasonReact.element(/* None */0, /* None */0, Control.MapList[/* make */1](Rebase.List[/* reverse */20](data[/* tests */1]), /* None */0, (function (test) {
+                                      var tmp;
+                                      try {
+                                        tmp = List.assoc(test[/* id */0], state[/* tests */0]);
+                                      }
+                                      catch (exn){
+                                        if (exn === Caml_builtin_exceptions.not_found) {
+                                          tmp = /* Untested */0;
+                                        } else {
+                                          throw exn;
+                                        }
+                                      }
+                                      return ReasonReact.element(/* Some */[Curry._1(Test.Id[/* toString */2], test[/* id */0])], /* None */0, TestBlock.make(data[/* setup */0], test, tmp, Curry._1(reduce, (function (changed) {
+                                                            return /* UpdateTest */Block.__(0, [changed]);
+                                                          })), Curry._1(reduce, (function () {
+                                                            return /* RunSingle */Block.__(3, [test]);
+                                                          })), Curry._1(reduce, (function () {
+                                                            return /* RemoveTest */Block.__(1, [test]);
+                                                          })), Curry._1(reduce, (function (language) {
+                                                            return /* UpdateTest */Block.__(0, [/* record */[
+                                                                        /* id */test[/* id */0],
+                                                                        /* language */language,
+                                                                        /* code */test[/* code */2]
+                                                                      ]]);
+                                                          })), /* array */[]));
+                                    })))
                         ])), React.createElement("footer", {
                       className: AppStyles.footer
                     }, ReasonReact.element(/* None */0, /* None */0, WidthContainer.make(/* array */[
@@ -35031,6 +35046,7 @@ var Block_          = __webpack_require__(45);
 var Button          = __webpack_require__(32);
 var Editor          = __webpack_require__(46);
 var Rebase          = __webpack_require__(5);
+var Control         = __webpack_require__(154);
 var Helpers         = __webpack_require__(12);
 var Compiler        = __webpack_require__(33);
 var Debounce        = __webpack_require__(47);
@@ -35096,7 +35112,7 @@ function getStateClass(param) {
 }
 
 function makeClassName(state) {
-  return Helpers.classNames(/* :: */[
+  return Curry._1(Helpers.classNames, /* :: */[
               /* tuple */[
                 TestBlockStyles.root,
                 /* true */1
@@ -35241,26 +35257,6 @@ function make(setup, data, testState, onChange, onRun, onRemove, onLanguageChang
                       setup,
                       data
                     ], 300, (function (compilerResult) {
-                        var tmp;
-                        if (state[/* showOutput */0]) {
-                          var exit = 0;
-                          switch (compilerResult.tag | 0) {
-                            case 0 : 
-                            case 1 : 
-                                exit = 1;
-                                break;
-                            case 2 : 
-                                tmp = React.createElement("div", undefined, Helpers.text(compilerResult[0]));
-                                break;
-                            
-                          }
-                          if (exit === 1) {
-                            tmp = ReasonReact.element(/* None */0, /* None */0, Editor.make(compilerResult[0], /* JS */16585, /* None */0, /* None */0, /* Some */[/* true */1], /* None */0, /* None */0, /* array */[]));
-                          }
-                          
-                        } else {
-                          tmp = null;
-                        }
                         return ReasonReact.element(/* None */0, /* None */0, Block_.make(/* `Element */[
                                         -744106340,
                                         renderHeader(self)
@@ -35272,7 +35268,22 @@ function make(setup, data, testState, onChange, onRun, onRemove, onLanguageChang
                                                                   /* code */code
                                                                 ]);
                                                     })], /* array */[])),
-                                        tmp
+                                        ReasonReact.element(/* None */0, /* None */0, Control.If[/* make */1](state[/* showOutput */0], (function () {
+                                                    var exit = 0;
+                                                    switch (compilerResult.tag | 0) {
+                                                      case 0 : 
+                                                      case 1 : 
+                                                          exit = 1;
+                                                          break;
+                                                      case 2 : 
+                                                          return React.createElement("div", undefined, Helpers.text(compilerResult[0]));
+                                                      
+                                                    }
+                                                    if (exit === 1) {
+                                                      return ReasonReact.element(/* None */0, /* None */0, Editor.make(compilerResult[0], /* JS */16585, /* None */0, /* None */0, /* Some */[/* true */1], /* None */0, /* None */0, /* array */[]));
+                                                    }
+                                                    
+                                                  })))
                                       ]));
                       })));
     });
@@ -37849,6 +37860,7 @@ var Block              = __webpack_require__(1);
 var Curry              = __webpack_require__(0);
 var React              = __webpack_require__(2);
 var Rebase             = __webpack_require__(5);
+var Control            = __webpack_require__(154);
 var Helpers            = __webpack_require__(12);
 var ReasonReact        = __webpack_require__(3);
 var OnClickOutside     = __webpack_require__(132);
@@ -37885,14 +37897,14 @@ function Make() {
                                   className: SelectButtonStyles.menu + (
                                     match !== 0 ? " s-open" : ""
                                   )
-                                }, React.createElement("ul", undefined, Rebase.$$Array[/* fromList */13](Rebase.List[/* map */0]((function (item) {
+                                }, React.createElement("ul", undefined, ReasonReact.element(/* None */0, /* None */0, Control.MapList[/* make */1](items, /* None */0, (function (item) {
                                                 return React.createElement("li", {
                                                             key: item[/* label */0],
                                                             onClick: Curry._1(reduce, (function () {
                                                                     return /* ItemSelected */[item];
                                                                   }))
                                                           }, Curry._1(renderItem, item));
-                                              }), items))))
+                                              })))))
                           ])));
       });
     newrecord[/* initialState */10] = (function () {
@@ -37961,8 +37973,8 @@ function make(onClick, children) {
       return /* NoUpdate */0;
     });
   newrecord[/* willUnmount */6] = (function (self) {
-      return Rebase.Option[/* forEach */8]((function (listener) {
-                    document.addEventListener("mousedown", listener);
+      return Rebase.Option[/* forEach */8]((function (param) {
+                    document.addEventListener("mousedown", param);
                     return /* () */0;
                   }), self[/* state */2][/* listener */1][0]);
     });
@@ -55214,6 +55226,107 @@ module.exports = reactDom;
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ }),
+/* 149 */,
+/* 150 */,
+/* 151 */,
+/* 152 */,
+/* 153 */,
+/* 154 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var $$Array     = __webpack_require__(24);
+var Curry       = __webpack_require__(0);
+var React       = __webpack_require__(2);
+var ReasonReact = __webpack_require__(3);
+
+function make(children) {
+  return ReasonReact.wrapJsForReason(React.Fragment, { }, children);
+}
+
+var Fragment = /* module */[/* make */make];
+
+var component = ReasonReact.statelessComponent("Control.Map");
+
+function make$1(items, $staropt$star, render) {
+  var empty = $staropt$star ? $staropt$star[0] : null;
+  var newrecord = component.slice();
+  newrecord[/* render */9] = (function () {
+      return ReasonReact.element(/* None */0, /* None */0, make(/* array */[items.length !== 0 ? $$Array.map(render, items) : empty]));
+    });
+  return newrecord;
+}
+
+var $$Map = /* module */[
+  /* component */component,
+  /* make */make$1
+];
+
+var component$1 = ReasonReact.statelessComponent("Control.Map");
+
+function make$2(items, $staropt$star, render) {
+  var empty = $staropt$star ? $staropt$star[0] : null;
+  var newrecord = component$1.slice();
+  newrecord[/* render */9] = (function () {
+      return ReasonReact.element(/* None */0, /* None */0, make$1($$Array.of_list(items), /* Some */[empty], render));
+    });
+  return newrecord;
+}
+
+var MapList = /* module */[
+  /* component */component$1,
+  /* make */make$2
+];
+
+var component$2 = ReasonReact.statelessComponent("Control.If");
+
+function make$3(cond, render) {
+  var newrecord = component$2.slice();
+  newrecord[/* render */9] = (function () {
+      if (cond !== 0) {
+        return Curry._1(render, /* () */0);
+      } else {
+        return null;
+      }
+    });
+  return newrecord;
+}
+
+var If = /* module */[
+  /* component */component$2,
+  /* make */make$3
+];
+
+var component$3 = ReasonReact.statelessComponent("Control.IFSome");
+
+function make$4(option, render) {
+  var newrecord = component$3.slice();
+  newrecord[/* render */9] = (function () {
+      if (option) {
+        return Curry._1(render, option[0]);
+      } else {
+        return null;
+      }
+    });
+  return newrecord;
+}
+
+var IfSome = /* module */[
+  /* component */component$3,
+  /* make */make$4
+];
+
+exports.Fragment = Fragment;
+exports.$$Map    = $$Map;
+exports.MapList  = MapList;
+exports.If       = If;
+exports.IfSome   = IfSome;
+/* component Not a pure module */
+
 
 /***/ })
 /******/ ]);
