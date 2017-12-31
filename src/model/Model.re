@@ -1,21 +1,4 @@
 module Decode = {
- let tuple3 = (decodeA, decodeB, decodeC, json) =>
-  if (Js.Array.isArray(json)) {
-    let source: array(Js.Json.t) = Obj.magic(json: Js.Json.t);
-    let length = Js.Array.length(source);
-    if (length == 3) {
-      (
-        decodeA(Array.unsafe_get(source, 0)),
-        decodeB(Array.unsafe_get(source, 1)),
-        decodeC(Array.unsafe_get(source, 2))
-      )
-    } else {
-      raise @@ Json.Decode.DecodeError({j|Expected array of length 2, got array of length $length|j})
-    }
-  } else {
-    raise @@ Json.Decode.DecodeError("Expected array, got " ++ Js.Json.stringify(json))
-  };
-
   let id: Js.Json.t => Test.id = json => 
     json |> Json.Decode.string |> Obj.magic;
 
