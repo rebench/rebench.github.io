@@ -62,11 +62,11 @@ include Persistence.Make({
 
   let serialize = ({ setup, tests }) =>
     (setup, tests) |> Model.Encode.state
-                   |> Js.Json.stringify;
+                   |> Json.stringify;
 
   let deserialize = data => {
     let (setup, tests) = 
-      data |> Js.Json.parseExn
+      data |> Json.parseOrRaise
            |> Model.Decode.state;
 
     { setup, tests }

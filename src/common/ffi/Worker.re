@@ -44,10 +44,7 @@ module Message = {
     fun | Run(tests) =>
             tests |> _toArray
                   |> Js.Array.reverseInPlace
-                  |> Array.map(((id, code)) => {
-                        "name": id,
-                        "code"
-                      })
+                  |> Array.map(((id, code)) => { "name": id, "code" })
 };
 
 type _worker;
@@ -78,8 +75,8 @@ let make = (~onMessage) => {
   _onerror(worker, e => onMessage(WorkerError(e)));
 
   {
-    postMessage: message =>
-      message |> Message._encodeToSend
-              |> _postMessage(worker)
+    postMessage: Fn.(
+      Message._encodeToSend >>_postMessage(worker)
+    )
   }
 };

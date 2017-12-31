@@ -114,8 +114,7 @@ let compileTest = (setup, test) =>
             _assemble(setup, code)
             |> Refmt.parseRE
             |> Result.map(Refmt.printML)
-            |> (fun | Error(e) => Rebase.Error(e##message)
-                    | Ok(code) => Ok(code))
+            |> Result.map2(Fn.id, e => e##message)
             |> Result.flatMap(BS.compile)
             |> (fun | Ok((code, None))           => Ok(code)
                     | Ok((code, Some(warnings))) => Warning(code, warnings)

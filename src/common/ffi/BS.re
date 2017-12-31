@@ -1,19 +1,13 @@
 open Rebase;
 
 module Decode = {
-  let success = json =>
-    Json.Decode.(
-      Ok(
-        json |> field("js_code", string)
-      )
-    );
+  let success = Json.Decode.(
+    field("js_code", string) |> map(code => Ok(code))
+  );
 
-  let error = json =>
-    Json.Decode.(
-      Error(
-        json |> field("text", string)
-      )
-    );
+  let error = Json.Decode.(
+    field("text", string) |> map(text => Error(text))
+  );
 };
 
 [@bs.val] [@bs.scope ("window", "ocaml")] external compile : string => string = "";
@@ -41,7 +35,7 @@ let compile : string => Result.t((string, option(string)), string) = code =>
     
     json |> Js.Json.parseExn
          |> Json.Decode.either(Decode.success, Decode.error)
-         |> result => result |> Result.map(code => (code, warnings));
+         |> Result.map(code => (code, warnings));
   } {
   | Json.Decode.DecodeError(e) =>
     Error("Unrecognized compiler output: " ++ e);

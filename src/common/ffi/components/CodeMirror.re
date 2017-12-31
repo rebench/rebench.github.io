@@ -17,7 +17,7 @@ type editor;
   }
 |}];
 [@bs.val] external setMarks: (editor, array(Js.t({..}))) => unit = "";
-let setMarks = setMarks;
+let setMarks = setMarks; /* subtle trick to make it call a local function using a "global" external */
 
 let make =
     (

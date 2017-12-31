@@ -55,7 +55,7 @@ module Make(Config: Config) = {
       <div className=Styles.root>
         <OnClickOutside onClick=reduce(() => OutsideClicked)>
            
-          <button className onClick = reduce((_) => ButtonClicked)>
+          <button className onClick=reduce(_e => ButtonClicked)>
             (
               items |> List.find(item => item.value === selected)
                     |> Option.getOrRaise

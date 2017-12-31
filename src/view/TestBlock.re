@@ -61,7 +61,7 @@ let getError =
 let getMarks =
   fun | Compiler.Ok(_)
       | Compiler.Warning(_, _) => []
-      | Error(_, marks) => marks;
+      | Error(_, marks)        => marks;
 
 
 module TestCompiler = Debounce.Make({
@@ -80,10 +80,7 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
       <span>
         (" - " |> text)
         <span className="score">
-          (
-            score |> formatRelativeScore
-                  |> text
-          )
+          {score |> formatRelativeScore |> text}
         </span>
       </span>
     | _ => ReasonReact.nullElement
@@ -98,10 +95,7 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
     | Running(result) =>
       <div className=(Styles.state ++ " s-running")>
         <Icon name="history" />
-        (
-          result |> formatResult
-                 |> text
-        )
+        {result |> formatResult |> text}
       </div>
 
     | Error(error) =>
@@ -113,10 +107,7 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
     | Complete(result, _) =>
       <div className=(Styles.state ++ " s-complete")>
         <Icon name="check" />
-        (
-          result |> formatResult
-                 |> text
-        )
+        {result |> formatResult |> text}
       </div>
 
     };

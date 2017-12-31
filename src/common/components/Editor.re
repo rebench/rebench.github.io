@@ -16,9 +16,9 @@ let _langToMode =
       | `JS => "javascript";
 
 type mark = {.
-  "from": {. "line": int, "ch": int },
-  "to": {. "line": int, "ch": int },
-  "options": {. "className": string, "title": string }
+  "from":     {. "line": int, "ch": int },
+  "to":       {. "line": int, "ch": int },
+  "options":  {. "className": string, "title": string }
 };
 
 type state = {

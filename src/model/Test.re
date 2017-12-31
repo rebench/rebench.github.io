@@ -10,14 +10,18 @@ module Id : {
 } = {
   type t = int;
 
-  let next = ids =>
-    ids |> List.reduce(Js.Math.max_int, 0)
-        |> succ;
+  let next = Fn.(
+    List.reduce(Js.Math.max_int, 0) >> succ
+  );
 
-  let fromInt = n => n;
-  let toString = string_of_int;
+  let fromInt =
+    Fn.id;
 
-  let generateFunctionName = id => {j|__test$(id)__|j}
+  let toString =
+    string_of_int;
+
+  let generateFunctionName = id =>
+    {j|__test$(id)__|j}
 };
 
 type id = Id.t;

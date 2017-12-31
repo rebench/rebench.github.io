@@ -13,7 +13,8 @@ let make = (~label,
             ~className="",
             ~onClick, _) => {
   ...component,
-  render: (_) =>
+
+  render: _self =>
     <button className = classNames([
                           (Styles.normal, true),
                           (className, true),

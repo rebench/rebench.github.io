@@ -6,7 +6,7 @@ let component = ReasonReact.statelessComponent("Error");
 let make = (~type_, ~message, _children) => {
   ...component,
 
-  render: (_) => {
+  render: _self => {
     let style = 
       switch type_ {
       | `Error    => Styles.error

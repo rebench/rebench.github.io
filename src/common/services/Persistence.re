@@ -41,7 +41,7 @@ module Make(Config: Config) = {
   };
 
   let component = ReasonReact.reducerComponent("Persistence");
-  let make = (renderChildren) => {
+  let make = renderChildren => {
     ...component,
 
     initialState: () => _retrieve() |> Option.getOr(Config.default()), /* TODO: getOrLazy */

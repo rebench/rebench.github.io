@@ -2,7 +2,7 @@ open! Rebase;
 open! Helpers;
 
 module SyntaxChecker = Debounce.Make({
-  type input = (string);
+  type input = string;
   type output = (option(string), list(Editor.mark));
   let compute = code =>
     code |> Compiler.checkSetup
