@@ -18743,7 +18743,6 @@ module.exports = exports["default"];
 "use strict";
 
 
-var React       = __webpack_require__(2);
 var Glamor      = __webpack_require__(7);
 var ReasonReact = __webpack_require__(3);
 
@@ -18766,7 +18765,7 @@ var component = ReasonReact.statelessComponent("WidthContainer");
 function make(children) {
   var newrecord = component.slice();
   newrecord[/* render */9] = (function () {
-      return React.createElement("div", {
+      return ReasonReact.createDomElement("div", {
                   className: widthContainer
                 }, children);
     });
@@ -21121,16 +21120,6 @@ function renderHeader(param) {
   }
 }
 
-function renderFooter(param) {
-  if (param) {
-    return React.createElement("footer", {
-                className: BlockStyles.footer
-              }, param[0]);
-  } else {
-    return null;
-  }
-}
-
 function makeClassName($staropt$star, collapsible, state) {
   var className = $staropt$star ? $staropt$star[0] : "";
   return Curry._1(Helpers.classNames, /* :: */[
@@ -21172,9 +21161,13 @@ function make(header, footer, className, error, $staropt$star, children) {
                       onClick: Curry._1(param[/* reduce */1], (function () {
                               return /* HeaderClicked */0;
                             }))
-                    }, renderHeader(header)), React.createElement("main", undefined, children), ReasonReact.element(/* None */0, /* None */0, Control.IfSome[/* make */1](error, (function (error) {
+                    }, renderHeader(header)), ReasonReact.createDomElement("main", { }, children), ReasonReact.element(/* None */0, /* None */0, Control.IfSome[/* make */1](error, (function (error) {
                             return ReasonReact.element(/* None */0, /* None */0, Message.make(/* Error */106380200, error, /* array */[]));
-                          }))), renderFooter(footer));
+                          }))), ReasonReact.element(/* None */0, /* None */0, Control.IfSome[/* make */1](footer, (function (elements) {
+                            return ReasonReact.createDomElement("footer", {
+                                        className: BlockStyles.footer
+                                      }, elements);
+                          }))));
     });
   newrecord[/* initialState */10] = (function () {
       return /* record */[/* collapsed : false */0];
@@ -21193,7 +21186,6 @@ var Styles = 0;
 
 exports.Styles        = Styles;
 exports.renderHeader  = renderHeader;
-exports.renderFooter  = renderFooter;
 exports.makeClassName = makeClassName;
 exports.component     = component;
 exports.make          = make;
@@ -37950,7 +37942,6 @@ exports.Make   = Make;
 
 
 var Curry       = __webpack_require__(0);
-var React       = __webpack_require__(2);
 var Rebase      = __webpack_require__(5);
 var ReasonReact = __webpack_require__(3);
 
@@ -37979,7 +37970,7 @@ function make(onClick, children) {
                   }), self[/* state */2][/* listener */1][0]);
     });
   newrecord[/* render */9] = (function (param) {
-      return React.createElement("div", {
+      return ReasonReact.createDomElement("div", {
                   ref: Curry._1(param[/* handle */0], (function (r, param) {
                           param[/* state */2][/* rootRef */0][0] = (r == null) ? /* None */0 : [r];
                           return /* () */0;

@@ -14,13 +14,6 @@ let renderHeader =
   fun | `Text(str)        => <div className=Styles.textHeader> (str |> text) </div>
       | `Element(element) => element;
 
-let renderFooter = 
-  fun | Some(elements) =>
-        <footer className=Styles.footer>
-          (elements |> ReasonReact.arrayToElement)
-        </footer>
-      | None => ReasonReact.nullElement;
-
 let makeClassName = (~className="", collapsible, state) =>
   classNames([
     (Styles.root, true),
@@ -50,15 +43,19 @@ let make = (~header, ~footer=?, ~className=?, ~error=?, ~collapsible=false, chil
         (renderHeader(header))
       </header>
 
-      <main>
-        (children |> ReasonReact.arrayToElement)
-      </main>
+      {ReasonReact.createDomElement("main", ~props=Js.Obj.empty(), children)}
 
       <Control.IfSome option=error>
         ...(error => <Message message=error type_=`Error />)
       </Control.IfSome>
 
-      (renderFooter(footer))
-
+      <Control.IfSome option=footer>
+        ...(elements =>
+          ReasonReact.createDomElement(
+            "footer",
+            ~props={ "className": Styles.footer },
+            elements
+        ))
+      </Control.IfSome>
     </section>
 };

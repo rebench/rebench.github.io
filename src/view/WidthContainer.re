@@ -9,10 +9,11 @@ let widthContainer = Glamor.(css([
 let component = ReasonReact.statelessComponent("WidthContainer");
 let make = children => {
   ...component,
-  
-  render: _self => {
-    <div className=widthContainer>
-      (ReasonReact.arrayToElement(children))
-    </div>
-  }
+
+  render: _self =>
+    ReasonReact.createDomElement(
+      "div",
+      ~props={"className": widthContainer},
+      children
+    )
 }

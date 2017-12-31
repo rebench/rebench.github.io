@@ -39,7 +39,11 @@ let make = (~onClick, /*~enabled=true,*/ children) => {
   },
 
   render: ({ handle }) =>
-    <div ref=handle((r, { state }) => state.rootRef := Js.toOption(r))>
-      (children |> ReasonReact.arrayToElement)
-    </div>
+    ReasonReact.createDomElement(
+      "div",
+      ~props={
+        "ref": handle((r, { state }) => state.rootRef := Js.toOption(r))
+      },
+      children
+    )
 }
