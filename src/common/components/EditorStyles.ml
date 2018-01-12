@@ -1,15 +1,14 @@
-open Glamor
+open TypedGlamor
 
 let root = css [
-  Selector("& .CodeMirror", [
-    height "auto";
-    fontFamily {|"SFMono-Regular", Consolas,"Roboto Mono","Droid Sans Mono","Liberation Mono",Menlo,Courier,monospace|};
-    fontSize "14px";
-  ]);
+  select "& .CodeMirror" [
+    height auto;
+    unsafe "fontFamily" {|"SFMono-Regular", Consolas,"Roboto Mono","Droid Sans Mono","Liberation Mono",Menlo,Courier,monospace|};
+    unsafe "fontSize" "14px";
+  ];
 
-  Selector("& .CodeMirror .syntax-error", [
-    background "#EC5F67";
-    color "black";
-  ]);
-
+  select "& .CodeMirror .syntax-error" [
+    background (hex 0xEC5F67);
+    color black;
+  ];
 ]

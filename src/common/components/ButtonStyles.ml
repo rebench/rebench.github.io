@@ -1,21 +1,21 @@
-open Glamor
+open TypedGlamor
 
 let common = [
   color Colors.text;
-  padding "1em";
-  cursor "pointer";
+  padding (em 1.);
+  unsafe "cursor" "pointer";
 
-  Selector("&.m-icon-left .mdi", [
-    marginRight ".25em";
-  ]);
+  select "&.m-icon-left .mdi" [
+    marginRight (em 0.25);
+  ];
 
-  Selector("&.m-icon-right .mdi", [
-    marginLeft ".5em";
-  ]);
+  select "&.m-icon-right .mdi" [
+    marginLeft (em 0.5);
+  ];
 
-  Selector("&:hover", [
+  hover [
     background Colors.highlightOverlay;
-  ]);
+  ];
 ]
 
 let normal = css (common @ [

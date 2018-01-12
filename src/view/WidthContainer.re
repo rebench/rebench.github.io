@@ -1,9 +1,9 @@
 
-let widthContainer = Glamor.(css([
-  width("100%"),
-  maxWidth("1012px"),
-  minWidth("600px"),
-  margin("0 auto")
+let widthContainer = TypedGlamor.(css([
+  width(pct(100.)),
+  maxWidth(px(1012)),
+  minWidth(px(600)),
+  margin2(~v=zero, ~h=auto)
 ]));
 
 let component = ReasonReact.statelessComponent("WidthContainer");

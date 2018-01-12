@@ -1,48 +1,48 @@
-open Glamor
+open TypedGlamor
 
 let root = css [
   background Colors.panel;
-  overflow "auto"; (* contain child element margins *)
-  margin "1em 0";
-  borderLeft ("2px solid transparent");
+  unsafe "overflow" "auto"; (* contain child element margins *)
+  margin2 ~v:(em 1.) ~h:zero;
+  borderLeft3 (px 2) solid transparent;
 
-  Selector("&.collapsible > header", [
-    Selector("&:hover", [
+  select "&.collapsible > header" [
+    hover [
       background Colors.panelDark;
-      cursor "pointer";
-    ]);
-  ]);
+      unsafe "cursor" "pointer";
+    ];
+  ];
 
-  Selector("& > main", [
-    marginTop ".5em";
-    marginBottom ".5em";
-  ]);
+  select "& > main" [
+    marginTop (em 0.5);
+    marginBottom (em 0.5);
+  ];
 
-  Selector("&.s-collapsed > main", [
-    display "none";
-  ]);
+  select "&.s-collapsed > main" [
+    display none;
+  ];
 
-  Selector("&.s-error", [
-    borderLeft ("2px solid " ^ Colors.red);
-  ]);
+  select "&.s-error" [
+    borderLeft3 (px 2) solid Colors.red;
+  ];
 ]
 
 let textHeader = css [
-  padding ".75em 1.25em";
-  fontSize ".85em";
+  padding2 ~v:(em 0.75) ~h:(em 1.25);
+  unsafe "fontSize" ".85em";
   color Colors.text;
-  textTransform "lowercase";
-  fontVariant "small-caps";
-  textAlign "center";
+  unsafe "textTransform" "lowercase";
+  unsafe "fontVariant" "small-caps";
+  unsafe "textAlign" "center";
 ]
 
 
 let footer = css [
-  display "flex";
+  unsafe "display" "flex";
   background Colors.panelDark;
   color Colors.text;
 
-  Selector("& button", [
-    padding ".75em 1em";
-  ]);
+  select "& button" [
+    padding2 ~v:(em 0.75) ~h:(em 1.);
+  ];
 ]

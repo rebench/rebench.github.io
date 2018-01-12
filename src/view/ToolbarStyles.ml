@@ -1,19 +1,19 @@
-open Glamor
+open TypedGlamor
 
 let root = css [
   background Colors.panel;
 
-  Selector("& > div", [ (* matches the inner width container *)
-    display "flex";
+  select "& > div" [ (* matches the inner width container *)
+    unsafe "display" "flex";
 
-    Selector("& > .logo", [
-      width "45px";
-      objectFit "contain";
-      objectPosition "left";
-    ]);
-  ]);
+    select "& > .logo" [
+      width (px 45);
+      unsafe "objectFit" "contain";
+      unsafe "objectPosition" "left";
+    ];
+  ];
 ]
 
 let separator = css [
-  flexGrow "1";
+  unsafe "flexGrow" "1";
 ]

@@ -1,11 +1,11 @@
-open Glamor
+open TypedGlamor
 
 let error = css [
   color Colors.red;
-  padding "1em";
+  padding (em 1.)
 ]
 
 let warning = css [
   color Colors.yellow;
-  padding "1em";
+  padding (em 1.);
 ]

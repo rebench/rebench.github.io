@@ -1,27 +1,27 @@
-open Glamor
+open TypedGlamor
 
 let root = css [
-  display "inline-block";
+  display inlineBlock;
 ]
 
 let menu = css [
-  position "absolute";
-  zIndex "100";
-  display "none";
-  transform "translateX(-2px)";
+  position absolute;
+  zIndex (int 100);
+  display none;
+  unsafe "transform" "translateX(-2px)";
   background Colors.panelDark;
-  boxShadow "2px 2px 1px 0 rgba(0, 0, 0, .25)";
+  unsafe "boxShadow" "2px 2px 1px 0 rgba(0, 0, 0, .25)";
 
-  Selector("&.s-open", [
-    display "block";
-  ]);
+  select "&.s-open" [
+    display block;
+  ];
 
-  Selector("& > ul > li", [
-    padding "1em";
-    cursor "pointer";
+  select "& > ul > li" [
+    padding (em 1.);
+    unsafe "cursor" "pointer";
 
-    Selector("&:hover", [
+    hover [
       background Colors.highlightOverlay
-    ]);
-  ]);
+    ];
+  ];
 ]

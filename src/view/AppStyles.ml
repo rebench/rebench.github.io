@@ -1,49 +1,49 @@
-open Glamor
+open TypedGlamor
 
 let root = css [
   background Colors.background;
 
-  minHeight "100vh";
+  minHeight (vh 100.);
 
-  display "flex";
-  flexDirection "column";
+  unsafe "display" "flex";
+  unsafe "flexDirection" "column";
 ]
 
 let footer = css [
   background Colors.darkBackground;
 
-  padding "1em 0 2em";
-  marginTop "auto";
+  padding3 ~top:(em 1.) ~h:zero ~bottom:(em 2.);
+  marginTop auto;
 
-  Selector("& > div", [ (* matches the inner width container *)
-    display "flex";
+  select "& > div" [ (* matches the inner width container *)
+    unsafe "display" "flex";
 
-    Selector("& > section", [
-      margin "0 2em";
-      opacity ".5";
-      transition "opacity .5s";
+    select "& > section" [
+      margin2 ~v:zero ~h:(em 2.);
+      unsafe "opacity" ".5";
+      transitions [AnimatableProperty.opacity, (ms 500), easeInOut, (ms 0)];
 
-      Selector("&:hover", [
-        opacity "1";
-      ]);
+      hover [
+        unsafe "opacity" "1";
+      ];
 
-      Selector("& h1", [
-        fontSize ".85em";
-        color "rgba(255, 255, 255, .5)";
-        textTransform "lowercase";
-        fontVariant "small-caps";
-        marginBottom ".35em";
-      ]);
+      select "& h1" [
+        unsafe "fontSize" ".85em";
+        color (rgba 255 255 255 0.5);
+        unsafe "textTransform" "lowercase";
+        unsafe "fontVariant" "small-caps";
+        marginBottom (em 0.35);
+      ];
 
-      Selector("& a", [
+      select "& a" [
         color Colors.text;
-        textDecoration "none";
-        fontSize ".85rem";
+        unsafe "textDecoration" "none";
+        unsafe "fontSize" ".85rem";
 
-        Selector ("&:hover", [
-          color "white";
-        ]);
-      ]);
-    ]);
-  ]);
+        hover [
+          color white;
+        ];
+      ];
+    ];
+  ];
 ]

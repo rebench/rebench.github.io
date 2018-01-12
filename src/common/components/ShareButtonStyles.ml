@@ -1,65 +1,71 @@
-open Glamor
+open TypedGlamor
 
 let root = css [
-  position "relative";
+  position relative;
 
-  Selector("& input", [
+  select "& input" [
     background Colors.panelDark;
-    transition "all 250ms";
-    width "0";
-    padding "0";
-    color "rgba(255, 255, 255, .75)";
-  ]);
+    transitions [AnimatableProperty.all, (ms 250), easeInOut, (ms 0)];
+    width zero;
+    padding zero;
+    color (rgba 255 255 255 0.75);
+  ];
 
-  Selector("& .tooltip", [
-    display "none";
-    position "absolute";
-    zIndex "100";
-    top "100%";
-    right "1em";
-    background "rgba(0, 0, 0, 1)";
-    color "#ccc";
-    whiteSpace "nowrap";
-    padding ".4em .8em";
-    borderRadius ".25em";
-    fontSize ".8rem";
+  select "& .tooltip" [
+    display none;
+    position absolute;
+    zIndex (int 100);
+    offsetTop (pct 100.);
+    offsetRight (em 1.);
+    background (rgba 0 0 0 1.);
+    color (hex 0xccc);
+    unsafe "whiteSpace" "nowrap";
+    padding2 ~v:(em 0.4) ~h:(em 0.8);
+    borderRadius (em 0.25);
+    unsafe "fontSize" ".8rem";
 
-    Selector("& .arrow", [
-      position "absolute";
-      content " ";
-      bottom "100%";
-      right "2em";
-      height "0";
-      width "0";
-      border ".5em solid transparent";
+    select "& .arrow" [
+      position absolute;
+      unsafe "content" " ";
+      offsetBottom (pct 100.);
+      offsetRight (em 2.);
+      height zero;
+      width zero;
+      border3 (em 0.5) solid transparent;
       (*pointerEvents "none";*)
-      borderBottomColor "rgba(0, 0, 0, 1)";
-      marginLeft ".5em";
-    ]);
+      borderBottomColor (rgba 0 0 0 1.);
+      marginLeft (em 0.5);
+    ];
 
-    Selector("& .confirmation-message", [
-      display "none";
-      padding "0 .75em";
-    ]);
-  ]);
+    select "& .confirmation-message" [
+      display none;
+      padding2 ~v:zero ~h:(em 0.75);
+    ];
+  ];
 
-  Selector("&:hover input", [
-    width "25vw";
-    marginRight "1em";
-    padding ".3em";
-  ]);
+  hover [
+    select "& input" [
+      width (vw 25.);
+      marginRight (em 1.);
+      padding (em 0.3);
+    ];
 
-  Selector("&:hover .tooltip, &.s-show-confirmation .tooltip", [
-    display "block";
-  ]);
+    select "& .tooltip, &.s-show-confirmation .tooltip" [
+      display block;
+    ];
+  ];
 
-  Selector("&.s-show-confirmation", [
-    Selector("& .tooltip .message", [
-      display "none";
-    ]);
+  select "&.s-show-confirmation .tooltip" [
+    display block;
+  ];
 
-    Selector("& .tooltip .confirmation-message", [
-      display "block";
-    ]);
-  ])
+  select "&.s-show-confirmation" [
+    select "& .tooltip .message" [
+      display none;
+    ];
+
+    select "& .tooltip .confirmation-message" [
+      display block;
+    ];
+  ]
 ]

@@ -1,97 +1,97 @@
-open Glamor
+open TypedGlamor
 
 let root = css [
-  Selector("& > main", [
-    display "flex";
+  select "& > main" [
+    unsafe "display" "flex";
 
-    Selector("& > *", [
-      flex "1";
-      width "50%";
-    ]);
-  ]);
+    select "& > *" [
+      unsafe "flex" "1";
+      width (pct 50.);
+    ];
+  ];
 
-  Selector("&.s-not-even-close .score", [
+  select "&.s-not-even-close .score" [
     color Colors.red;
-  ]);
+  ];
 
-  Selector("&.s-close .score", [
+  select "&.s-close .score" [
     color Colors.yellow;
-  ]);
+  ];
 
-  Selector("&.s-fastest .score", [
+  select "&.s-fastest .score" [
     color Colors.green;
-  ]);
+  ];
 
-  Selector("& button.m-language-reason", [
+  select "& button.m-language-reason" [
     color Colors.reason;
-  ]);
+  ];
 
-  Selector("& button.m-language-ocaml", [
+  select "& button.m-language-ocaml" [
     color Colors.ocaml;
-  ]);
+  ];
 
-  Selector("& button.m-language-javascript", [
+  select "& button.m-language-javascript" [
     color Colors.javascript;
-  ]);
+  ];
 ]
 
 let header = css [
-  fontSize ".85em";
+  unsafe "fontSize" ".85em";
   color Colors.text;
-  textTransform "lowercase";
-  fontVariant "small-caps";
-  display "flex";
-  justifyContent "space-between";
-  alignItems "baseline";
+  unsafe "textTransform" "lowercase";
+  unsafe "fontVariant" "small-caps";
+  unsafe "display" "flex";
+  unsafe "justifyContent" "space-between";
+  unsafe "alignItems" "baseline";
 
-  Selector("& button", [
-    padding ".75em";
-    cursor "pointer";
+  select "& button" [
+    padding (em 0.75);
+    unsafe "cursor" "pointer";
 
-    Selector("& .mdi:before", [
-      transform "translateY(2px)"; (* alignment fix due to the lowercase small-caps styling *)
-      opacity ".35";
-    ]);
+    select "& .mdi:before" [
+      unsafe "transform" "translateY(2px)"; (* alignment fix due to the lowercase small-caps styling *)
+      unsafe "opacity" ".35";
+    ];
 
-    Selector("&:hover", [
+    hover [
       background Colors.highlightOverlay;
-    ]);
-  ]);
+    ];
+  ];
 
-  Selector("& > .box", [
-    display "flex";
-    flex "1";
+  select "& > .box" [
+    unsafe "display" "flex";
+    unsafe "flex" "1";
 
-    Selector("&.right", [
-      justifyContent "flex-end";
-    ]);
-  ]);
+    select "&.right" [
+      unsafe "justifyContent" "flex-end";
+    ];
+  ];
 
-  Selector("& > .title", [
-    display "inline-block";
-    padding ".75em";
-    textAlign "center";
-    flex "1";
-  ]);
+  select "& > .title" [
+    display inlineBlock;
+    padding (em 0.75);
+    unsafe "textAlign" "center";
+    unsafe "flex" "1";
+  ];
 ]
 
 
 let state = css [
-  padding ".75em 1em";
+  padding2 ~v:(em 0.75) ~h:(em 1.);
 
-  Selector("& .mdi", [
-    marginRight ".25em";
-  ]);
+  select "& .mdi" [
+    marginRight (em 0.25);
+  ];
 
-  Selector("&.s-running .mdi", [
+  select "&.s-running .mdi" [
     color Colors.yellow;
-  ]);
+  ];
 
-  Selector("&.s-error .mdi", [
+  select "&.s-error .mdi" [
     color Colors.red;
-  ]);
+  ];
 
-  Selector("&.s-complete .mdi", [
+  select "&.s-complete .mdi" [
     color Colors.green;
-  ]);
+  ];
 ]
