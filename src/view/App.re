@@ -1,9 +1,8 @@
 let _assoc = List.assoc;
 let _remove_assoc = List.remove_assoc;
+open!  Rebase;
+open!  Vrroom.Helpers;
 module Control = Vrroom.Control;
-open! Rebase;
-open! Vrroom.Helpers;
-
 module Styles = AppStyles;
 
 type state = {

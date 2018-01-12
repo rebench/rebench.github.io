@@ -46,15 +46,15 @@ include Persistence.Make({
           }
 
         | UpdateTest(test) => {
-          ...state,
-          tests:
-            state.tests |> List.map(this => this.Test.id === test.id ? test : this)
-        }
+            ...state,
+            tests:
+              state.tests |> List.map(this => this.Test.id === test.id ? test : this)
+          }
         
         | UpdateSetup(setup) => {
-          ...state,
-          setup
-        }
+            ...state,
+            setup
+          }
 
         | Clear =>
           default()

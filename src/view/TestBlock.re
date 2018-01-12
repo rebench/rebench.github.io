@@ -138,17 +138,18 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
 
     </div>;
 
-  let renderFooter = () => [|
-    <Button icon    = "chevron-right"
-            label   = "Run"
-            onClick = onRun />,
+  let renderFooter = () =>
+    <Vrroom.Fragment>
+      <Button icon    = "chevron-right"
+              label   = "Run"
+              onClick = onRun />
 
-    <Button icon    = "close"
-            label   = "Remove"
-            onClick = onRemove />,
+      <Button icon    = "close"
+              label   = "Remove"
+              onClick = onRemove />
 
-    renderResult()
-  |];
+      {renderResult()}
+    </Vrroom.Fragment>;
 
   {
     ...component,

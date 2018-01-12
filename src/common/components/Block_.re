@@ -10,8 +10,8 @@ type action =
   | HeaderClicked
 ;
 
-let renderHeader =
-  fun | `Text(str)        => <div className=Styles.textHeader> (str |> text) </div>
+let renderHeaderContent =
+  fun | `Text(str)        => <div className=Styles.textHeader> {str |> text} </div>
       | `Element(element) => element;
 
 let makeClassName = (~className="", collapsible, state) =>
@@ -40,7 +40,7 @@ let make = (~header, ~footer=?, ~className=?, ~error=?, ~collapsible=false, chil
     <section className=makeClassName(~className?, collapsible, state)>
 
       <header onClick=reduce(_e => HeaderClicked)>
-        (renderHeader(header))
+        {renderHeaderContent(header)}
       </header>
 
       {ReasonReact.createDomElement("main", ~props=Js.Obj.empty(), children)}
@@ -50,12 +50,11 @@ let make = (~header, ~footer=?, ~className=?, ~error=?, ~collapsible=false, chil
       </Control.IfSome>
 
       <Control.IfSome option=footer>
-        ...(elements =>
-          ReasonReact.createDomElement(
-            "footer",
-            ~props={ "className": Styles.footer },
-            elements
-        ))
+        ...(content =>
+          <footer className=Styles.footer>
+            content
+          </footer>
+        )
       </Control.IfSome>
     </section>
 };
