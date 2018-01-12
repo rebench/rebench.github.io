@@ -1,8 +1,8 @@
-let _toArray = Array.of_list;
 let _assoc = List.assoc;
 let _remove_assoc = List.remove_assoc;
+module Control = Vrroom.Control;
 open! Rebase;
-open! Helpers;
+open! Vrroom.Helpers;
 
 module Styles = AppStyles;
 

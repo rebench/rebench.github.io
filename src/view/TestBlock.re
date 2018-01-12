@@ -1,5 +1,6 @@
 open! Rebase;
-open! Helpers;
+open! Vrroom.Helpers;
+module Control = Vrroom.Control;
 module Styles = TestBlockStyles;
 open! Test;
 
@@ -32,10 +33,8 @@ let getStateClass =
       | Complete(_, Some(s)) when s <= -50. => "s-complete s-not-even-close"
       | Complete(_)                         => "s-complete";
 
-let makeClassName = state => classNames([
-    (Styles.root, true),
-    (getStateClass(state), true)
-  ]);
+let makeClassName = state =>
+  ClassName.join([Styles.root |> Js.String.make, getStateClass(state)]);
 
 module LanguageSelectButton = SelectButton.Make({
   type value = Language.t;
@@ -83,7 +82,7 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
           {score |> formatRelativeScore |> text}
         </span>
       </span>
-    | _ => ReasonReact.nullElement
+    | _ => null
     };
 
   let renderResult = () =>

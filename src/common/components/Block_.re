@@ -1,5 +1,5 @@
-open Helpers;
-
+open Vrroom.Helpers;
+module Control = Vrroom.Control;
 module Styles = BlockStyles;
 
 type state = {
@@ -15,12 +15,12 @@ let renderHeader =
       | `Element(element) => element;
 
 let makeClassName = (~className="", collapsible, state) =>
-  classNames([
-    (Styles.root, true),
-    (className, true),
-    ("collapsible", collapsible),
-    ("s-collapsed", state.collapsed)
-  ]);
+  ClassName.(join([
+    Styles.root |> Js.String.make,
+    className,
+    "collapsible" |> if_(collapsible),
+    "s-collapsed" |> if_(state.collapsed)
+  ]));
 
 let component = ReasonReact.reducerComponent("Block");
 let make = (~header, ~footer=?, ~className=?, ~error=?, ~collapsible=false, children) => {

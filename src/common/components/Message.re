@@ -1,5 +1,5 @@
 open! Rebase;
-open Helpers;
+open Vrroom.Helpers;
 module Styles = MessageStyles;
 
 let component = ReasonReact.statelessComponent("Error");

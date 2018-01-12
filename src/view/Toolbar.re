@@ -1,4 +1,4 @@
-open! Helpers;
+open! Vrroom.Helpers;
 module Styles = ToolbarStyles;
 
 let component = ReasonReact.statelessComponent("Toolbar");

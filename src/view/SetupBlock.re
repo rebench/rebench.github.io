@@ -1,5 +1,5 @@
 open! Rebase;
-open! Helpers;
+open! Vrroom.Helpers;
 
 module SyntaxChecker = Debounce.Make({
   type input = string;

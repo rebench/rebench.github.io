@@ -1,5 +1,5 @@
 open! Rebase;
-open! Helpers;
+open! Vrroom.Helpers;
 
 [@bs.val] external addEventListener : string => (Dom.event => unit) => unit = "document.addEventListener";
 [@bs.val] external removeEventListener : string => (Dom.event => unit) => unit = "document.removeEventListener";

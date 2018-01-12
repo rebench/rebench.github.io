@@ -1,10 +1,9 @@
-open Helpers;
-
+open Vrroom.Helpers;
 module Styles = ButtonStyles;
 
 let makeIcon =
   fun | Some(name) => <Icon name />
-      | None       => ReasonReact.nullElement;
+      | None       => null;
 
 let component = ReasonReact.statelessComponent("Button");
 let make = (~label,
@@ -15,17 +14,17 @@ let make = (~label,
   ...component,
 
   render: _self =>
-    <button className = classNames([
-                          (Styles.normal, true),
-                          (className, true),
-                          ("m-icon-left", alignIcon === `Left),
-                          ("m-icon-right", alignIcon === `Right)
-                        ])
+    <button className = ClassName.(join([
+                          Styles.normal |> Js.String.make,
+                          className,
+                          "m-icon-left" |> if_(alignIcon === `Left),
+                          "m-icon-right" |> if_(alignIcon === `Right)
+                        ]))
             onClick   = (_e => onClick()) >
 
-      (alignIcon === `Left ? makeIcon(icon) : ReasonReact.nullElement)
+      (alignIcon === `Left ? makeIcon(icon) : null)
       (label |> text)
-      (alignIcon === `Right ? makeIcon(icon) : ReasonReact.nullElement)
+      (alignIcon === `Right ? makeIcon(icon) : null)
 
     </button>
 };

@@ -1,5 +1,5 @@
 open Rebase;
-open Helpers;
+open Vrroom.Helpers;
 
 [@bs.val] external execCommand : string => unit = "document.execCommand";
 [@bs.send] external selectAll : Dom.element => unit = "select";
