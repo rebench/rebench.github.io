@@ -8,8 +8,7 @@ open! Vrroom.Helpers;
 [@bs.send.pipe: Dom.node] external contains : Dom.node_like('a) => bool = "";
 
 type state = {
-  rootRef: ref(option(Dom.element)),
-  listener: ref(option(Dom.event => unit))
+  rootRef: ref(option(Dom.element))
 };
 
 let component = ReasonReact.reducerComponent("OnClickOutside");
@@ -17,26 +16,25 @@ let make = (~onClick, /*~enabled=true,*/ children) => {
   ...component,
 
   initialState: () => {
-    rootRef: ref(None),
-    listener: ref(None)
+    rootRef: ref(None)
   },
   reducer: ((), _state) => ReasonReact.NoUpdate,
 
-  didMount: self => {
-    let listener = event =>
-      self.state.rootRef^ |> Option.forEach(rootEl =>
-        if (event |> target |> contains(rootEl)) {
-          onClick();
-        }
-      );
-    self.state.listener := Some(listener);
-    addEventListener("mousedown", listener);
-    ReasonReact.NoUpdate
-  },
-  /*didUpdate: ([oldSelf, newSelf]) =>,*/
-  willUnmount: self => {
-    self.state.listener^ |> Option.forEach(addEventListener("mousedown"));
-  },
+  subscriptions: self => [
+    Sub(
+      () => {
+        let listener = event =>
+          self.state.rootRef^ |> Option.forEach(rootEl =>
+            if (event |> target |> contains(rootEl)) {
+              onClick();
+            }
+          );
+        addEventListener("mousedown", listener);
+        listener
+      },
+      removeEventListener("mousedown")
+    )
+  ],
 
   render: ({ handle }) =>
     ReasonReact.createDomElement(
