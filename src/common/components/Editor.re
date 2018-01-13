@@ -1,7 +1,5 @@
 open Rebase;
 
-module Styles = EditorStyles;
-
 [%bs.raw {|require('codemirror/lib/codemirror.css')|}];
 [%bs.raw {|require('codemirror/theme/material.css')|}];
 [%bs.raw {|require('codemirror/mode/javascript/javascript')|}];
@@ -47,7 +45,7 @@ let make = (~value, ~lang, ~defaultValue=?, ~marks=[], ~readOnly=false, ~inputRe
   },
 
   render: ({ handle }) =>
-    <div className=Styles.root>
+    <div className=EditorStyles.container>
       <CodeMirror
         value
         editorDidMount=(handle((editor, { state }) => state.editor := Some(editor)))

@@ -1,6 +1,5 @@
 open Vrroom.Helpers;
 module Control = Vrroom.Control;
-module Styles = BlockStyles;
 
 type state = {
   collapsed: bool
@@ -11,19 +10,16 @@ type action =
 ;
 
 let renderHeaderContent =
-  fun | `Text(str)        => <div className=Styles.textHeader> {str |> text} </div>
+  fun | `Text(str)        => <div className="textHeader"> {str |> text} </div>
       | `Element(element) => element;
 
-let makeClassName = (~className="", collapsible, state) =>
-  ClassName.(join([
-    Styles.root |> Js.String.make,
-    className,
-    "collapsible" |> if_(collapsible),
-    "s-collapsed" |> if_(state.collapsed)
-  ]));
-
 let component = ReasonReact.reducerComponent("Block");
-let make = (~header, ~footer=?, ~className=?, ~error=?, ~collapsible=false, children) => {
+let make = (~header,
+            ~footer=?,
+            ~className=?,
+            ~error=?,
+            ~collapsible as isCollapsible=false,
+            children) => {
   ...component,
 
   initialState: () => { collapsed: false },
@@ -31,14 +27,16 @@ let make = (~header, ~footer=?, ~className=?, ~error=?, ~collapsible=false, chil
   reducer: (action, state) =>
     switch action {
     | HeaderClicked =>
-      collapsible ?
+      isCollapsible ?
         ReasonReact.Update({ collapsed: !state.collapsed }) :
         ReasonReact.NoUpdate
     },
 
   render: ({ reduce, state }) =>
-    <section className=makeClassName(~className?, collapsible, state)>
-
+    <section className=ClassName.join([
+      BlockStyles.container(~isCollapsible, ~isCollapsed=state.collapsed) |> Js.String.make,
+      className |> ClassName.fromOption
+    ])>
       <header onClick=reduce(_e => HeaderClicked)>
         {renderHeaderContent(header)}
       </header>
@@ -46,12 +44,12 @@ let make = (~header, ~footer=?, ~className=?, ~error=?, ~collapsible=false, chil
       {ReasonReact.createDomElement("main", ~props=Js.Obj.empty(), children)}
 
       <Control.IfSome option=error>
-        ...(error => <Message message=error type_=`Error />)
+        ...(error => <Message message=error kind=`Error />)
       </Control.IfSome>
 
       <Control.IfSome option=footer>
         ...(content =>
-          <footer className=Styles.footer>
+          <footer>
             content
           </footer>
         )

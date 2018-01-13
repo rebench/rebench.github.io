@@ -161,7 +161,7 @@ let make = (~data: Store.data,
   },
 
   render: ({ reduce, state }) =>
-    <div className=Styles.root>
+    <div className=Styles.container>
       <Toolbar onRunAll     = reduce(() => RunAll)
                onAdd        = reduce(() => AddTest)
                onClear      = reduce(() => Clear)
@@ -190,7 +190,7 @@ let make = (~data: Store.data,
         </Control.MapList>
       </WidthContainer>
 
-      <footer className=Styles.footer>
+      <footer>
         <WidthContainer>
           <section>
             <h1> ("Project" |> text) </h1>

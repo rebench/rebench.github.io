@@ -1,5 +1,5 @@
 
-let widthContainer = TypedGlamor.(css([
+let style = TypedGlamor.(css([
   width(pct(100.)),
   maxWidth(px(1012)),
   minWidth(px(600)),
@@ -13,7 +13,7 @@ let make = children => {
   render: _self =>
     ReasonReact.createDomElement(
       "div",
-      ~props={"className": widthContainer},
+      ~props={"className": style},
       children
     )
 }

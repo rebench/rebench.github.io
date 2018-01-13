@@ -1,6 +1,6 @@
 open TypedGlamor
 
-let root = css [
+let container ~showConfirmation = css [
   position relative;
 
   select "& input" [
@@ -12,8 +12,8 @@ let root = css [
   ];
 
   select "& .tooltip" [
-    display none;
     position absolute;
+    display none;
     zIndex (int 100);
     offsetTop (pct 100.);
     offsetRight (em 1.);
@@ -24,7 +24,7 @@ let root = css [
     borderRadius (em 0.25);
     unsafe "fontSize" ".8rem";
 
-    select "& .arrow" [
+    select "::before" [
       position absolute;
       unsafe "content" " ";
       offsetBottom (pct 100.);
@@ -41,6 +41,21 @@ let root = css [
       display none;
       padding2 ~v:zero ~h:(em 0.75);
     ];
+
+    if showConfirmation then
+      select "&" [
+        display block;
+
+        select "& .confirmation-message" [
+          display block;
+        ];
+
+        select "& .message" [
+          display none;
+        ];
+      ]
+    else
+      unsafe "nothing" "";
   ];
 
   hover [
@@ -50,22 +65,8 @@ let root = css [
       padding (em 0.3);
     ];
 
-    select "& .tooltip, &.s-show-confirmation .tooltip" [
+    select "& .tooltip" [
       display block;
     ];
   ];
-
-  select "&.s-show-confirmation .tooltip" [
-    display block;
-  ];
-
-  select "&.s-show-confirmation" [
-    select "& .tooltip .message" [
-      display none;
-    ];
-
-    select "& .tooltip .confirmation-message" [
-      display block;
-    ];
-  ]
 ]

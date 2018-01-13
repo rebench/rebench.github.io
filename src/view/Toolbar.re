@@ -5,7 +5,7 @@ let component = ReasonReact.statelessComponent("Toolbar");
 let make = (~onRunAll, ~onAdd, ~onClear, ~shareableUrl as url, _) => {
   ...component,
   render: _self =>
-    <div className=Styles.root>
+    <div className=Styles.container>
       <WidthContainer>
 
         <img className="logo" src="static/logo.svg" title="re:bench" alt="re:bench" />
@@ -22,7 +22,7 @@ let make = (~onRunAll, ~onAdd, ~onClear, ~shareableUrl as url, _) => {
                 label   = "Clear"
                 onClick = onClear />
 
-        <div className=Styles.separator />
+        <div className="separator" />
 
         <ShareButton url />
 

@@ -14,12 +14,7 @@ let make = (~label,
   ...component,
 
   render: _self =>
-    <button className = ClassName.(join([
-                          Styles.normal |> Js.String.make,
-                          className,
-                          "m-icon-left" |> if_(alignIcon === `Left),
-                          "m-icon-right" |> if_(alignIcon === `Right)
-                        ]))
+    <button className = ClassName.join([Styles.root(`Normal, alignIcon) |> Js.String.make, className])
             onClick   = (_e => onClick()) >
 
       (alignIcon === `Left ? makeIcon(icon) : null)

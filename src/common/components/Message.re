@@ -1,20 +1,12 @@
 open! Rebase;
 open Vrroom.Helpers;
-module Styles = MessageStyles;
 
 let component = ReasonReact.statelessComponent("Error");
-let make = (~type_, ~message, _children) => {
+let make = (~kind, ~message, _children) => {
   ...component,
 
-  render: _self => {
-    let style = 
-      switch type_ {
-      | `Error    => Styles.error
-      | `Warning  => Styles.warning
-      };
-
-    <div className=style>
+  render: _self =>
+    <div className=MessageStyles.container(~kind)>
       (message |> text)
     </div>
-  }
 };

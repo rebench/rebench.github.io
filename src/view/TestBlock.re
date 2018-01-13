@@ -33,9 +33,6 @@ let getStateClass =
       | Complete(_, Some(s)) when s <= -50. => "s-complete s-not-even-close"
       | Complete(_)                         => "s-complete";
 
-let makeClassName = state =>
-  ClassName.join([Styles.root |> Js.String.make, getStateClass(state)]);
-
 module LanguageSelectButton = SelectButton.Make({
   type value = Language.t;
 });
@@ -46,11 +43,6 @@ let languageMenuItems =
       label: lang |> Language.name,
       value: lang
     });
-
-let getLanguageButtonClassName =
-  fun | `RE => "m-language-reason"
-      | `ML => "m-language-ocaml"
-      | `JS => "m-language-javascript";
 
 let getError =
   fun | Compiler.Ok(_)
@@ -87,36 +79,32 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
 
   let renderResult = () =>
     switch testState {
-    
-    | Untested =>
-      <div className=(Styles.state ++ " s-untested") />
+    | Untested => null
 
     | Running(result) =>
-      <div className=(Styles.state ++ " s-running")>
+      <Vrroom.Fragment>
         <Icon name="history" />
         {result |> formatResult |> text}
-      </div>
+      </Vrroom.Fragment>
 
     | Error(error) =>
-      <div className=(Styles.state ++ " s-error")>
+      <Vrroom.Fragment>
         <Icon name="alert-circle-outline" />
         (error |> text)
-      </div>
+      </Vrroom.Fragment>
 
     | Complete(result, _) =>
-      <div className=(Styles.state ++ " s-complete")>
+      <Vrroom.Fragment>
         <Icon name="check" />
         {result |> formatResult |> text}
-      </div>
-
+      </Vrroom.Fragment>
     };
 
   let renderHeader = ({ ReasonReact.reduce, state }) =>
-    <div className=Styles.header>
-
+    <Vrroom.Fragment>
       <div className="box">
         <LanguageSelectButton
-            className         = getLanguageButtonClassName(data.language)
+            className         = "language-button"
             selected          = data.language
             onSelect          = onLanguageChange
             items             = languageMenuItems
@@ -135,8 +123,7 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
                 alignIcon = `Right
                 onClick   = reduce(() => ToggleOutput) />
       </div>
-
-    </div>;
+    </Vrroom.Fragment>;
 
   let renderFooter = () =>
     <Vrroom.Fragment>
@@ -148,23 +135,22 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
               label   = "Remove"
               onClick = onRemove />
 
-      {renderResult()}
+      <div className="state">
+        {renderResult()}
+      </div>
     </Vrroom.Fragment>;
 
   {
     ...component,
 
     initialState: () => { showOutput: false },
-    reducer: (action, state) => 
-      switch action {
-      | ToggleOutput =>
-        ReasonReact.Update({ showOutput: !state.showOutput })
-      },
+    reducer: (ToggleOutput, state) => 
+      ReasonReact.Update({ showOutput: !state.showOutput }),
 
     render: ({ state } as self) =>
       <TestCompiler input=(setup, data) wait=300>
         ...(compilerResult =>
-          <Block_ className = makeClassName(testState)
+          <Block_ className = (Styles.container(~testState, ~language=data.language) |> Js.String.make)
                   header    = `Element(renderHeader(self))
                   footer    = renderFooter()
                   error     = ?getError(compilerResult) >

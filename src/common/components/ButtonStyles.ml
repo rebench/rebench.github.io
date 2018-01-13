@@ -1,27 +1,24 @@
 open TypedGlamor
 
-let common = [
+let root kind alignIcon = css [
   color Colors.text;
   padding (em 1.);
   unsafe "cursor" "pointer";
 
-  select "&.m-icon-left .mdi" [
-    marginRight (em 0.25);
-  ];
+  background (
+    match kind with
+    | `Normal -> Colors.panel
+    | `Dark   -> Colors.panelDark
+  );
 
-  select "&.m-icon-right .mdi" [
-    marginLeft (em 0.5);
+  select "& .mdi" [
+    if alignIcon = `Left then
+      marginRight (em 0.25)
+    else
+      marginLeft (em 0.5)
   ];
 
   hover [
     background Colors.highlightOverlay;
   ];
 ]
-
-let normal = css (common @ [
-  background Colors.panel;
-])
-
-let dark = css (common @ [
-  background Colors.panelDark;
-])

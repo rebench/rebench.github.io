@@ -14,7 +14,7 @@ module Make(Config: Config) = {
   };
 
   type state = {
-    isOpen: bool
+    isMenuOpen: bool
   };
 
   type action =
@@ -34,25 +34,25 @@ module Make(Config: Config) = {
     ...component,
 
     initialState: () => {
-      isOpen: false
+      isMenuOpen: false
     },
     reducer: (action, state) =>
       switch action {
       | ButtonClicked =>
-        ReasonReact.Update({ isOpen: !state.isOpen })
+        ReasonReact.Update({ isMenuOpen: !state.isMenuOpen })
 
       | OutsideClicked =>
-        ReasonReact.Update({ isOpen: false })
+        ReasonReact.Update({ isMenuOpen: false })
 
       | ItemSelected(item) =>
         ReasonReact.UpdateWithSideEffects(
-          { isOpen: false },
+          { isMenuOpen: false },
           _self => onSelect(item.value)
         )
       },
 
     render: ({ reduce, state }) =>
-      <div className=Styles.root>
+      <div className=Styles.container(~isMenuOpen=state.isMenuOpen)>
         <OnClickOutside onClick=reduce(() => OutsideClicked)>
            
           <button className onClick=reduce(_e => ButtonClicked)>
@@ -63,7 +63,7 @@ module Make(Config: Config) = {
             )
           </button>
 
-          <menu className=(Styles.menu ++ (state.isOpen ? " s-open" : ""))>
+          <menu>
             <ul>
               <Control.MapList items>
                 ...(item =>

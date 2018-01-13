@@ -1,6 +1,6 @@
 open TypedGlamor
 
-let root = css [
+let container = css [
   background Colors.panel;
 
   select "& > div" [ (* matches the inner width container *)
@@ -11,9 +11,9 @@ let root = css [
       unsafe "objectFit" "contain";
       unsafe "objectPosition" "left";
     ];
-  ];
-]
 
-let separator = css [
-  unsafe "flexGrow" "1";
+    select "& > .separator" [
+      unsafe "flexGrow" "1";
+    ]
+  ];
 ]
