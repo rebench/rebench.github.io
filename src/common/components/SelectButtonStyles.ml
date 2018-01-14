@@ -11,13 +11,13 @@ let container ~isMenuOpen = css [
 
     position absolute;
     zIndex (int 100);
-    unsafe "transform" "translateX(-2px)";
+    transforms [translateX (px (-2))];
     background Colors.panelDark;
-    unsafe "boxShadow" "2px 2px 1px 0 rgba(0, 0, 0, .25)";
+    boxShadows [(shadow ~x:(px 2) ~y:(px 2) ~blur:(px 1) (rgba 0 0 0 0.25))];
 
     select "& > ul > li" [
       padding (em 1.);
-      unsafe "cursor" "pointer";
+      cursor pointer;
 
       hover [
         background Colors.highlightOverlay

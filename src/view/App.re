@@ -161,7 +161,7 @@ let make = (~data: Store.data,
   },
 
   render: ({ reduce, state }) =>
-    <div className=Styles.container>
+    <div className=(Styles.container |> TypedGlamor.toString)>
       <Toolbar onRunAll     = reduce(() => RunAll)
                onAdd        = reduce(() => AddTest)
                onClear      = reduce(() => Clear)

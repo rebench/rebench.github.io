@@ -5,8 +5,8 @@ let container = css [
 
   minHeight (vh 100.);
 
-  unsafe "display" "flex";
-  unsafe "flexDirection" "column";
+  display flex;
+  flexDirection column;
   
   select "& > footer" [
     background Colors.darkBackground;
@@ -15,29 +15,29 @@ let container = css [
     marginTop auto;
 
     select "& > div" [ (* matches the inner width container *)
-      unsafe "display" "flex";
+      display flex;
 
       select "& > section" [
         margin2 ~v:zero ~h:(em 2.);
-        unsafe "opacity" ".5";
+        opacity 0.5;
         transitions [AnimatableProperty.opacity, (ms 500), easeInOut, (ms 0)];
 
         hover [
-          unsafe "opacity" "1";
+          opacity 1.;
         ];
 
         select "& h1" [
-          unsafe "fontSize" ".85em";
+          fontSize (em 0.85);
           color (rgba 255 255 255 0.5);
-          unsafe "textTransform" "lowercase";
-          unsafe "fontVariant" "small-caps";
+          textTransform lowercase;
+          fontVariant smallCaps;
           marginBottom (em 0.35);
         ];
 
         select "& a" [
           color Colors.text;
-          unsafe "textDecoration" "none";
-          unsafe "fontSize" ".85rem";
+          textDecoration none;
+          fontSize (rem 0.85);
 
           hover [
             color white;

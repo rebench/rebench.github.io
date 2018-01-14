@@ -3,8 +3,16 @@ open TypedGlamor
 let container = css [
   select "& .CodeMirror" [
     height auto;
-    unsafe "fontFamily" {|"SFMono-Regular", Consolas,"Roboto Mono","Droid Sans Mono","Liberation Mono",Menlo,Courier,monospace|};
-    unsafe "fontSize" "14px";
+    fontFamilies [
+      "SFMono-Regular";
+      "Consolas";
+      "Roboto Mono";
+      "Droid Sans Mono";
+      "Liberation Mono";
+      "Menlo,Courier";
+      monospace
+    ];
+    fontSize (px 14);
   ];
 
   select "& .CodeMirror .syntax-error" [

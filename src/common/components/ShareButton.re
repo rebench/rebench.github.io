@@ -43,7 +43,7 @@ let make = (~url, _) => {
     },
 
   render: ({ reduce, handle, state }) =>
-    <div className=Styles.container(~showConfirmation=state.showConfirmation)>
+    <div className=(Styles.container(~showConfirmation=state.showConfirmation) |> TypedGlamor.toString)>
 
       <input value    = url
              ref      = handle((r, { state }) => state.inputRef := Js.toOption(r))

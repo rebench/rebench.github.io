@@ -19,10 +19,10 @@ let container ~showConfirmation = css [
     offsetRight (em 1.);
     background (rgba 0 0 0 1.);
     color (hex 0xccc);
-    unsafe "whiteSpace" "nowrap";
+    whiteSpace nowrap;
     padding2 ~v:(em 0.4) ~h:(em 0.8);
     borderRadius (em 0.25);
-    unsafe "fontSize" ".8rem";
+    fontSize (rem 0.8);
 
     select "::before" [
       position absolute;
@@ -43,7 +43,7 @@ let container ~showConfirmation = css [
     ];
 
     if showConfirmation then
-      select "&" [
+      add [
         display block;
 
         select "& .confirmation-message" [
@@ -55,7 +55,7 @@ let container ~showConfirmation = css [
         ];
       ]
     else
-      unsafe "nothing" "";
+      nothing;
   ];
 
   hover [

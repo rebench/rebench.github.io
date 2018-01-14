@@ -4,7 +4,7 @@ let container = css [
   background Colors.panel;
 
   select "& > div" [ (* matches the inner width container *)
-    unsafe "display" "flex";
+    display flex;
 
     select "& > .logo" [
       width (px 45);
@@ -13,7 +13,7 @@ let container = css [
     ];
 
     select "& > .separator" [
-      unsafe "flexGrow" "1";
+      flex_ auto;
     ]
   ];
 ]

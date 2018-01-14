@@ -3,21 +3,21 @@ open TypedGlamor
 let container ~(testState: Test.state) ~language = css [
 
   select "& > header" [
-    unsafe "fontSize" ".85em";
+    fontSize (em 0.85);
     color Colors.text;
-    unsafe "textTransform" "lowercase";
-    unsafe "fontVariant" "small-caps";
-    unsafe "display" "flex";
-    unsafe "justifyContent" "space-between";
-    unsafe "alignItems" "baseline";
+    textTransform lowercase;
+    fontVariant smallCaps;
+    display flex;
+    justifyContent spaceBetween;
+    alignItems baseline;
 
     select "& button" [
       padding (em 0.75);
-      unsafe "cursor" "pointer";
+      cursor pointer;
 
       select "& .mdi:before" [
-        unsafe "transform" "translateY(2px)"; (* alignment fix due to the lowercase small-caps styling *)
-        unsafe "opacity" ".35";
+        transforms [translateY (px 2)]; (* alignment fix due to the lowercase small-caps styling *)
+        opacity 0.35;
       ];
 
       hover [
@@ -33,19 +33,19 @@ let container ~(testState: Test.state) ~language = css [
     ];
 
     select "& > .box" [
-      unsafe "display" "flex";
-      unsafe "flex" "1";
+      display flex;
+      flex_ (int 1);
 
       select "&.right" [
-        unsafe "justifyContent" "flex-end";
+        justifyContent flexEnd;
       ];
     ];
 
     select "& > .title" [
       display inlineBlock;
       padding (em 0.75);
-      unsafe "textAlign" "center";
-      unsafe "flex" "1";
+      textAlign center;
+      flex_ (int 1);
     ];
 
     select "& .score" [
@@ -53,15 +53,15 @@ let container ~(testState: Test.state) ~language = css [
       | Complete(_, Some(s)) when s == 0.   -> color Colors.green
       | Complete(_, Some(s)) when s >= -10. -> color Colors.yellow
       | Complete(_, Some(s)) when s <= -50. -> color Colors.red
-      | _ -> unsafe "nothing" "";
+      | _                                   -> nothing;
     ];
   ];
 
   select "& > main" [
-    unsafe "display" "flex";
+    display flex;
 
     select "& > *" [
-      unsafe "flex" "1";
+      flex_ (int 1);
       width (pct 50.);
     ];
   ];
@@ -77,7 +77,7 @@ let container ~(testState: Test.state) ~language = css [
         | Running(_)  -> color Colors.yellow
         | Error(_)    -> color Colors.red
         | Complete(_) -> color Colors.green
-        | _           -> unsafe "nothing" ""
+        | _           -> nothing
       ];
     ]
   ]

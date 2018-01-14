@@ -52,7 +52,7 @@ module Make(Config: Config) = {
       },
 
     render: ({ reduce, state }) =>
-      <div className=Styles.container(~isMenuOpen=state.isMenuOpen)>
+      <div className=(Styles.container(~isMenuOpen=state.isMenuOpen) |> TypedGlamor.toString)>
         <OnClickOutside onClick=reduce(() => OutsideClicked)>
            
           <button className onClick=reduce(_e => ButtonClicked)>

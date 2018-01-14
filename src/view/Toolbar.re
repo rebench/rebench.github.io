@@ -5,7 +5,7 @@ let component = ReasonReact.statelessComponent("Toolbar");
 let make = (~onRunAll, ~onAdd, ~onClear, ~shareableUrl as url, _) => {
   ...component,
   render: _self =>
-    <div className=Styles.container>
+    <div className=(Styles.container |> TypedGlamor.toString)>
       <WidthContainer>
 
         <img className="logo" src="static/logo.svg" title="re:bench" alt="re:bench" />

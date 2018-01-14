@@ -2,8 +2,9 @@ open TypedGlamor
 
 let container ~isCollapsible ~isCollapsed = css [
   label "block";
+
   background Colors.panel;
-  unsafe "overflow" "auto"; (* contain child element margins *)
+  overflow auto; (* contain child element margins *)
   margin2 ~v:(em 1.) ~h:zero;
   borderLeft3 (px 2) solid transparent;
 
@@ -11,7 +12,7 @@ let container ~isCollapsible ~isCollapsed = css [
     select "& > header" [
       hover [
         background Colors.panelDark;
-        unsafe "cursor" "pointer";
+        cursor pointer;
       ];
     ]
   else select "&" [];
@@ -34,15 +35,15 @@ let container ~isCollapsible ~isCollapsed = css [
 
   select "& .textHeader" [
     padding2 ~v:(em 0.75) ~h:(em 1.25);
-    unsafe "fontSize" ".85em";
+    fontSize (em 0.85);
     color Colors.text;
-    unsafe "textTransform" "lowercase";
-    unsafe "fontVariant" "small-caps";
-    unsafe "textAlign" "center";
+    textTransform lowercase;
+    fontVariant smallCaps;
+    textAlign center;
   ];
 
   select "& footer" [
-    unsafe "display" "flex";
+    display flex;
     background Colors.panelDark;
     color Colors.text;
 

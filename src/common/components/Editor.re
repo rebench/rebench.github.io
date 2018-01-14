@@ -45,7 +45,7 @@ let make = (~value, ~lang, ~defaultValue=?, ~marks=[], ~readOnly=false, ~inputRe
   },
 
   render: ({ handle }) =>
-    <div className=EditorStyles.container>
+    <div className=(EditorStyles.container |> TypedGlamor.toString)>
       <CodeMirror
         value
         editorDidMount=(handle((editor, { state }) => state.editor := Some(editor)))

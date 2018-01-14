@@ -6,7 +6,7 @@ let make = (~kind, ~message, _children) => {
   ...component,
 
   render: _self =>
-    <div className=MessageStyles.container(~kind)>
+    <div className=(MessageStyles.container(~kind) |> TypedGlamor.toString)>
       (message |> text)
     </div>
 };

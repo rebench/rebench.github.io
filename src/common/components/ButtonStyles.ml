@@ -3,7 +3,7 @@ open TypedGlamor
 let root kind alignIcon = css [
   color Colors.text;
   padding (em 1.);
-  unsafe "cursor" "pointer";
+  cursor pointer;
 
   background (
     match kind with
