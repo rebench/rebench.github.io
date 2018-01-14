@@ -6,8 +6,9 @@ module Control = Vrroom.Control;
 module Styles = AppStyles;
 
 type state = {
-  tests: list((Test.id, Test.state)),
-  worker: ref(Worker.t)
+  tests:    list((Test.id, Test.state)),
+  worker:   ref(Worker.t),
+  showHelp: bool
 };
 
 type actions =
@@ -18,6 +19,8 @@ type actions =
   | Clear
   | RunAll
   | RunSingle(Test.t)
+  | ShowHelp
+  | HideHelp
   | WorkerMessage(Worker.Message.receive)
 ;
 
@@ -45,7 +48,8 @@ let make = (~data: Store.data,
 
   initialState: () => {
     tests: [],
-    worker: ref(Worker.make(~onMessage=Js.log)) /* TODO: a bit hacky default */
+    worker: ref(Worker.make(~onMessage=Js.log)), /* TODO: a bit hacky default */
+    showHelp: false
   },
 
   didMount: ({ reduce, state }) => {
@@ -119,6 +123,11 @@ let make = (~data: Store.data,
       ReasonReact.SideEffects(
         _self => run([test])
       )
+
+    | ShowHelp => 
+      ReasonReact.Update({ ...state, showHelp: true })
+    | HideHelp => 
+      ReasonReact.Update({ ...state, showHelp: false })
   
     | WorkerMessage(TestCycle(id, result)) =>
       ReasonReact.Update({
@@ -160,65 +169,76 @@ let make = (~data: Store.data,
     }
   },
 
-  render: ({ reduce, state }) =>
-    <div className=(Styles.container |> TypedGlamor.toString)>
+  render: ({ send, reduce, state }) =>
+    <div className=(Styles.container(~preventScroll=state.showHelp) |> TypedGlamor.toString)>
       <Toolbar onRunAll     = reduce(() => RunAll)
                onAdd        = reduce(() => AddTest)
                onClear      = reduce(() => Clear)
+               onHelp       = reduce(() => ShowHelp)
                shareableUrl = url />
 
-      <WidthContainer>
-        <SetupBlock code      = data.Store.setup
-                    onChange  = reduce(code => UpdateSetup(code)) />
-
-        <Control.MapList items=(data.tests |> List.reverse)>
-          ...(test =>
-            <TestBlock
-                key       = (test.Test.id |> Test.Id.toString)
-                onChange  = reduce(changed => UpdateTest(changed))
-                onRun     = reduce(() => RunSingle(test))
-                onRemove  = reduce(() => RemoveTest(test))
-                onLanguageChange
-                          = reduce(language => UpdateTest({ ...test, language }))
-                data      = test
-                setup     = data.setup
-                state     = (try (_assoc(test.id, state.tests)) {
-                            | Not_found => Test.Untested
-                            })
-            />
-          )
-        </Control.MapList>
-      </WidthContainer>
-
-      <footer>
+      <div className="scroll-container">
         <WidthContainer>
-          <section>
-            <h1> ("Project" |> text) </h1>
-            <ul>
-              <li> <a href="https://github.com/rebench/rebench.github.io"> ("Source Code Repository" |> text) </a> </li>
-              <li> <a href="https://github.com/rebench/rebench.github.io/issues"> ("Support / Bug Tracker" |> text) </a> </li>
-            </ul>
-          </section>
+          <SetupBlock code      = data.Store.setup
+                      onChange  = reduce(code => UpdateSetup(code)) />
 
-          <section>
-            <h1> ("Made with" |> text) </h1>
-            <ul>
-              <li> <a href="https://github.com/bucklescript/bucklescript"> ("BuckleScript" |> text) </a> </li>
-              <li> <a href="https://benchmarkjs.com/"> ("Benchmark.js" |> text) </a> </li>
-              <li> <a href="https://codemirror.net/"> ("CodeMirror" |> text) </a> </li>
-              <li> <a href="https://reasonml.github.io/reason-react/"> ("ReasonReact" |> text) </a> </li>
-              <li> <a href="https://github.com/threepointone/glamor"> ("glamor" |> text) </a> </li>
-            </ul>
-          </section>
-
-          <section>
-            <h1> ("Reason" |> text) </h1>
-            <ul>
-              <li> <a href="https://reasonml.github.io/guide"> ("Reason Guide" |> text) </a> </li>
-              <li> <a href="https://reasonml.github.io/try"> ("Reason Playground" |> text) </a> </li>
-            </ul>
-          </section>
+          <Control.MapList items=(data.tests |> List.reverse)>
+            ...(test =>
+              <TestBlock
+                  key       = (test.Test.id |> Test.Id.toString)
+                  onChange  = reduce(changed => UpdateTest(changed))
+                  onRun     = reduce(() => RunSingle(test))
+                  onRemove  = reduce(() => RemoveTest(test))
+                  onLanguageChange
+                            = reduce(language => UpdateTest({ ...test, language }))
+                  data      = test
+                  setup     = data.setup
+                  state     = (try (_assoc(test.id, state.tests)) {
+                              | Not_found => Test.Untested
+                              })
+              />
+            )
+          </Control.MapList>
         </WidthContainer>
-      </footer>
+
+        <footer>
+          <WidthContainer>
+            <section>
+              <h1> ("Project" |> text) </h1>
+              <ul>
+                <li> <a href="https://github.com/rebench/rebench.github.io"> ("Source Code Repository" |> text) </a> </li>
+                <li> <a href="https://github.com/rebench/rebench.github.io/issues"> ("Support / Bug Tracker" |> text) </a> </li>
+              </ul>
+            </section>
+
+            <section>
+              <h1> ("Made with" |> text) </h1>
+              <ul>
+                <li> <a href="https://github.com/bucklescript/bucklescript"> ("BuckleScript" |> text) </a> </li>
+                <li> <a href="https://benchmarkjs.com/"> ("Benchmark.js" |> text) </a> </li>
+                <li> <a href="https://codemirror.net/"> ("CodeMirror" |> text) </a> </li>
+                <li> <a href="https://reasonml.github.io/reason-react/"> ("ReasonReact" |> text) </a> </li>
+                <li> <a href="https://github.com/threepointone/glamor"> ("glamor" |> text) </a> </li>
+              </ul>
+            </section>
+
+            <section>
+              <h1> ("Reason" |> text) </h1>
+              <ul>
+                <li> <a href="https://reasonml.github.io/guide"> ("Reason Guide" |> text) </a> </li>
+                <li> <a href="https://reasonml.github.io/try"> ("Reason Playground" |> text) </a> </li>
+              </ul>
+            </section>
+          </WidthContainer>
+        </footer>
+      </div>
+
+      <Control.If cond=state.showHelp>
+        ...(() => 
+          <div className  = "mask"
+               onClick    = (e => ReactEventRe.Mouse.(target(e) === currentTarget(e)) ? send(HideHelp) : ())>
+            <HelpModal onClose=(() => send(HideHelp))/>
+          </div>)
+      </Control.If>
     </div>
 };

@@ -60,17 +60,17 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 160);
+/******/ 	return __webpack_require__(__webpack_require__.s = 162);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 160:
+/***/ 162:
 /***/ (function(module, exports, __webpack_require__) {
 
 importScripts('../static/stdlibBundle.js');
 
-const Benchmark = __webpack_require__(161);
+const Benchmark = __webpack_require__(163);
 
 onmessage = ({ data }) => {
   var suite = new Benchmark.Suite;
@@ -120,7 +120,7 @@ onmessage = ({ data }) => {
 
 /***/ }),
 
-/***/ 161:
+/***/ 163:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var require;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -2922,7 +2922,7 @@ onmessage = ({ data }) => {
   // Some AMD build optimizers, like r.js, check for condition patterns like the following:
   if (true) {
     // Define as an anonymous module so, through path mapping, it can be aliased.
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(163), __webpack_require__(164)], __WEBPACK_AMD_DEFINE_RESULT__ = (function(_, platform) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(165), __webpack_require__(166)], __WEBPACK_AMD_DEFINE_RESULT__ = (function(_, platform) {
       return runInContext({
         '_': _,
         'platform': platform
@@ -2953,7 +2953,7 @@ onmessage = ({ data }) => {
 
 /***/ }),
 
-/***/ 162:
+/***/ 164:
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -2962,11 +2962,11 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 162;
+webpackEmptyContext.id = 164;
 
 /***/ }),
 
-/***/ 163:
+/***/ 165:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -20059,7 +20059,7 @@ webpackEmptyContext.id = 162;
 
 /***/ }),
 
-/***/ 164:
+/***/ 166:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*!

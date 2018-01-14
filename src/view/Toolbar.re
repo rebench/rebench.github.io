@@ -2,7 +2,7 @@ open! Vrroom.Helpers;
 module Styles = ToolbarStyles;
 
 let component = ReasonReact.statelessComponent("Toolbar");
-let make = (~onRunAll, ~onAdd, ~onClear, ~shareableUrl as url, _) => {
+let make = (~onRunAll, ~onAdd, ~onClear, ~onHelp, ~shareableUrl as url, _:array(unit)) => {
   ...component,
   render: _self =>
     <div className=(Styles.container |> TypedGlamor.toString)>
@@ -25,6 +25,10 @@ let make = (~onRunAll, ~onAdd, ~onClear, ~shareableUrl as url, _) => {
         <div className="separator" />
 
         <ShareButton url />
+
+        <Button icon    = "help-circle-outline"
+                label   = "Help"
+                onClick = onHelp />
 
       </WidthContainer>
     </div>
