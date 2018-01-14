@@ -32,12 +32,12 @@ let make = (~header,
         ReasonReact.NoUpdate
     },
 
-  render: ({ reduce, state }) =>
+  render: ({ send, state }) =>
     <section className=ClassName.join([
       BlockStyles.container(~isCollapsible, ~isCollapsed=state.collapsed) |> Js.String.make,
       className |> ClassName.fromOption
     ])>
-      <header onClick=reduce(_e => HeaderClicked)>
+      <header onClick={_e => send(HeaderClicked)}>
         {renderHeaderContent(header)}
       </header>
 

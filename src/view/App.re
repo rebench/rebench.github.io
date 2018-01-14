@@ -52,11 +52,11 @@ let make = (~data: Store.data,
     showHelp: false
   },
 
-  didMount: ({ reduce, state }) => {
+  didMount: ({ send, state }) => {
     ReasonReact.Update({
       ...state,
       worker: ref(Worker.make(
-        ~onMessage  = reduce(message => WorkerMessage(message))
+        ~onMessage  = {message => send(WorkerMessage(message))}
       ))
     })
   },
@@ -169,33 +169,33 @@ let make = (~data: Store.data,
     }
   },
 
-  render: ({ send, reduce, state }) =>
+  render: ({ send, state }) =>
     <div className=(Styles.container(~preventScroll=state.showHelp) |> TypedGlamor.toString)>
-      <Toolbar onRunAll     = reduce(() => RunAll)
-               onAdd        = reduce(() => AddTest)
-               onClear      = reduce(() => Clear)
-               onHelp       = reduce(() => ShowHelp)
+      <Toolbar onRunAll     = {() => send(RunAll)}
+               onAdd        = {() => send(AddTest)}
+               onClear      = {() => send(Clear)}
+               onHelp       = {() => send(ShowHelp)}
                shareableUrl = url />
 
       <div className="scroll-container">
         <WidthContainer>
           <SetupBlock code      = data.Store.setup
-                      onChange  = reduce(code => UpdateSetup(code)) />
+                      onChange  = {code => send(UpdateSetup(code))} />
 
           <Control.MapList items=(data.tests |> List.reverse)>
             ...(test =>
               <TestBlock
                   key       = (test.Test.id |> Test.Id.toString)
-                  onChange  = reduce(changed => UpdateTest(changed))
-                  onRun     = reduce(() => RunSingle(test))
-                  onRemove  = reduce(() => RemoveTest(test))
+                  onChange  = {changed => send(UpdateTest(changed))}
+                  onRun     = {() => send(RunSingle(test))}
+                  onRemove  = {() => send(RemoveTest(test))}
                   onLanguageChange
-                            = reduce(language => UpdateTest({ ...test, language }))
+                            = {language => send(UpdateTest({ ...test, language }))}
                   data      = test
                   setup     = data.setup
-                  state     = (try (_assoc(test.id, state.tests)) {
+                  state     = {try (_assoc(test.id, state.tests)) {
                               | Not_found => Test.Untested
-                              })
+                              }}
               />
             )
           </Control.MapList>

@@ -51,11 +51,11 @@ module Make(Config: Config) = {
         )
       },
 
-    render: ({ reduce, state }) =>
+    render: ({ send, state }) =>
       <div className=(Styles.container(~isMenuOpen=state.isMenuOpen) |> TypedGlamor.toString)>
-        <OnClickOutside onClick=reduce(() => OutsideClicked)>
+        <OnClickOutside onClick={() =>send(OutsideClicked)}>
            
-          <button className onClick=reduce(_e => ButtonClicked)>
+          <button className onClick={_e => send(ButtonClicked)}>
             (
               items |> List.find(item => item.value === selected)
                     |> Option.getOrRaise
@@ -68,7 +68,7 @@ module Make(Config: Config) = {
               <Control.MapList items>
                 ...(item =>
                   <li key     = item.label
-                      onClick = reduce(_e => ItemSelected(item)) >
+                      onClick = {_e => send(ItemSelected(item))} >
                     (renderItem(item))
                   </li>
                 )

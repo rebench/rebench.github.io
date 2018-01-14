@@ -100,7 +100,7 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
       </Vrroom.Fragment>
     };
 
-  let renderHeader = ({ ReasonReact.reduce, state }) =>
+  let renderHeader = ({ ReasonReact.send, state }) =>
     <Vrroom.Fragment>
       <div className="box">
         <LanguageSelectButton
@@ -121,7 +121,7 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
         <Button label     = "output"
                 icon      = (state.showOutput ? "chevron-up" : "chevron-down")
                 alignIcon = `Right
-                onClick   = reduce(() => ToggleOutput) />
+                onClick   = {() => send(ToggleOutput)} />
       </div>
     </Vrroom.Fragment>;
 

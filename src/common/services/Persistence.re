@@ -52,10 +52,10 @@ module Make(Config: Config) = {
         ({ state }) => _persist(state)
       ),
 
-    render: ({ state, reduce }) => {
+    render: ({ send, state }) => {
       let url = state |> _generateUrl;
       Location.replaceState(url);
-      renderChildren(state, url, ~updateStore=reduce(action => action))
+      renderChildren(state, url, ~updateStore=send)
     }
   };
 };

@@ -29,12 +29,12 @@ let make = (~url, _) => {
     | Clicked =>
       ReasonReact.UpdateWithSideEffects(
         { ...state, showConfirmation: true },
-        self => {
+        ({ send }) => {
           state.inputRef^ |> Option.forEach(input => {
             selectAll(input);
             execCommand("copy");
           });
-          Js.Global.setTimeout(self.reduce(() => Timeout), 2000) |> ignore
+          Js.Global.setTimeout(() => send(Timeout), 2000) |> ignore
         }
       )
 
@@ -42,7 +42,7 @@ let make = (~url, _) => {
       ReasonReact.Update({ ...state, showConfirmation: false })
     },
 
-  render: ({ reduce, handle, state }) =>
+  render: ({ send, handle, state }) =>
     <div className=(Styles.container(~showConfirmation=state.showConfirmation) |> TypedGlamor.toString)>
 
       <input value    = url
@@ -51,7 +51,7 @@ let make = (~url, _) => {
 
       <Button icon      = "share"
               label     = "Share"
-              onClick   = reduce((_) => Clicked) />
+              onClick   = {_e => send(Clicked)} />
 
       <span className="tooltip">
         <span className="message"> ("Click to copy to clipboard" |> text) </span>

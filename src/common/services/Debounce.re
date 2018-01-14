@@ -37,7 +37,7 @@ module Make(Config: Config) = {
 
         timeout := Some(Js.Global.setTimeout(() => {
           timeout := None;
-          newSelf.reduce(() => input |> Config.compute)();
+          newSelf.send(input |> Config.compute);
         }, wait));
       }
     },
