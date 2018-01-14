@@ -59,9 +59,10 @@ let container ~(testState: Test.state) ~language = css [
 
   select "& > main" [
     display flex;
+    overflow hidden;
 
     select "& > *" [
-      flex_ (int 1);
+      flex_ auto;
       width (pct 50.);
     ];
   ];
