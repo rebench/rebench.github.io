@@ -2,7 +2,8 @@ open! Rebase;
 
 type update('state) = [
 | `Update('state)
-| `UndoableUpdate('state)
+| `UndoableUpdate(string, 'state)
+| `SilentUpdate('state)
 ];
 
 module type Config = {
@@ -19,7 +20,7 @@ module type Config = {
 module Make(Config: Config) = {
   type state('a) = {
     current: 'a,
-    undo: option('a)
+    undo: option((string, 'a))
   };
 
   let _prefix = "?" ++ Config.id ++ "=";
@@ -61,13 +62,22 @@ module Make(Config: Config) = {
     },
 
     reducer: (action, state) =>
-      ReasonReact.UpdateWithSideEffects(
-        switch (Config.reducer(state.current, action)) {
-        | `Update(next)         => { current: next, undo: None }
-        | `UndoableUpdate(next) => { current: next, undo: Some(state.current) }
-        },
-        ({ state }) => _persist(state.current)
-      ),
+      switch (Config.reducer(state.current, action)) {
+      | `Update(next)         =>
+        ReasonReact.UpdateWithSideEffects(
+          { current: next, undo: None },
+          ({ state }) => _persist(state.current)
+        )
+      | `UndoableUpdate(description, next) =>
+        ReasonReact.UpdateWithSideEffects(
+          { current: next, undo: Some((description, state.current)) },
+          ({ state }) => _persist(state.current)
+        )
+      | `SilentUpdate(next)   =>
+        ReasonReact.Update(
+          { ...state, current: next}
+        )
+      },
 
     render: ({ send, state }) => {
       let url = state.current |> _generateUrl;

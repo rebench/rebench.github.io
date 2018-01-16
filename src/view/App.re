@@ -117,6 +117,18 @@ let make = (~data: Store.state(Store.data),
               />
             )
           </Control.MapList>
+
+          {
+            <Control.IfSome option=data.undo>
+              ...(((description, state)) =>
+                <Button icon      = "undo"
+                        label     = ("Undo " ++ description)
+                        style     = `Dark
+                        className = "undo-button"
+                        onClick   = (() => updateStore(Store.Undo(state))) />)
+            </Control.IfSome>
+          }
+
         </WidthContainer>
 
         <footer>

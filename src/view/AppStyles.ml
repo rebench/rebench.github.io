@@ -17,6 +17,11 @@ let container ~preventScroll = css [
       overflow hidden
     else
       overflow auto;
+
+    select "& .undo-button" [
+      display block;
+      margin2 ~v:(em 1.) ~h:auto;
+    ];
   
     select "& > footer" [
       background Colors.darkBackground;

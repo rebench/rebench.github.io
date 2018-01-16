@@ -17,6 +17,7 @@ type action =
   | UpdateTestState(Test.id, Test.state)
   | UpdateSetup(string)
   | Clear
+  | Undo(data)
 ;
 
 let _nextId = data =>
@@ -65,7 +66,7 @@ include Persistence.Make({
               ] 
           })
 
-        | RemoveTest(id) => `UndoableUpdate({
+        | RemoveTest(id) => `UndoableUpdate("Remove", {
             ...state,
             tests:
               state.tests |> List.filter(this => this.data.id !== id)
@@ -79,7 +80,7 @@ include Persistence.Make({
                           |> _recalculateScores
           })
 
-        | UpdateTestState(id, testState) => `Update({
+        | UpdateTestState(id, testState) => `SilentUpdate({
             ...state,
             tests:
               state.tests |> List.map(this => this.data.id === id ? { ...this, state: testState } : this)
@@ -93,7 +94,10 @@ include Persistence.Make({
           })
 
         | Clear =>
-          `UndoableUpdate(default())
+          `UndoableUpdate("Clear", default())
+
+        | Undo(state) =>
+          `Update({ ...state, tests: state.tests |> List.map(this => { ...this, state: Untested }) })
         ;
 
   let serialize = ({ setup, tests }) =>
