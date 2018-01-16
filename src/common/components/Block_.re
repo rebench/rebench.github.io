@@ -34,7 +34,7 @@ let make = (~header,
 
   render: ({ send, state }) =>
     <section className=ClassName.join([
-      BlockStyles.container(~isCollapsible, ~isCollapsed=state.collapsed) |> Js.String.make,
+      BlockStyles.container(~isCollapsible, ~isCollapsed=state.collapsed) |> TypedGlamor.toString,
       className |> ClassName.fromOption
     ])>
       <header onClick={_e => send(HeaderClicked)}>

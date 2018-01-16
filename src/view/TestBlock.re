@@ -150,7 +150,7 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
     render: ({ state } as self) =>
       <TestCompiler input=(setup, data) wait=300>
         ...(compilerResult =>
-          <Block_ className = (Styles.container(~testState, ~language=data.language) |> Js.String.make)
+          <Block_ className = (Styles.container(~testState, ~language=data.language) |> TypedGlamor.toString)
                   header    = `Element(renderHeader(self))
                   footer    = renderFooter()
                   error     = ?getError(compilerResult) >

@@ -15,7 +15,7 @@ let make = (~label,
   ...component,
 
   render: _self =>
-    <button className = ClassName.join([Styles.root(style, alignIcon) |> Js.String.make, className])
+    <button className = ClassName.join([Styles.root(style, alignIcon) |> TypedGlamor.toString, className])
             onClick   = (_e => onClick()) >
 
       (alignIcon === `Left ? makeIcon(icon) : null)
