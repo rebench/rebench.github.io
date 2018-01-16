@@ -6,17 +6,11 @@ module Control = Vrroom.Control;
 module Styles = AppStyles;
 
 type state = {
-  tests:    list((Test.id, Test.state)),
   worker:   ref(Worker.t),
   showHelp: bool
 };
 
 type actions =
-  | AddTest
-  | UpdateTest(Test.t)
-  | RemoveTest(Test.t)
-  | UpdateSetup(string)
-  | Clear
   | RunAll
   | RunSingle(Test.t)
   | ShowHelp
@@ -24,30 +18,14 @@ type actions =
   | WorkerMessage(Worker.Message.receive)
 ;
 
-let _recalculateScores = tests => {
-  let fastest =
-    tests |> List.map(
-              fun | (_, Test.Complete({ hz }, _)) => Some(hz)
-                  | _ => None)
-          |> List.filter(Option.isSome)
-          |> List.map(Option.getOrRaise)
-          |> List.reduce(Js.Math.max_float, 0.);
-
-  tests |> List.map(
-            fun | (id, Test.Complete({ hz } as result, _)) =>
-                  (id, Test.Complete(result, Some((hz -. fastest) /. fastest *. 100.)))
-                | test => test)
-};
-
 let component = ReasonReact.reducerComponent("App");
-let make = (~data: Store.data,
+let make = (~data: Store.state(Store.data),
             ~url,
             ~updateStore,
             _children) => {
   ...component,
 
   initialState: () => {
-    tests: [],
     worker: ref(Worker.make(~onMessage=Js.log)), /* TODO: a bit hacky default */
     showHelp: false
   },
@@ -63,7 +41,7 @@ let make = (~data: Store.data,
 
   reducer: (action, state) => {
     let run = tests =>
-      tests |> List.map((test: Test.t) => (test.id, Compiler.compileTest(data.setup, test)))
+      tests |> List.map((test: Test.t) => (test.id, Compiler.compileTest(data.current.setup, test)))
             |> List.map(
                  fun | (id, Compiler.Ok(code)) => (id, code)
                      | (id, Warning(code, _))  => (id, code)
@@ -72,53 +50,10 @@ let make = (~data: Store.data,
 
     switch action {
     
-    | AddTest =>
-      ReasonReact.SideEffects(
-        _self => updateStore(Store.AddTest)
-      )
-
-    | UpdateTest(test) =>
-      ReasonReact.UpdateWithSideEffects({
-          ...state,
-          tests:
-            state.tests |> List.map(((id, _) as this) =>
-                             id !== test.id ? this : (id, Test.Untested))
-                        |> _recalculateScores
-        },
-        _self => updateStore(Store.UpdateTest(test))
-      )
-
-    | RemoveTest(test) =>
-      ReasonReact.UpdateWithSideEffects({
-          ...state,
-          tests:
-            state.tests |> List.filter(((id, _)) => id !== test.id)
-                        |> _recalculateScores
-        },
-        _self => updateStore(Store.RemoveTest(test))
-      )
-
-    | UpdateSetup(code) =>
-      ReasonReact.UpdateWithSideEffects({
-          ...state,
-          tests: []
-        },
-        _self => updateStore(Store.UpdateSetup(code))
-      )
-
-    | Clear =>
-      ReasonReact.UpdateWithSideEffects({
-          ...state,
-          tests: []
-        },
-        _self => updateStore(Store.Clear)
-      )
-    
     | RunAll =>
       ReasonReact.SideEffects(
-        _self => run(data.tests)
+        _self => run(data.current.tests |> List.map(this => this.Store.data))
       )
-  
     | RunSingle(test) =>
       ReasonReact.SideEffects(
         _self => run([test])
@@ -130,34 +65,19 @@ let make = (~data: Store.data,
       ReasonReact.Update({ ...state, showHelp: false })
   
     | WorkerMessage(TestCycle(id, result)) =>
-      ReasonReact.Update({
-        ...state,
-        tests:
-          [
-            (id, Test.Running(result)),
-            ..._remove_assoc(id, state.tests)
-          ]
-      })
+      ReasonReact.SideEffects(
+        _self => updateStore(Store.UpdateTestState(id, Test.Running(result)))
+      )
 
     | WorkerMessage(TestError(id, error)) =>
-      ReasonReact.Update({
-        ...state,
-        tests:
-          [
-            (id, Test.Error(error)),
-            ..._remove_assoc(id, state.tests)
-          ]
-      })
+      ReasonReact.SideEffects(
+        _self => updateStore(Store.UpdateTestState(id, Test.Error(error)))
+      )
   
     | WorkerMessage(SuiteCycle(id, result)) =>
-      ReasonReact.Update({
-        ...state,
-        tests:
-          [
-            (id, Test.Complete(result, None)),
-            ..._remove_assoc(id, state.tests)
-          ] |> _recalculateScores
-      })
+      ReasonReact.SideEffects(
+        _self => updateStore(Store.UpdateTestState(id, Test.Complete(result, None)))
+      )
   
     | WorkerMessage(SuiteComplete) =>
       ReasonReact.NoUpdate
@@ -172,30 +92,28 @@ let make = (~data: Store.data,
   render: ({ send, state }) =>
     <div className=(Styles.container(~preventScroll=state.showHelp) |> TypedGlamor.toString)>
       <Toolbar onRunAll     = {() => send(RunAll)}
-               onAdd        = {() => send(AddTest)}
-               onClear      = {() => send(Clear)}
+               onAdd        = {() => updateStore(Store.AddTest)}
+               onClear      = {() => updateStore(Store.Clear)}
                onHelp       = {() => send(ShowHelp)}
                shareableUrl = url />
 
       <div className="scroll-container">
         <WidthContainer>
-          <SetupBlock code      = data.Store.setup
-                      onChange  = {code => send(UpdateSetup(code))} />
+          <SetupBlock code      = data.current.setup
+                      onChange  = {code => updateStore(Store.UpdateSetup(code))} />
 
-          <Control.MapList items=(data.tests |> List.reverse)>
+          <Control.MapList items=(data.current.tests |> List.reverse)>
             ...(test =>
               <TestBlock
-                  key       = (test.Test.id |> Test.Id.toString)
-                  onChange  = {changed => send(UpdateTest(changed))}
-                  onRun     = {() => send(RunSingle(test))}
-                  onRemove  = {() => send(RemoveTest(test))}
+                  key       = (test.data.id |> Test.Id.toString)
+                  onChange  = {changed => updateStore(Store.UpdateTestData(changed))}
+                  onRun     = {() => send(RunSingle(test.data))}
+                  onRemove  = {() => updateStore(Store.RemoveTest(test.data.id))}
                   onLanguageChange
-                            = {language => send(UpdateTest({ ...test, language }))}
-                  data      = test
-                  setup     = data.setup
-                  state     = {try (_assoc(test.id, state.tests)) {
-                              | Not_found => Test.Untested
-                              }}
+                            = {language => updateStore(Store.UpdateTestData({ ...test.data, language }))}
+                  data      = test.data
+                  setup     = data.current.setup
+                  state     = test.state 
               />
             )
           </Control.MapList>
