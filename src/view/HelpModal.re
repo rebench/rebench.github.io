@@ -35,7 +35,7 @@ let content = {|
 
 <p>
   That's about it. If you come across a bug, or something you don't understand, please let me know by
-  <a href="https://github.com/rebench/rebench.github.io/issues/new">creating an issue</a>. Happy testing! :)
+  <a href="https://github.com/rebench/rebench.github.io/issues/new">creating an issue</a>. Happy benchmarking! :)
 
 |};
 
