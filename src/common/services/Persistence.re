@@ -81,7 +81,12 @@ module Make(Config: Config) = {
 
     render: ({ send, state }) => {
       let url = state.current |> _generateUrl;
-      Location.replaceState(url);
+
+      /* don't unnecessarily call replaceState, to avoid triggering WebKit SecurityError */
+      if (url !== Location.href) {
+        Location.replaceState(url);
+      };
+      
       renderChildren(state, url, ~updateStore=send)
     }
   };
