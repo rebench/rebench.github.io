@@ -6,7 +6,7 @@ module Control = Vrroom.Control;
 module Styles = AppStyles;
 
 type state = {
-  worker:   ref(Worker.t),
+  worker:   ref(option(Worker.t)),
   showHelp: bool
 };
 
@@ -26,16 +26,16 @@ let make = (~data: Store.state(Store.data),
   ...component,
 
   initialState: () => {
-    worker: ref(Worker.make(~onMessage=Js.log)), /* TODO: a bit hacky default */
+    worker: ref(None),
     showHelp: false
   },
 
   didMount: ({ send, state }) => {
     ReasonReact.Update({
       ...state,
-      worker: ref(Worker.make(
+      worker: ref(Some(Worker.make(
         ~onMessage  = {message => send(WorkerMessage(message))}
-      ))
+      )))
     })
   },
 
@@ -46,7 +46,7 @@ let make = (~data: Store.state(Store.data),
                  fun | (id, Compiler.Ok(code)) => (id, code)
                      | (id, Warning(code, _))  => (id, code)
                      | (id, _)                 => (id, "throw Error('failed to compile');"))
-            |> tests => state.worker^.postMessage(Run(tests));
+            |> tests => state.worker^ |> Option.forEach(w => w.Worker.postMessage(Run(tests)));
 
     switch action {
     

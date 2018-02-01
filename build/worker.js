@@ -146,7 +146,7 @@ onmessage = ({ data }) => {
   var root = (objectTypes[typeof window] && window) || this;
 
   /** Detect free variable `define`. */
-  var freeDefine = __webpack_require__(22);
+  var freeDefine = __webpack_require__(23);
 
   /** Detect free variable `exports`. */
   var freeExports = objectTypes[typeof exports] && exports && !exports.nodeType && exports;
@@ -636,10 +636,10 @@ onmessage = ({ data }) => {
       // Lazy define.
       createFunction = function(args, body) {
         var result,
-            anchor = __webpack_require__(22) ? __webpack_require__(57) : Benchmark,
+            anchor = __webpack_require__(23) ? __webpack_require__(57) : Benchmark,
             prop = uid + 'createFunction';
 
-        runScript((__webpack_require__(22) ? 'define.amd.' : 'Benchmark.') + prop + '=function(' + args + '){' + body + '}');
+        runScript((__webpack_require__(23) ? 'define.amd.' : 'Benchmark.') + prop + '=function(' + args + '){' + body + '}');
         result = anchor[prop];
         delete anchor[prop];
         return result;
@@ -783,12 +783,12 @@ onmessage = ({ data }) => {
      * @param {string} code The code to run.
      */
     function runScript(code) {
-      var anchor = __webpack_require__(22) ? __webpack_require__(57) : Benchmark,
+      var anchor = __webpack_require__(23) ? __webpack_require__(57) : Benchmark,
           script = doc.createElement('script'),
           sibling = doc.getElementsByTagName('script')[0],
           parent = sibling.parentNode,
           prop = uid + 'runScript',
-          prefix = '(' + (__webpack_require__(22) ? 'define.amd.' : 'Benchmark.') + prop + '||function(){})();';
+          prefix = '(' + (__webpack_require__(23) ? 'define.amd.' : 'Benchmark.') + prop + '||function(){})();';
 
       // Firefox 2.0.0.2 cannot use script injection as intended because it executes
       // asynchronously, but that's OK because script injection is only used to avoid
@@ -2949,7 +2949,7 @@ onmessage = ({ data }) => {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)(module), __webpack_require__(20)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), __webpack_require__(21)))
 
 /***/ }),
 
@@ -20055,7 +20055,7 @@ webpackEmptyContext.id = 164;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20), __webpack_require__(21)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21), __webpack_require__(22)(module)))
 
 /***/ }),
 
@@ -21281,11 +21281,11 @@ webpackEmptyContext.id = 164;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(21)(module), __webpack_require__(20)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(22)(module), __webpack_require__(21)))
 
 /***/ }),
 
-/***/ 20:
+/***/ 21:
 /***/ (function(module, exports) {
 
 var g;
@@ -21313,7 +21313,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 21:
+/***/ 22:
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -21342,7 +21342,7 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ 22:
+/***/ 23:
 /***/ (function(module, exports) {
 
 module.exports = function() {
