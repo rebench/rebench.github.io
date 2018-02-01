@@ -1,5 +1,5 @@
 open Rebase;
-open Vrroom.Helpers;
+open Vrroom;
 
 [@bs.val] external execCommand : string => unit = "document.execCommand";
 [@bs.send] external selectAll : Dom.element => unit = "select";
@@ -16,7 +16,7 @@ type action =
   | Timeout;
 
 let component = ReasonReact.reducerComponent("ShareButton");
-let make = (~url, _) => {
+let make = (~url, _:childless) => {
   ...component,
 
   initialState: () => {

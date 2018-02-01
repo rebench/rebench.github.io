@@ -1,4 +1,5 @@
 open Rebase;
+open Vrroom;
 
 [%bs.raw {|require('codemirror/lib/codemirror.css')|}];
 [%bs.raw {|require('codemirror/theme/material.css')|}];
@@ -31,7 +32,7 @@ let setMarks = (editor, marks: list(mark)) =>
   );
 
 let component = ReasonReact.reducerComponent("Editor");
-let make = (~value, ~lang, ~defaultValue=?, ~marks=[], ~readOnly=false, ~inputRef=?, ~onChange=?, _) => {
+let make = (~value, ~lang, ~defaultValue=?, ~marks=[], ~readOnly=false, ~inputRef=?, ~onChange=?, _:childless) => {
   ...component,
 
   initialState: () => {

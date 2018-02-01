@@ -1,8 +1,8 @@
-open! Vrroom.Helpers;
+open! Vrroom;
 module Styles = ToolbarStyles;
 
 let component = ReasonReact.statelessComponent("Toolbar");
-let make = (~onRunAll, ~onAdd, ~onClear, ~onHelp, ~shareableUrl as url, _:array(unit)) => {
+let make = (~onRunAll, ~onAdd, ~onClear, ~onHelp, ~shareableUrl as url, _:childless) => {
   ...component,
   render: _self =>
     <div className=(Styles.container |> TypedGlamor.toString)>

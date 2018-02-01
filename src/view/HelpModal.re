@@ -1,4 +1,4 @@
-open! Vrroom.Helpers;
+open! Vrroom;
 module Styles = HelpModalStyles;
 
 let content = {|
@@ -40,7 +40,7 @@ let content = {|
 |};
 
 let component = ReasonReact.statelessComponent("HelpPopup");
-let make = (~onClose, _:array(unit)) => {
+let make = (~onClose, _:childless) => {
   ...component,
   render: _self =>
     <WidthContainer>

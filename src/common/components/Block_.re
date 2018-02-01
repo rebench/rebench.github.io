@@ -1,5 +1,4 @@
-open Vrroom.Helpers;
-module Control = Vrroom.Control;
+open Vrroom;
 
 type state = {
   collapsed: bool

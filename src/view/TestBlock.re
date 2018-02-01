@@ -1,6 +1,5 @@
 open! Rebase;
-open! Vrroom.Helpers;
-module Control = Vrroom.Control;
+open! Vrroom;
 module Styles = TestBlockStyles;
 open! Test;
 
@@ -63,7 +62,7 @@ module TestCompiler = Debounce.Make({
 });
 
 let component = ReasonReact.reducerComponent("TestBlock");
-let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRemove, ~onLanguageChange, _children) => {
+let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRemove, ~onLanguageChange, _:childless) => {
 
   let renderRelativeScore = () =>
     switch testState {
@@ -74,12 +73,12 @@ let make = (~setup, ~data: Test.t, ~state as testState, ~onChange, ~onRun, ~onRe
           {score |> formatRelativeScore |> text}
         </span>
       </span>
-    | _ => null
+    | _ => nothing
     };
 
   let renderResult = () =>
     switch testState {
-    | Untested => null
+    | Untested => nothing
 
     | Running(result) =>
       <Vrroom.Fragment>

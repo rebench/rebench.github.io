@@ -1,5 +1,5 @@
 open! Rebase;
-open! Vrroom.Helpers;
+open! Vrroom;
 
 module SyntaxChecker = Debounce.Make({
   type input = string;
@@ -12,7 +12,7 @@ module SyntaxChecker = Debounce.Make({
 });
 
 let component = ReasonReact.statelessComponent("SetupBlock");
-let make = (~code, ~onChange, _children) => {
+let make = (~code, ~onChange, _:childless) => {
   ...component,
 
   render: _self =>

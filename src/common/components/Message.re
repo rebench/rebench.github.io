@@ -1,8 +1,8 @@
 open! Rebase;
-open Vrroom.Helpers;
+open Vrroom;
 
 let component = ReasonReact.statelessComponent("Error");
-let make = (~kind, ~message, _children) => {
+let make = (~kind, ~message, _:childless) => {
   ...component,
 
   render: _self =>

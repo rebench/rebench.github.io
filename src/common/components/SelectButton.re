@@ -1,6 +1,5 @@
 open Rebase;
-open Vrroom.Helpers;
-module Control = Vrroom.Control;
+open Vrroom;
 module Styles = SelectButtonStyles;
 
 module type Config = {
@@ -30,7 +29,7 @@ module Make(Config: Config) = {
               ~renderButtonLabel  = item => item.label |> text,
               ~renderItem         = item => item.label |> text,
               ~onSelect,
-              _) => {
+              _:childless) => {
     ...component,
 
     initialState: () => {

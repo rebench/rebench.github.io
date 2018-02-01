@@ -1,8 +1,7 @@
 let _assoc = List.assoc;
 let _remove_assoc = List.remove_assoc;
 open!  Rebase;
-open!  Vrroom.Helpers;
-module Control = Vrroom.Control;
+open!  Vrroom;
 module Styles = AppStyles;
 
 type state = {
@@ -22,7 +21,7 @@ let component = ReasonReact.reducerComponent("App");
 let make = (~data: Store.state(Store.data),
             ~url,
             ~updateStore,
-            _children) => {
+            _:childless) => {
   ...component,
 
   initialState: () => {
