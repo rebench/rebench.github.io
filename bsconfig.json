@@ -7,7 +7,8 @@
     "@glennsl/rebase",
     "bs-json",
     "vrroom",
-    "typed-glamor"
+    "typed-glamor",
+    "bs-refmt"
   ],
   "refmt": 3,
   "sources": [{

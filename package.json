@@ -20,6 +20,7 @@
     "acorn": "^5.3.0",
     "benchmark": "^2.1.4",
     "bs-json": "^1.0.1",
+    "bs-refmt": "github:glennsl/bs-refmt",
     "codemirror": "^5.34.0",
     "file-loader": "^1.1.6",
     "lz-string": "^1.4.4",
