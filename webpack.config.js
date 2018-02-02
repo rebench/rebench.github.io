@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    app: './lib/js/src/index.js',
+    app: './src/index.bs.js',
     worker: './src/worker.js'
   },
 
@@ -13,7 +13,7 @@ module.exports = {
 
   module: {
     loaders: [{
-      test: /\.(png|jpg|gif|html|css)$/,
+      test: /\.(png|jpg|gif|html|css)$|stdlibBundle.js$/,
       loader: 'file-loader?name=[name].[ext]'
     }],
   },

@@ -99,10 +99,10 @@ let checkSetup = code =>
   code |> Refmt.parseRE
        |> fun | Ok(ast) =>
                 ast |> Refmt.printML
-                    |> BS.compile
-                    |> (fun | Ok((code, None))           => Ok(code)
-                            | Ok((code, Some(warnings))) => Warning(code, warnings)
-                            | Error(message)             => Error(message, []))
+                    |> BsBox.compile
+                    |> (fun | Ok({ code, warnings: None })           => Ok(code)
+                            | Ok({ code, warnings: Some(warnings) }) => Warning(code, warnings)
+                            | Error({ message })                     => Error(message, []))
               | Error(e) =>
                 e |> SyntaxError.fromRefmt
                   |> e => Error(e.message, [e |> SyntaxError.toMark]);
@@ -115,9 +115,10 @@ let compileTest = (setup, test) =>
             |> Refmt.parseRE
             |> Result.map(Refmt.printML)
             |> Result.map2(Fn.id, e => e##message)
-            |> Result.flatMap(BS.compile)
-            |> (fun | Ok((code, None))           => Ok(code)
-                    | Ok((code, Some(warnings))) => Warning(code, warnings)
-                    | Error(message)             => Error(message, [])));
-
-
+            |> Result.flatMap(code =>
+                 BsBox.compile(code)
+                 |> (fun | Js.Result.Ok(v)          => Js.Result.Ok(v)
+                         | Error({ BsBox.message }) => Error(message)))
+            |> (fun | Ok({ code, warnings: None })           => Ok(code)
+                    | Ok({ code, warnings: Some(warnings) }) => Warning(code, warnings)
+                    | Error(message)                         => Error(message, [])));

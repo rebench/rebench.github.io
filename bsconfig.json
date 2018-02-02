@@ -2,13 +2,19 @@
   "name": "rebench",
   "reason": {"react-jsx" : 2},
   "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
   "bs-dependencies": [
     "reason-react",
     "@glennsl/rebase",
     "bs-json",
     "vrroom",
     "typed-glamor",
-    "bs-refmt"
+    "bs-refmt",
+    "bs-in-a-box"
   ],
   "refmt": 3,
   "sources": [{

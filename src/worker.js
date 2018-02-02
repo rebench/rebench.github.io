@@ -1,4 +1,5 @@
-importScripts('../static/stdlibBundle.js');
+require('../node_modules/bs-in-a-box/vendor/stdlibBundle.js');
+importScripts('stdlibBundle.js');
 
 const Benchmark = require('benchmark');
 
