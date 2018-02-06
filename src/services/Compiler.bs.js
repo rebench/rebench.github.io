@@ -6,25 +6,20 @@ var Refmt        = require("bs-refmt/src/Refmt.bs.js");
 var Acorn        = require("acorn");
 var Js_exn       = require("bs-platform/lib/js/js_exn.js");
 var Rebase       = require("@glennsl/rebase/src/Rebase.bs.js");
-var Reason       = require("reason");
 var Template     = require("./Template.bs.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 
 function fromRefmt(e) {
   return /* record */[
-          /* message */e.message,
-          /* range */Rebase.Option[/* map */0]((function ($$location) {
-                  return /* record */[
-                          /* from : record */[
-                            /* line */$$location.startLine - 2 | 0,
-                            /* column */$$location.startLineStartChar - 1 | 0
-                          ],
-                          /* to_ : record */[
-                            /* line */$$location.endLine - 2 | 0,
-                            /* column */$$location.endLineEndChar
-                          ]
-                        ];
-                }), Js_primitive.null_undefined_to_opt(e.location))
+          /* message */e[/* message */0],
+          /* from : record */[
+            /* line */e[/* from */1][/* line */0] - 2 | 0,
+            /* column */e[/* from */1][/* column */1] - 1 | 0
+          ],
+          /* until : record */[
+            /* line */e[/* until */2][/* line */0] - 2 | 0,
+            /* column */e[/* until */2][/* column */1]
+          ]
         ];
 }
 
@@ -32,39 +27,27 @@ function fromAcorn(e) {
   var loc = e.loc;
   return /* record */[
           /* message */Rebase.Option[/* getOrRaise */17](Js_primitive.undefined_to_opt(e.message)),
-          /* range : Some */[/* record */[
-              /* from : record */[
-                /* line */loc.line - 1 | 0,
-                /* column */loc.column
-              ],
-              /* to_ : record */[
-                /* line */loc.line - 1 | 0,
-                /* column */loc.column + 1 | 0
-              ]
-            ]]
+          /* from : record */[
+            /* line */loc.line - 1 | 0,
+            /* column */loc.column
+          ],
+          /* until : record */[
+            /* line */loc.line - 1 | 0,
+            /* column */loc.column + 1 | 0
+          ]
         ];
 }
 
 function toMark(error) {
   return {
-          from: Rebase.Option[/* mapOr */18]((function (range) {
-                  return {
-                          line: range[/* from */0][/* line */0],
-                          ch: range[/* from */0][/* column */1]
-                        };
-                }), {
-                line: 0,
-                ch: 0
-              }, error[/* range */1]),
-          to: Rebase.Option[/* mapOr */18]((function (range) {
-                  return {
-                          line: range[/* to_ */1][/* line */0],
-                          ch: range[/* to_ */1][/* column */1]
-                        };
-                }), {
-                line: 0,
-                ch: 1
-              }, error[/* range */1]),
+          from: {
+            line: error[/* from */1][/* line */0],
+            ch: error[/* from */1][/* column */1]
+          },
+          to: {
+            line: error[/* until */2][/* line */0],
+            ch: error[/* until */2][/* column */1]
+          },
           options: {
             className: "syntax-error",
             title: error[/* message */0]
@@ -85,9 +68,9 @@ function _assemble(setup, code) {
 function _check(language, code) {
   if (language !== 17247) {
     if (language >= 18355) {
-      return Rebase.Result[/* map2 */1]((function (ast) {
-                    return Reason.printRE(ast);
-                  }), fromRefmt, Refmt.parseRE(Template.apply(language, code)));
+      return Rebase.Result[/* map2 */1](Refmt.printRE, (function (param) {
+                    return fromRefmt(param[1]);
+                  }), Refmt.parseRE(Template.apply(language, code)));
     } else {
       var exit = 0;
       var val;
@@ -110,16 +93,16 @@ function _check(language, code) {
       
     }
   } else {
-    return Rebase.Result[/* map2 */1]((function (ast) {
-                  return Reason.printRE(ast);
-                }), fromRefmt, Refmt.parseML(Template.apply(language, code)));
+    return Rebase.Result[/* map2 */1](Refmt.printRE, (function (param) {
+                  return fromRefmt(param[1]);
+                }), Refmt.parseML(Template.apply(language, code)));
   }
 }
 
 function checkSetup(code) {
   var param = Refmt.parseRE(code);
   if (param.tag) {
-    var e = fromRefmt(param[0]);
+    var e = fromRefmt(param[0][1]);
     return /* Error */Block.__(2, [
               e[/* message */0],
               /* :: */[
@@ -128,23 +111,23 @@ function checkSetup(code) {
               ]
             ]);
   } else {
-    var param$1 = BsBox.compile(Reason.printML(param[0]));
+    var param$1 = BsBox.compile(Refmt.printML(param[0]));
     if (param$1.tag) {
       return /* Error */Block.__(2, [
-                param$1[0][/* message */0],
+                param$1[0][1][/* message */0],
                 /* [] */0
               ]);
     } else {
       var match = param$1[0];
-      var match$1 = match[/* warnings */1];
+      var warnings = match[/* warnings */1];
       var code$1 = match[/* code */0];
-      if (match$1) {
+      if (warnings === "") {
+        return /* Ok */Block.__(0, [code$1]);
+      } else {
         return /* Warning */Block.__(1, [
                   code$1,
-                  match$1[0]
+                  warnings
                 ]);
-      } else {
-        return /* Ok */Block.__(0, [code$1]);
       }
     }
   }
@@ -162,34 +145,23 @@ function compileTest(setup, test) {
               ]
             ]);
   } else {
-    var param$1 = Rebase.Result[/* flatMap */6]((function (code) {
-            var param = BsBox.compile(code);
-            if (param.tag) {
-              return /* Error */Block.__(1, [param[0][/* message */0]]);
-            } else {
-              return /* Ok */Block.__(0, [param[0]]);
-            }
-          }), Rebase.Result[/* map2 */1](Rebase.Fn[/* id */0], (function (e) {
-                return e.message;
-              }), Rebase.Result[/* map */0]((function (prim) {
-                    return Reason.printML(prim);
-                  }), Refmt.parseRE(_assemble(setup, param[0])))));
+    var param$1 = Rebase.Result[/* flatMap */6](BsBox.compile, Rebase.Result[/* map */0](Rebase.Fn[/* id */0], Rebase.Result[/* map */0](Refmt.printML, Refmt.parseRE(_assemble(setup, param[0])))));
     if (param$1.tag) {
       return /* Error */Block.__(2, [
-                param$1[0],
+                param$1[0][1][/* message */0],
                 /* [] */0
               ]);
     } else {
       var match = param$1[0];
-      var match$1 = match[/* warnings */1];
+      var warnings = match[/* warnings */1];
       var code = match[/* code */0];
-      if (match$1) {
+      if (warnings === "") {
+        return /* Ok */Block.__(0, [code]);
+      } else {
         return /* Warning */Block.__(1, [
                   code,
-                  match$1[0]
+                  warnings
                 ]);
-      } else {
-        return /* Ok */Block.__(0, [code]);
       }
     }
   }

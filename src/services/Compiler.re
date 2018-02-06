@@ -10,56 +10,47 @@ module SyntaxError = {
   type location = {
     line: int,
     column: int
-  };
-
-  type range = {
-    from: location,
-    to_: location
-  };
-
-  type t = {
+  }
+  and t = {
     message: string,
-    range: option(range)
+    from: location,
+    until: location
   };
 
   let fromRefmt: Refmt.error => t = e => {
-    message: e##message,
-    range: e##location |> Js.toOption |> Option.map(location => {
-      from: {
-        line: location##startLine - 2,
-        column: location##startLineStartChar - 1
-      },
-      to_: {
-        line: location##endLine - 2,
-        column: location##endLineEndChar
-      }
-    })
+    message: e.message,
+    from: {
+      line: e.from.line - 2,
+      column: e.from.column - 1
+    },
+    until: {
+      line: e.until.line - 2,
+      column: e.until.column
+    }
   };
 
   [@bs.get] external loc : Js.Exn.t => {. "line": int, "column": int } = "";
-  let fromAcorn = e => {
+  let fromAcorn = e => loc(e) |> loc => {
     message: e |> Js.Exn.message |> Option.getOrRaise,
-    range: loc(e) |> loc => Some({
-      from: {
-        line: loc##line - 1,
-        column: loc##column
-      },
-      to_: {
-        line: loc##line - 1,
-        column: loc##column + 1
-      }
-    })
+    from: {
+      line: loc##line - 1,
+      column: loc##column
+    },
+    until: {
+      line: loc##line - 1,
+      column: loc##column + 1
+    }
   };
 
   let toMark = (error: t) => {
-    "from": error.range |> Option.mapOr(range => {
-      "line": range.from.line,
-      "ch": range.from.column
-    }, { "line": 0, "ch": 0 }),
-    "to": error.range |> Option.mapOr(range => {
-      "line": range.to_.line,
-      "ch": range.to_.column
-    }, { "line": 0, "ch": 1 }),
+    "from": {
+      "line": error.from.line,
+      "ch": error.from.column
+    },
+    "to": {
+      "line": error.until.line,
+      "ch": error.until.column
+    },
     "options": {
       "className": "syntax-error",
       "title": error.message
@@ -77,12 +68,16 @@ let _check = (language, code) =>
   | `RE => 
     Template.apply(language, code)
       |> Refmt.parseRE
-      |> Result.map2(ast => ast |> Refmt.printRE, e => SyntaxError.fromRefmt(e));
+      |> Result.map2(
+          ast                   => ast |> Refmt.printRE,
+          (`RefmtParseError(e)) => SyntaxError.fromRefmt(e));
 
   | `ML => 
     Template.apply(language, code)
       |> Refmt.parseML
-      |> Result.map2(ast => ast |> Refmt.printRE, e => SyntaxError.fromRefmt(e));
+      |> Result.map2(
+          ast                   => ast |> Refmt.printRE,
+          (`RefmtParseError(e)) => SyntaxError.fromRefmt(e));
 
   | `JS =>
     switch (Acorn.parse(code)) {
@@ -100,10 +95,10 @@ let checkSetup = code =>
        |> fun | Ok(ast) =>
                 ast |> Refmt.printML
                     |> BsBox.compile
-                    |> (fun | Ok({ code, warnings: None })           => Ok(code)
-                            | Ok({ code, warnings: Some(warnings) }) => Warning(code, warnings)
-                            | Error({ message })                     => Error(message, []))
-              | Error(e) =>
+                    |> (fun | Ok({ code, warnings }) when warnings == ""  => Ok(code)
+                            | Ok({ code, warnings })                      => Warning(code, warnings)
+                            | Error(`BsCompileError({ BsBox.message }))   => Error(message, []))
+              | Error(`RefmtParseError(e)) =>
                 e |> SyntaxError.fromRefmt
                   |> e => Error(e.message, [e |> SyntaxError.toMark]);
 
@@ -114,11 +109,9 @@ let compileTest = (setup, test) =>
             _assemble(setup, code)
             |> Refmt.parseRE
             |> Result.map(Refmt.printML)
-            |> Result.map2(Fn.id, e => e##message)
-            |> Result.flatMap(code =>
-                 BsBox.compile(code)
-                 |> (fun | Js.Result.Ok(v)          => Js.Result.Ok(v)
-                         | Error({ BsBox.message }) => Error(message)))
-            |> (fun | Ok({ code, warnings: None })           => Ok(code)
-                    | Ok({ code, warnings: Some(warnings) }) => Warning(code, warnings)
-                    | Error(message)                         => Error(message, [])));
+            |> Result.map(Fn.id)
+            |> Result.flatMap(BsBox.compile)
+            |> (fun | Ok({ code, warnings }) when warnings == ""  => Ok(code)
+                    | Ok({ code, warnings })                      => Warning(code, warnings)
+                    | Error(`RefmtParseError({ message }))
+                    | Error(`BsCompileError({ message }))         => Error(message, [])));
