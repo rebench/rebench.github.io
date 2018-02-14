@@ -1,12 +1,12 @@
 'use strict';
 
-var Block        = require("bs-platform/lib/js/block.js");
-var BsBox        = require("bs-in-a-box/src/BsBox.bs.js");
-var Refmt        = require("bs-refmt/src/Refmt.bs.js");
-var Acorn        = require("acorn");
-var Js_exn       = require("bs-platform/lib/js/js_exn.js");
-var Rebase       = require("@glennsl/rebase/src/Rebase.bs.js");
-var Template     = require("./Template.bs.js");
+var Block = require("bs-platform/lib/js/block.js");
+var BsBox = require("bs-in-a-box/src/BsBox.bs.js");
+var Refmt = require("bs-refmt/src/Refmt.bs.js");
+var Acorn = require("acorn");
+var Js_exn = require("bs-platform/lib/js/js_exn.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
+var Template = require("./Template.bs.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 
 function fromRefmt(e) {
@@ -87,7 +87,6 @@ function _check(language, code) {
         }
       }
       if (exit === 1) {
-        ((0));
         return /* Ok */Block.__(0, [Template.apply(/* JS */16585, code)]);
       }
       
@@ -168,8 +167,8 @@ function compileTest(setup, test) {
 }
 
 exports.$$SyntaxError = $$SyntaxError;
-exports._assemble     = _assemble;
-exports._check        = _check;
-exports.checkSetup    = checkSetup;
-exports.compileTest   = compileTest;
+exports._assemble = _assemble;
+exports._check = _check;
+exports.checkSetup = checkSetup;
+exports.compileTest = compileTest;
 /* BsBox Not a pure module */

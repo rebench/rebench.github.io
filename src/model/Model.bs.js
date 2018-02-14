@@ -1,8 +1,8 @@
 'use strict';
 
-var Test        = require("./Test.bs.js");
-var Curry       = require("bs-platform/lib/js/curry.js");
-var Rebase      = require("@glennsl/rebase/src/Rebase.bs.js");
+var Test = require("./Test.bs.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
 var Json_decode = require("bs-json/src/Json_decode.js");
 var Json_encode = require("bs-json/src/Json_encode.js");
 

@@ -1,9 +1,9 @@
 'use strict';
 
-var Curry            = require("bs-platform/lib/js/curry.js");
-var Rebase           = require("@glennsl/rebase/src/Rebase.bs.js");
-var ReasonReact      = require("reason-react/src/ReasonReact.js");
-var Js_undefined     = require("bs-platform/lib/js/js_undefined.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
+var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Js_undefined = require("bs-platform/lib/js/js_undefined.js");
 var ReactCodemirror2 = require("react-codemirror2");
 
 
@@ -26,19 +26,19 @@ function setMarks$1(prim, prim$1) {
 
 function make(style, value, defaultValue, editorDidMount, onChange, options, children) {
   return ReasonReact.wrapJsForReason(ReactCodemirror2.Controlled, {
-              style: Js_undefined.from_opt(style),
-              value: Js_undefined.from_opt(value),
-              defaultValue: Js_undefined.from_opt(defaultValue),
-              editorDidMount: Js_undefined.from_opt(editorDidMount),
+              style: Js_undefined.fromOption(style),
+              value: Js_undefined.fromOption(value),
+              defaultValue: Js_undefined.fromOption(defaultValue),
+              editorDidMount: Js_undefined.fromOption(editorDidMount),
               onBeforeChange: Rebase.Option[/* mapOr */18]((function (f, _, _$1, value) {
                       return Curry._1(f, value);
                     }), (function (_, _$1, _$2) {
                       return /* () */0;
                     }), onChange),
-              options: Js_undefined.from_opt(options)
+              options: Js_undefined.fromOption(options)
             }, children);
 }
 
 exports.setMarks = setMarks$1;
-exports.make     = make;
+exports.make = make;
 /*  Not a pure module */

@@ -1,10 +1,10 @@
 'use strict';
 
-var Curry       = require("bs-platform/lib/js/curry.js");
-var Block_      = require("../common/components/Block_.bs.js");
-var Editor      = require("../common/components/Editor.bs.js");
-var Compiler    = require("../services/Compiler.bs.js");
-var Debounce    = require("../common/services/Debounce.bs.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Block_ = require("../common/components/Block_.bs.js");
+var Editor = require("../common/components/Editor.bs.js");
+var Compiler = require("../services/Compiler.bs.js");
+var Debounce = require("../common/services/Debounce.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 
 function compute(code) {
@@ -43,6 +43,6 @@ function make(code, onChange, _) {
 }
 
 exports.SyntaxChecker = SyntaxChecker;
-exports.component     = component;
-exports.make          = make;
+exports.component = component;
+exports.make = make;
 /* SyntaxChecker Not a pure module */

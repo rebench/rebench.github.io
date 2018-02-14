@@ -1,13 +1,13 @@
 'use strict';
 
-var Block              = require("bs-platform/lib/js/block.js");
-var Curry              = require("bs-platform/lib/js/curry.js");
-var React              = require("react");
-var Rebase             = require("@glennsl/rebase/src/Rebase.bs.js");
-var Vrroom             = require("vrroom/src/Vrroom.bs.js");
-var ReasonReact        = require("reason-react/src/ReasonReact.js");
-var TypedGlamor        = require("typed-glamor/src/TypedGlamor.bs.js");
-var OnClickOutside     = require("../services/OnClickOutside.bs.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var React = require("react");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
+var Vrroom = require("vrroom/src/Vrroom.bs.js");
+var ReasonReact = require("reason-react/src/ReasonReact.js");
+var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
+var OnClickOutside = require("../services/OnClickOutside.bs.js");
 var SelectButtonStyles = require("./SelectButtonStyles.bs.js");
 
 function Make() {
@@ -77,5 +77,5 @@ function Make() {
 var Styles = 0;
 
 exports.Styles = Styles;
-exports.Make   = Make;
+exports.Make = Make;
 /* react Not a pure module */

@@ -1,8 +1,8 @@
 'use strict';
 
-var Block       = require("bs-platform/lib/js/block.js");
-var Curry       = require("bs-platform/lib/js/curry.js");
-var Rebase      = require("@glennsl/rebase/src/Rebase.bs.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 
 function Make(Config) {

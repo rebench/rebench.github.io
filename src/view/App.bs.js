@@ -1,22 +1,22 @@
 'use strict';
 
-var List           = require("bs-platform/lib/js/list.js");
-var Test           = require("../model/Test.bs.js");
-var Block          = require("bs-platform/lib/js/block.js");
-var Curry          = require("bs-platform/lib/js/curry.js");
-var React          = require("react");
-var Button         = require("../common/components/Button.bs.js");
-var Rebase         = require("@glennsl/rebase/src/Rebase.bs.js");
-var Vrroom         = require("vrroom/src/Vrroom.bs.js");
-var Worker         = require("../common/ffi/Worker.bs.js");
-var Toolbar        = require("./Toolbar.bs.js");
-var Compiler       = require("../services/Compiler.bs.js");
-var AppStyles      = require("./AppStyles.bs.js");
-var HelpModal      = require("./HelpModal.bs.js");
-var TestBlock      = require("./TestBlock.bs.js");
-var SetupBlock     = require("./SetupBlock.bs.js");
-var ReasonReact    = require("reason-react/src/ReasonReact.js");
-var TypedGlamor    = require("typed-glamor/src/TypedGlamor.bs.js");
+var List = require("bs-platform/lib/js/list.js");
+var Test = require("../model/Test.bs.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var React = require("react");
+var Button = require("../common/components/Button.bs.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
+var Vrroom = require("vrroom/src/Vrroom.bs.js");
+var Worker = require("../common/ffi/Worker.bs.js");
+var Toolbar = require("./Toolbar.bs.js");
+var Compiler = require("../services/Compiler.bs.js");
+var AppStyles = require("./AppStyles.bs.js");
+var HelpModal = require("./HelpModal.bs.js");
+var TestBlock = require("./TestBlock.bs.js");
+var SetupBlock = require("./SetupBlock.bs.js");
+var ReasonReact = require("reason-react/src/ReasonReact.js");
+var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 var WidthContainer = require("./WidthContainer.bs.js");
 
 var component = ReasonReact.reducerComponent("App");
@@ -230,9 +230,9 @@ var _remove_assoc = List.remove_assoc;
 
 var Styles = 0;
 
-exports._assoc        = _assoc;
+exports._assoc = _assoc;
 exports._remove_assoc = _remove_assoc;
-exports.Styles        = Styles;
-exports.component     = component;
-exports.make          = make;
+exports.Styles = Styles;
+exports.component = component;
+exports.make = make;
 /* component Not a pure module */

@@ -1,7 +1,7 @@
 'use strict';
 
-var Curry      = require("bs-platform/lib/js/curry.js");
-var Rebase     = require("@glennsl/rebase/src/Rebase.bs.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 
 var partial_arg = Rebase.List[/* reduce */3];

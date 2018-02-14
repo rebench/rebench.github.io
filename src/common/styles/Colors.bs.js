@@ -26,16 +26,16 @@ var ocaml = TypedGlamor.hex(13138471);
 
 var javascript = TypedGlamor.hex(16244760);
 
-exports.background       = background;
-exports.darkBackground   = darkBackground;
-exports.panel            = panel;
-exports.panelDark        = panelDark;
+exports.background = background;
+exports.darkBackground = darkBackground;
+exports.panel = panel;
+exports.panelDark = panelDark;
 exports.highlightOverlay = highlightOverlay;
-exports.text             = text;
-exports.green            = green;
-exports.yellow           = yellow;
-exports.red              = red;
-exports.reason           = reason;
-exports.ocaml            = ocaml;
-exports.javascript       = javascript;
+exports.text = text;
+exports.green = green;
+exports.yellow = yellow;
+exports.red = red;
+exports.reason = reason;
+exports.ocaml = ocaml;
+exports.javascript = javascript;
 /* background Not a pure module */

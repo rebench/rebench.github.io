@@ -1,6 +1,6 @@
 'use strict';
 
-var Curry  = require("bs-platform/lib/js/curry.js");
+var Curry = require("bs-platform/lib/js/curry.js");
 var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
 
 function makeCounter(init) {
@@ -35,7 +35,7 @@ function debounce(f, wait) {
     });
 }
 
-exports.makeCounter  = makeCounter;
+exports.makeCounter = makeCounter;
 exports.formatNumber = formatNumber;
-exports.debounce     = debounce;
+exports.debounce = debounce;
 /* formatNumber Not a pure module */

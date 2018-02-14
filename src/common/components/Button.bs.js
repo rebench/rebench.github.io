@@ -1,11 +1,11 @@
 'use strict';
 
-var Icon         = require("./Icon.bs.js");
-var Curry        = require("bs-platform/lib/js/curry.js");
-var React        = require("react");
-var Vrroom       = require("vrroom/src/Vrroom.bs.js");
-var ReasonReact  = require("reason-react/src/ReasonReact.js");
-var TypedGlamor  = require("typed-glamor/src/TypedGlamor.bs.js");
+var Icon = require("./Icon.bs.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var React = require("react");
+var Vrroom = require("vrroom/src/Vrroom.bs.js");
+var ReasonReact = require("reason-react/src/ReasonReact.js");
+var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 var ButtonStyles = require("./ButtonStyles.bs.js");
 
 function makeIcon(param) {
@@ -44,8 +44,8 @@ function make(label, icon, $staropt$star, $staropt$star$1, $staropt$star$2, onCl
 
 var Styles = 0;
 
-exports.Styles    = Styles;
-exports.makeIcon  = makeIcon;
+exports.Styles = Styles;
+exports.makeIcon = makeIcon;
 exports.component = component;
-exports.make      = make;
+exports.make = make;
 /* component Not a pure module */

@@ -1,11 +1,11 @@
 'use strict';
 
-var Json        = require("bs-json/src/Json.js");
-var Test        = require("../model/Test.bs.js");
-var Block       = require("bs-platform/lib/js/block.js");
-var Curry       = require("bs-platform/lib/js/curry.js");
-var Model       = require("../model/Model.bs.js");
-var Rebase      = require("@glennsl/rebase/src/Rebase.bs.js");
+var Json = require("bs-json/src/Json.js");
+var Test = require("../model/Test.bs.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Model = require("../model/Model.bs.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
 var Persistence = require("../common/services/Persistence.bs.js");
 
 function _nextId(data) {
@@ -229,12 +229,12 @@ var component = include[4];
 
 var make = include[5];
 
-exports._nextId            = _nextId;
+exports._nextId = _nextId;
 exports._recalculateScores = _recalculateScores;
-exports._prefix            = _prefix;
-exports._generateUrl       = _generateUrl;
-exports._retrieve          = _retrieve;
-exports._persist           = _persist;
-exports.component          = component;
-exports.make               = make;
+exports._prefix = _prefix;
+exports._generateUrl = _generateUrl;
+exports._retrieve = _retrieve;
+exports._persist = _persist;
+exports.component = component;
+exports.make = make;
 /* include Not a pure module */

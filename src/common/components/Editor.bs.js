@@ -1,12 +1,12 @@
 'use strict';
 
-var Curry        = require("bs-platform/lib/js/curry.js");
-var React        = require("react");
-var Rebase       = require("@glennsl/rebase/src/Rebase.bs.js");
-var CodeMirror   = require("../ffi/components/CodeMirror.bs.js");
-var Js_boolean   = require("bs-platform/lib/js/js_boolean.js");
-var ReasonReact  = require("reason-react/src/ReasonReact.js");
-var TypedGlamor  = require("typed-glamor/src/TypedGlamor.bs.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var React = require("react");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
+var CodeMirror = require("../ffi/components/CodeMirror.bs.js");
+var Js_boolean = require("bs-platform/lib/js/js_boolean.js");
+var ReasonReact = require("reason-react/src/ReasonReact.js");
+var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 var EditorStyles = require("./EditorStyles.bs.js");
 
 ((require('codemirror/lib/codemirror.css')));
@@ -74,7 +74,7 @@ function make(value, lang, defaultValue, $staropt$star, $staropt$star$1, inputRe
 }
 
 exports._langToMode = _langToMode;
-exports.setMarks    = setMarks;
-exports.component   = component;
-exports.make        = make;
+exports.setMarks = setMarks;
+exports.component = component;
+exports.make = make;
 /*  Not a pure module */

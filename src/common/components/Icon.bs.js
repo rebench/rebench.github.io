@@ -1,6 +1,6 @@
 'use strict';
 
-var React       = require("react");
+var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 
 var component = ReasonReact.statelessComponent("Icon");
@@ -16,5 +16,5 @@ function make(name, _) {
 }
 
 exports.component = component;
-exports.make      = make;
+exports.make = make;
 /* component Not a pure module */

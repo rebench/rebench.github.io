@@ -29,7 +29,7 @@ function make(children) {
   return newrecord;
 }
 
-exports.style     = style;
+exports.style = style;
 exports.component = component;
-exports.make      = make;
+exports.make = make;
 /* style Not a pure module */

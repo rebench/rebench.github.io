@@ -1,11 +1,11 @@
 'use strict';
 
-var React          = require("react");
-var Button         = require("../common/components/Button.bs.js");
-var ReasonReact    = require("reason-react/src/ReasonReact.js");
-var ShareButton    = require("../common/components/ShareButton.bs.js");
-var TypedGlamor    = require("typed-glamor/src/TypedGlamor.bs.js");
-var ToolbarStyles  = require("./ToolbarStyles.bs.js");
+var React = require("react");
+var Button = require("../common/components/Button.bs.js");
+var ReasonReact = require("reason-react/src/ReasonReact.js");
+var ShareButton = require("../common/components/ShareButton.bs.js");
+var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
+var ToolbarStyles = require("./ToolbarStyles.bs.js");
 var WidthContainer = require("./WidthContainer.bs.js");
 
 var component = ReasonReact.statelessComponent("Toolbar");
@@ -37,7 +37,7 @@ function make(onRunAll, onAdd, onClear, onHelp, url, _) {
 
 var Styles = 0;
 
-exports.Styles    = Styles;
+exports.Styles = Styles;
 exports.component = component;
-exports.make      = make;
+exports.make = make;
 /* component Not a pure module */

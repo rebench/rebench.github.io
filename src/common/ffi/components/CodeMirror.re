@@ -32,12 +32,12 @@ let make =
   ReasonReact.wrapJsForReason(
     ~reactClass=codeMirror,
     ~props={
-      "style": Js.Undefined.from_opt(style),
-      "value": Js.Undefined.from_opt(value),
-      "defaultValue": Js.Undefined.from_opt(defaultValue),
-      "editorDidMount": Js.Undefined.from_opt(editorDidMount),
+      "style": Js.Undefined.fromOption(style),
+      "value": Js.Undefined.fromOption(value),
+      "defaultValue": Js.Undefined.fromOption(defaultValue),
+      "editorDidMount": Js.Undefined.fromOption(editorDidMount),
       "onBeforeChange": onChange |> Option.mapOr(f => (_, _, value) => f(value), (_, _, _) => ()),
-      "options": Js.Undefined.from_opt(options)
+      "options": Js.Undefined.fromOption(options)
     },
     children
   );

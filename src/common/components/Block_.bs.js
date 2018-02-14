@@ -1,10 +1,10 @@
 'use strict';
 
-var Block       = require("bs-platform/lib/js/block.js");
-var Curry       = require("bs-platform/lib/js/curry.js");
-var React       = require("react");
-var Vrroom      = require("vrroom/src/Vrroom.bs.js");
-var Message     = require("./Message.bs.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var React = require("react");
+var Vrroom = require("vrroom/src/Vrroom.bs.js");
+var Message = require("./Message.bs.js");
 var BlockStyles = require("./BlockStyles.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
@@ -58,6 +58,6 @@ function make(header, footer, className, error, $staropt$star, children) {
 }
 
 exports.renderHeaderContent = renderHeaderContent;
-exports.component           = component;
-exports.make                = make;
+exports.component = component;
+exports.make = make;
 /* component Not a pure module */

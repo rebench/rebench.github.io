@@ -1,6 +1,6 @@
 'use strict';
 
-var Colors      = require("../common/styles/Colors.bs.js");
+var Colors = require("../common/styles/Colors.bs.js");
 var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 
 function container(testState, language) {

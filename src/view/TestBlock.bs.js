@@ -1,21 +1,21 @@
 'use strict';
 
-var Icon            = require("../common/components/Icon.bs.js");
-var Block           = require("bs-platform/lib/js/block.js");
-var Curry           = require("bs-platform/lib/js/curry.js");
-var Utils           = require("../common/utils/Utils.bs.js");
-var React           = require("react");
-var Block_          = require("../common/components/Block_.bs.js");
-var Button          = require("../common/components/Button.bs.js");
-var Editor          = require("../common/components/Editor.bs.js");
-var Rebase          = require("@glennsl/rebase/src/Rebase.bs.js");
-var Vrroom          = require("vrroom/src/Vrroom.bs.js");
-var Compiler        = require("../services/Compiler.bs.js");
-var Debounce        = require("../common/services/Debounce.bs.js");
-var Language        = require("../model/Language.bs.js");
-var ReasonReact     = require("reason-react/src/ReasonReact.js");
-var TypedGlamor     = require("typed-glamor/src/TypedGlamor.bs.js");
-var SelectButton    = require("../common/components/SelectButton.bs.js");
+var Icon = require("../common/components/Icon.bs.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Utils = require("../common/utils/Utils.bs.js");
+var React = require("react");
+var Block_ = require("../common/components/Block_.bs.js");
+var Button = require("../common/components/Button.bs.js");
+var Editor = require("../common/components/Editor.bs.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
+var Vrroom = require("vrroom/src/Vrroom.bs.js");
+var Compiler = require("../services/Compiler.bs.js");
+var Debounce = require("../common/services/Debounce.bs.js");
+var Language = require("../model/Language.bs.js");
+var ReasonReact = require("reason-react/src/ReasonReact.js");
+var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
+var SelectButton = require("../common/components/SelectButton.bs.js");
 var TestBlockStyles = require("./TestBlockStyles.bs.js");
 
 function formatResult(param) {
@@ -239,15 +239,15 @@ function make(setup, data, testState, onChange, onRun, onRemove, onLanguageChang
 
 var Styles = 0;
 
-exports.Styles               = Styles;
-exports.formatResult         = formatResult;
-exports.formatRelativeScore  = formatRelativeScore;
-exports.getStateClass        = getStateClass;
+exports.Styles = Styles;
+exports.formatResult = formatResult;
+exports.formatRelativeScore = formatRelativeScore;
+exports.getStateClass = getStateClass;
 exports.LanguageSelectButton = LanguageSelectButton;
-exports.languageMenuItems    = languageMenuItems;
-exports.getError             = getError;
-exports.getMarks             = getMarks;
-exports.TestCompiler         = TestCompiler;
-exports.component            = component;
-exports.make                 = make;
+exports.languageMenuItems = languageMenuItems;
+exports.getError = getError;
+exports.getMarks = getMarks;
+exports.TestCompiler = TestCompiler;
+exports.component = component;
+exports.make = make;
 /* LanguageSelectButton Not a pure module */

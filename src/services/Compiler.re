@@ -83,10 +83,8 @@ let _check = (language, code) =>
     switch (Acorn.parse(code)) {
     | exception Js.Exn.Error(e) =>
       Error(SyntaxError.fromAcorn(e))
-    | _ => {
-      [%raw "0"]; /* TODO: Workaround for BS bug: https://github.com/BuckleScript/bucklescript/issues/2316 */
+    | _ =>
       Ok(Template.apply(`JS, code))
-    } 
     }
   };
 

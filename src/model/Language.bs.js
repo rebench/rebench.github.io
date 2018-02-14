@@ -25,6 +25,6 @@ function abbreviation(param) {
   }
 }
 
-exports.name         = name;
+exports.name = name;
 exports.abbreviation = abbreviation;
 /* No side effect */

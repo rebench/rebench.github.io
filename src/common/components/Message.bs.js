@@ -1,9 +1,9 @@
 'use strict';
 
-var React         = require("react");
-var Vrroom        = require("vrroom/src/Vrroom.bs.js");
-var ReasonReact   = require("reason-react/src/ReasonReact.js");
-var TypedGlamor   = require("typed-glamor/src/TypedGlamor.bs.js");
+var React = require("react");
+var Vrroom = require("vrroom/src/Vrroom.bs.js");
+var ReasonReact = require("reason-react/src/ReasonReact.js");
+var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 var MessageStyles = require("./MessageStyles.bs.js");
 
 var component = ReasonReact.statelessComponent("Error");
@@ -19,5 +19,5 @@ function make(kind, message, _) {
 }
 
 exports.component = component;
-exports.make      = make;
+exports.make = make;
 /* component Not a pure module */

@@ -1,13 +1,13 @@
 'use strict';
 
-var Block             = require("bs-platform/lib/js/block.js");
-var Curry             = require("bs-platform/lib/js/curry.js");
-var React             = require("react");
-var Button            = require("./Button.bs.js");
-var Rebase            = require("@glennsl/rebase/src/Rebase.bs.js");
-var Vrroom            = require("vrroom/src/Vrroom.bs.js");
-var ReasonReact       = require("reason-react/src/ReasonReact.js");
-var TypedGlamor       = require("typed-glamor/src/TypedGlamor.bs.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var React = require("react");
+var Button = require("./Button.bs.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
+var Vrroom = require("vrroom/src/Vrroom.bs.js");
+var ReasonReact = require("reason-react/src/ReasonReact.js");
+var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 var ShareButtonStyles = require("./ShareButtonStyles.bs.js");
 
 var component = ReasonReact.reducerComponent("ShareButton");
@@ -73,7 +73,7 @@ function make(url, _) {
 
 var Styles = 0;
 
-exports.Styles    = Styles;
+exports.Styles = Styles;
 exports.component = component;
-exports.make      = make;
+exports.make = make;
 /* component Not a pure module */

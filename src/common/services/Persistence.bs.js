@@ -1,11 +1,11 @@
 'use strict';
 
-var Block        = require("bs-platform/lib/js/block.js");
-var Curry        = require("bs-platform/lib/js/curry.js");
-var Js_exn       = require("bs-platform/lib/js/js_exn.js");
-var Rebase       = require("@glennsl/rebase/src/Rebase.bs.js");
-var LzString     = require("lz-string");
-var ReasonReact  = require("reason-react/src/ReasonReact.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Js_exn = require("bs-platform/lib/js/js_exn.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
+var LzString = require("lz-string");
+var ReasonReact = require("reason-react/src/ReasonReact.js");
 var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
 
 function Make(Config) {

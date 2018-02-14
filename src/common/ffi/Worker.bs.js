@@ -1,9 +1,9 @@
 'use strict';
 
-var $$Array    = require("bs-platform/lib/js/array.js");
-var Block      = require("bs-platform/lib/js/block.js");
-var Curry      = require("bs-platform/lib/js/curry.js");
-var Rebase     = require("@glennsl/rebase/src/Rebase.bs.js");
+var $$Array = require("bs-platform/lib/js/array.js");
+var Block = require("bs-platform/lib/js/block.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 
 function _decodeReceived(message) {
@@ -79,6 +79,6 @@ function make(onMessage) {
 var _toArray = $$Array.of_list;
 
 exports._toArray = _toArray;
-exports.Message  = Message;
-exports.make     = make;
+exports.Message = Message;
+exports.make = make;
 /* No side effect */

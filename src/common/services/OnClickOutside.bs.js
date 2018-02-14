@@ -1,7 +1,7 @@
 'use strict';
 
-var Curry       = require("bs-platform/lib/js/curry.js");
-var Rebase      = require("@glennsl/rebase/src/Rebase.bs.js");
+var Curry = require("bs-platform/lib/js/curry.js");
+var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 
 var component = ReasonReact.reducerComponent("OnClickOutside");
@@ -50,5 +50,5 @@ function make(onClick, children) {
 }
 
 exports.component = component;
-exports.make      = make;
+exports.make = make;
 /* component Not a pure module */
