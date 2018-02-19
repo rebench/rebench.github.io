@@ -3,7 +3,7 @@
 var Colors = require("../common/styles/Colors.bs.js");
 var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 
-var container = TypedGlamor.css(/* :: */[
+var container = TypedGlamor.css(/* None */0, /* :: */[
       TypedGlamor.background(Colors.panel),
       /* :: */[
         TypedGlamor.select("& > div", /* :: */[

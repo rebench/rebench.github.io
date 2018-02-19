@@ -18,7 +18,7 @@ let container ~showConfirmation = css [
     offsetTop (pct 100.);
     offsetRight (em 1.);
     background (rgba 0 0 0 1.);
-    color (hex 0xccc);
+    color (hex "ccc");
     whiteSpace nowrap;
     padding2 ~v:(em 0.4) ~h:(em 0.8);
     borderRadius (em 0.25);

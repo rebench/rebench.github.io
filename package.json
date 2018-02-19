@@ -17,24 +17,22 @@
   "license": "ISC",
   "dependencies": {
     "@glennsl/rebase": "^0.2.0",
-    "acorn": "^5.3.0",
+    "acorn": "^5.4.1",
     "benchmark": "^2.1.4",
-    "bs-in-a-box": "github:glennsl/bs-in-a-box",
-    "bs-json": "^1.0.1",
-    "bs-refmt": "github:glennsl/bs-refmt",
+    "bs-in-a-box": "github:glennsl/bs-in-a-box#b83aa97e6a78fdb7274932fa44a8d97dcd7d6d51",
+    "@glennsl/bs-json": "^1.1.2",
+    "bs-refmt": "github:glennsl/bs-refmt#032f911",
     "codemirror": "^5.34.0",
-    "file-loader": "^1.1.6",
+    "file-loader": "^1.1.7",
     "lz-string": "^1.4.4",
     "react": "^16.2.0",
     "react-codemirror2": "^4.0.0",
     "react-dom": "^16.2.0",
-    "reason": "^3.0.2",
     "reason-react": "^0.3.2",
-    "typed-glamor": "github:glennsl/typed-css/packages/glamor",
-    "vrroom": "github:glennsl/vrroom"
+    "vrroom": "github:glennsl/vrroom#691ea02"
   },
   "devDependencies": {
-    "bs-platform": "^2.1.0",
-    "webpack": "^3.8.1"
+    "bs-platform": "^2.2.1",
+    "webpack": "^3.11.0"
   }
 }

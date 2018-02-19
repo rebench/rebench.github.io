@@ -4,7 +4,7 @@ var Colors = require("../styles/Colors.bs.js");
 var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 
 function container(showConfirmation) {
-  return TypedGlamor.css(/* :: */[
+  return TypedGlamor.css(/* None */0, /* :: */[
               TypedGlamor.position(TypedGlamor.relative),
               /* :: */[
                 TypedGlamor.select("& input", /* :: */[
@@ -45,7 +45,7 @@ function container(showConfirmation) {
                                 /* :: */[
                                   TypedGlamor.background(TypedGlamor.rgba(0, 0, 0, 1)),
                                   /* :: */[
-                                    TypedGlamor.color(TypedGlamor.hex(3276)),
+                                    TypedGlamor.color(TypedGlamor.hex("ccc")),
                                     /* :: */[
                                       TypedGlamor.whiteSpace(TypedGlamor.nowrap),
                                       /* :: */[

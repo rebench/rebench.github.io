@@ -16,7 +16,7 @@ let container = css [
   ];
 
   select "& .CodeMirror .syntax-error" [
-    background (hex 0xEC5F67);
+    background (hex "EC5F67");
     color black;
   ];
 ]

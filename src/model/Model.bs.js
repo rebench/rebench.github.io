@@ -3,8 +3,8 @@
 var Test = require("./Test.bs.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Rebase = require("@glennsl/rebase/src/Rebase.bs.js");
-var Json_decode = require("bs-json/src/Json_decode.js");
-var Json_encode = require("bs-json/src/Json_encode.js");
+var Json_decode = require("@glennsl/bs-json/src/Json_decode.bs.js");
+var Json_encode = require("@glennsl/bs-json/src/Json_encode.bs.js");
 
 var id = Curry._2(Rebase.Fn[/* >> */6], Json_decode.string, (function (prim) {
         return prim;

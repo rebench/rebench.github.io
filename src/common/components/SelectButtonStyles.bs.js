@@ -4,7 +4,7 @@ var Colors = require("../styles/Colors.bs.js");
 var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 
 function container(isMenuOpen) {
-  return TypedGlamor.css(/* :: */[
+  return TypedGlamor.css(/* None */0, /* :: */[
               TypedGlamor.display(TypedGlamor.inlineBlock),
               /* :: */[
                 TypedGlamor.select("& menu", /* :: */[

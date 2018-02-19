@@ -1,6 +1,6 @@
 'use strict';
 
-var Json = require("bs-json/src/Json.js");
+var Json = require("@glennsl/bs-json/src/Json.bs.js");
 var Test = require("../model/Test.bs.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");

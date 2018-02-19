@@ -4,7 +4,7 @@ var Colors = require("../common/styles/Colors.bs.js");
 var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 
 function container(preventScroll) {
-  return TypedGlamor.css(/* :: */[
+  return TypedGlamor.css(/* None */0, /* :: */[
               TypedGlamor.background(Colors.background),
               /* :: */[
                 TypedGlamor.height(TypedGlamor.vh(100)),

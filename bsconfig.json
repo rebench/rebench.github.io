@@ -10,7 +10,7 @@
   "bs-dependencies": [
     "reason-react",
     "@glennsl/rebase",
-    "bs-json",
+    "@glennsl/bs-json",
     "vrroom",
     "typed-glamor",
     "bs-refmt",

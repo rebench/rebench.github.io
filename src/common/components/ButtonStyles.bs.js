@@ -4,7 +4,7 @@ var Colors = require("../styles/Colors.bs.js");
 var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 
 function root(kind, alignIcon) {
-  return TypedGlamor.css(/* :: */[
+  return TypedGlamor.css(/* None */0, /* :: */[
               TypedGlamor.color(Colors.text),
               /* :: */[
                 TypedGlamor.padding(TypedGlamor.em(1)),

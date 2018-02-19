@@ -4,7 +4,7 @@ var Colors = require("../styles/Colors.bs.js");
 var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 
 function container(isCollapsible, isCollapsed) {
-  return TypedGlamor.css(/* :: */[
+  return TypedGlamor.css(/* None */0, /* :: */[
               TypedGlamor.label("block"),
               /* :: */[
                 TypedGlamor.background(Colors.panel),

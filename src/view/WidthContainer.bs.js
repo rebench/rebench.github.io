@@ -3,7 +3,7 @@
 var ReasonReact = require("reason-react/src/ReasonReact.js");
 var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 
-var style = TypedGlamor.css(/* :: */[
+var style = TypedGlamor.css(/* None */0, /* :: */[
       TypedGlamor.width(TypedGlamor.pct(100)),
       /* :: */[
         TypedGlamor.maxWidth(TypedGlamor.px(1012)),

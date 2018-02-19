@@ -2,7 +2,7 @@
 
 var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
 
-var container = TypedGlamor.css(/* :: */[
+var container = TypedGlamor.css(/* None */0, /* :: */[
       TypedGlamor.select("& .CodeMirror", /* :: */[
             TypedGlamor.height(TypedGlamor.auto),
             /* :: */[
@@ -36,7 +36,7 @@ var container = TypedGlamor.css(/* :: */[
           ]),
       /* :: */[
         TypedGlamor.select("& .CodeMirror .syntax-error", /* :: */[
-              TypedGlamor.background(TypedGlamor.hex(15490919)),
+              TypedGlamor.background(TypedGlamor.hex("EC5F67")),
               /* :: */[
                 TypedGlamor.color(TypedGlamor.black),
                 /* [] */0
