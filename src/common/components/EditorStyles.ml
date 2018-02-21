@@ -9,7 +9,8 @@ let container = css [
       "Roboto Mono";
       "Droid Sans Mono";
       "Liberation Mono";
-      "Menlo,Courier";
+      "Menlo";
+      "Courier";
       monospace
     ];
     fontSize (px 14);
