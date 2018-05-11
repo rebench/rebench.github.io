@@ -39,58 +39,70 @@ function Make(Config) {
   };
   var component = ReasonReact.reducerComponent("Persistence");
   var make = function (renderChildren) {
-    var newrecord = component.slice();
-    newrecord[/* render */9] = (function (param) {
-        var state = param[/* state */2];
-        var url = _generateUrl(state[/* current */0]);
-        if (url !== window.location.href) {
-          window.history.replaceState((null), "", url);
-        }
-        return Curry._3(renderChildren, state, url, param[/* send */4]);
-      });
-    newrecord[/* initialState */10] = (function () {
-        return /* record */[
-                /* current */Rebase.Option[/* getOr */16](Curry._1(Config[/* default */1], /* () */0), _retrieve(/* () */0)),
-                /* undo : None */0
-              ];
-      });
-    newrecord[/* reducer */12] = (function (action, state) {
-        var match = Curry._2(Config[/* reducer */2], state[/* current */0], action);
-        var variant = match[0];
-        if (variant !== 737434270) {
-          if (variant >= 999946793) {
-            return /* UpdateWithSideEffects */Block.__(3, [
-                      /* record */[
-                        /* current */match[1],
+    return /* record */[
+            /* debugName */component[/* debugName */0],
+            /* reactClassInternal */component[/* reactClassInternal */1],
+            /* handedOffState */component[/* handedOffState */2],
+            /* willReceiveProps */component[/* willReceiveProps */3],
+            /* didMount */component[/* didMount */4],
+            /* didUpdate */component[/* didUpdate */5],
+            /* willUnmount */component[/* willUnmount */6],
+            /* willUpdate */component[/* willUpdate */7],
+            /* shouldUpdate */component[/* shouldUpdate */8],
+            /* render */(function (param) {
+                var state = param[/* state */2];
+                var url = _generateUrl(state[/* current */0]);
+                if (url !== window.location.href) {
+                  window.history.replaceState(null, "", url);
+                }
+                return Curry._3(renderChildren, state, url, param[/* send */4]);
+              }),
+            /* initialState */(function () {
+                return /* record */[
+                        /* current */Rebase.Option[/* getOr */16](Curry._1(Config[/* default */1], /* () */0), _retrieve(/* () */0)),
                         /* undo : None */0
-                      ],
-                      (function (param) {
-                          return _persist(param[/* state */2][/* current */0]);
-                        })
-                    ]);
-          } else {
-            var match$1 = match[1];
-            return /* UpdateWithSideEffects */Block.__(3, [
-                      /* record */[
-                        /* current */match$1[1],
-                        /* undo : Some */[/* tuple */[
-                            match$1[0],
-                            state[/* current */0]
-                          ]]
-                      ],
-                      (function (param) {
-                          return _persist(param[/* state */2][/* current */0]);
-                        })
-                    ]);
-          }
-        } else {
-          return /* Update */Block.__(0, [/* record */[
-                      /* current */match[1],
-                      /* undo */state[/* undo */1]
-                    ]]);
-        }
-      });
-    return newrecord;
+                      ];
+              }),
+            /* retainedProps */component[/* retainedProps */11],
+            /* reducer */(function (action, state) {
+                var match = Curry._2(Config[/* reducer */2], state[/* current */0], action);
+                var variant = match[0];
+                if (variant !== 737434270) {
+                  if (variant >= 999946793) {
+                    return /* UpdateWithSideEffects */Block.__(3, [
+                              /* record */[
+                                /* current */match[1],
+                                /* undo : None */0
+                              ],
+                              (function (param) {
+                                  return _persist(param[/* state */2][/* current */0]);
+                                })
+                            ]);
+                  } else {
+                    var match$1 = match[1];
+                    return /* UpdateWithSideEffects */Block.__(3, [
+                              /* record */[
+                                /* current */match$1[1],
+                                /* undo : Some */[/* tuple */[
+                                    match$1[0],
+                                    state[/* current */0]
+                                  ]]
+                              ],
+                              (function (param) {
+                                  return _persist(param[/* state */2][/* current */0]);
+                                })
+                            ]);
+                  }
+                } else {
+                  return /* Update */Block.__(0, [/* record */[
+                              /* current */match[1],
+                              /* undo */state[/* undo */1]
+                            ]]);
+                }
+              }),
+            /* subscriptions */component[/* subscriptions */13],
+            /* jsElementWrapped */component[/* jsElementWrapped */14]
+          ];
   };
   return /* module */[
           /* _prefix */_prefix,

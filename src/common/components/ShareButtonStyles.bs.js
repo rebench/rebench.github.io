@@ -1,7 +1,7 @@
 'use strict';
 
 var Colors = require("../styles/Colors.bs.js");
-var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
+var TypedGlamor = require("bs-typed-glamor/src/TypedGlamor.bs.js");
 
 function container(showConfirmation) {
   return TypedGlamor.css(/* None */0, /* :: */[

@@ -1,7 +1,7 @@
 'use strict';
 
 var ReasonReact = require("reason-react/src/ReasonReact.js");
-var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
+var TypedGlamor = require("bs-typed-glamor/src/TypedGlamor.bs.js");
 
 var style = TypedGlamor.css(/* None */0, /* :: */[
       TypedGlamor.width(TypedGlamor.pct(100)),
@@ -20,13 +20,27 @@ var style = TypedGlamor.css(/* None */0, /* :: */[
 var component = ReasonReact.statelessComponent("WidthContainer");
 
 function make(children) {
-  var newrecord = component.slice();
-  newrecord[/* render */9] = (function () {
-      return ReasonReact.createDomElement("div", {
-                  className: style
-                }, children);
-    });
-  return newrecord;
+  return /* record */[
+          /* debugName */component[/* debugName */0],
+          /* reactClassInternal */component[/* reactClassInternal */1],
+          /* handedOffState */component[/* handedOffState */2],
+          /* willReceiveProps */component[/* willReceiveProps */3],
+          /* didMount */component[/* didMount */4],
+          /* didUpdate */component[/* didUpdate */5],
+          /* willUnmount */component[/* willUnmount */6],
+          /* willUpdate */component[/* willUpdate */7],
+          /* shouldUpdate */component[/* shouldUpdate */8],
+          /* render */(function () {
+              return ReasonReact.createDomElement("div", {
+                          className: style
+                        }, children);
+            }),
+          /* initialState */component[/* initialState */10],
+          /* retainedProps */component[/* retainedProps */11],
+          /* reducer */component[/* reducer */12],
+          /* subscriptions */component[/* subscriptions */13],
+          /* jsElementWrapped */component[/* jsElementWrapped */14]
+        ];
 }
 
 exports.style = style;

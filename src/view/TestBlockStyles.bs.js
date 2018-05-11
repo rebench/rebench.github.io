@@ -1,13 +1,13 @@
 'use strict';
 
 var Colors = require("../common/styles/Colors.bs.js");
-var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
+var TypedGlamor = require("bs-typed-glamor/src/TypedGlamor.bs.js");
 
 function container(testState, language) {
   var tmp;
-  if (typeof testState === "number") {
+  if (typeof testState === "number" || testState.tag !== 2) {
     tmp = TypedGlamor.nothing;
-  } else if (testState.tag === 2) {
+  } else {
     var match = testState[1];
     if (match) {
       var s = match[0];
@@ -19,8 +19,6 @@ function container(testState, language) {
     } else {
       tmp = TypedGlamor.nothing;
     }
-  } else {
-    tmp = TypedGlamor.nothing;
   }
   var tmp$1;
   if (typeof testState === "number") {

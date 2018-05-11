@@ -14,29 +14,29 @@ var Compiler = require("../services/Compiler.bs.js");
 var Debounce = require("../common/services/Debounce.bs.js");
 var Language = require("../model/Language.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
-var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
+var TypedGlamor = require("bs-typed-glamor/src/TypedGlamor.bs.js");
 var SelectButton = require("../common/components/SelectButton.bs.js");
 var TestBlockStyles = require("./TestBlockStyles.bs.js");
 
 function formatResult(param) {
   var sampleCount = param[/* sampleCount */2];
   var hz = param[/* hz */0];
-  var match = +(hz < 100);
-  var arg = match !== 0 ? 2 : 0;
+  var match = hz < 100;
+  var arg = match ? 2 : 0;
   var hz$1 = Curry._1(Utils.formatNumber, (function (param) {
             return param.toFixed(arg);
           })(hz));
   var rme = (function (param) {
         return param.toFixed(2);
       })(param[/* rme */1]);
-  var match$1 = +(sampleCount > 1);
-  var plural = match$1 !== 0 ? "s" : "";
+  var match$1 = sampleCount > 1;
+  var plural = match$1 ? "s" : "";
   return "" + (String(hz$1) + (" ops/sec \xb1" + (String(rme) + ("% (" + (String(sampleCount) + (" run" + (String(plural) + " sampled)")))))));
 }
 
 function formatRelativeScore(score) {
-  var match = +(score === 0);
-  if (match !== 0) {
+  var match = score === 0;
+  if (match) {
     return "Fastest";
   } else {
     return (-score).toFixed() + "% slower";
@@ -68,7 +68,6 @@ function getStateClass(param) {
           } else {
             return "s-complete";
           }
-          break;
       
     }
   }
@@ -124,9 +123,9 @@ var component = ReasonReact.reducerComponent("TestBlock");
 
 function make(setup, data, testState, onChange, onRun, onRemove, onLanguageChange, _) {
   var renderRelativeScore = function () {
-    if (typeof testState === "number") {
+    if (typeof testState === "number" || testState.tag !== 2) {
       return Vrroom.nothing;
-    } else if (testState.tag === 2) {
+    } else {
       var match = testState[1];
       if (match) {
         return React.createElement("span", undefined, Vrroom.text(" - "), React.createElement("span", {
@@ -135,8 +134,6 @@ function make(setup, data, testState, onChange, onRun, onRemove, onLanguageChang
       } else {
         return Vrroom.nothing;
       }
-    } else {
-      return Vrroom.nothing;
     }
   };
   var renderResult = function () {
@@ -177,7 +174,7 @@ function make(setup, data, testState, onChange, onRun, onRemove, onLanguageChang
                         }, Vrroom.text("test"), renderRelativeScore(/* () */0)),
                     React.createElement("div", {
                           className: "box right"
-                        }, ReasonReact.element(/* None */0, /* None */0, Button.make("output", /* Some */[match !== 0 ? "chevron-up" : "chevron-down"], /* None */0, /* Some */[/* Right */-57574468], /* None */0, (function () {
+                        }, ReasonReact.element(/* None */0, /* None */0, Button.make("output", /* Some */[match ? "chevron-up" : "chevron-down"], /* None */0, /* Some */[/* Right */-57574468], /* None */0, (function () {
                                     return Curry._1(send, /* ToggleOutput */0);
                                   }), /* array */[])))
                   ]));
@@ -191,50 +188,62 @@ function make(setup, data, testState, onChange, onRun, onRemove, onLanguageChang
                         }, renderResult(/* () */0))
                   ]));
   };
-  var newrecord = component.slice();
-  newrecord[/* render */9] = (function (self) {
-      var state = self[/* state */2];
-      return ReasonReact.element(/* None */0, /* None */0, Curry._3(TestCompiler[/* make */1], /* tuple */[
-                      setup,
-                      data
-                    ], 300, (function (compilerResult) {
-                        return ReasonReact.element(/* None */0, /* None */0, Block_.make(/* `Element */[
-                                        -744106340,
-                                        renderHeader(self)
-                                      ], /* Some */[renderFooter(/* () */0)], /* Some */[TypedGlamor.toString(TestBlockStyles.container(testState, data[/* language */1]))], getError(compilerResult), /* None */0, /* array */[
-                                        ReasonReact.element(/* None */0, /* None */0, Editor.make(data[/* code */2], data[/* language */1], /* None */0, /* Some */[getMarks(compilerResult)], /* None */0, /* None */0, /* Some */[(function (code) {
-                                                      return Curry._1(onChange, /* record */[
-                                                                  /* id */data[/* id */0],
-                                                                  /* language */data[/* language */1],
-                                                                  /* code */code
-                                                                ]);
-                                                    })], /* array */[])),
-                                        ReasonReact.element(/* None */0, /* None */0, Curry._2(Vrroom.Control[/* If */2][/* make */1], state[/* showOutput */0], (function () {
-                                                    var exit = 0;
-                                                    switch (compilerResult.tag | 0) {
-                                                      case 0 : 
-                                                      case 1 : 
-                                                          exit = 1;
-                                                          break;
-                                                      case 2 : 
-                                                          return React.createElement("div", undefined, Vrroom.text(compilerResult[0]));
-                                                      
-                                                    }
-                                                    if (exit === 1) {
-                                                      return ReasonReact.element(/* None */0, /* None */0, Editor.make(compilerResult[0], /* JS */16585, /* None */0, /* None */0, /* Some */[/* true */1], /* None */0, /* None */0, /* array */[]));
-                                                    }
-                                                    
-                                                  })))
-                                      ]));
-                      })));
-    });
-  newrecord[/* initialState */10] = (function () {
-      return /* record */[/* showOutput : false */0];
-    });
-  newrecord[/* reducer */12] = (function (_, state) {
-      return /* Update */Block.__(0, [/* record */[/* showOutput */1 - state[/* showOutput */0]]]);
-    });
-  return newrecord;
+  return /* record */[
+          /* debugName */component[/* debugName */0],
+          /* reactClassInternal */component[/* reactClassInternal */1],
+          /* handedOffState */component[/* handedOffState */2],
+          /* willReceiveProps */component[/* willReceiveProps */3],
+          /* didMount */component[/* didMount */4],
+          /* didUpdate */component[/* didUpdate */5],
+          /* willUnmount */component[/* willUnmount */6],
+          /* willUpdate */component[/* willUpdate */7],
+          /* shouldUpdate */component[/* shouldUpdate */8],
+          /* render */(function (self) {
+              var state = self[/* state */2];
+              return ReasonReact.element(/* None */0, /* None */0, Curry._3(TestCompiler[/* make */1], /* tuple */[
+                              setup,
+                              data
+                            ], 300, (function (compilerResult) {
+                                return ReasonReact.element(/* None */0, /* None */0, Block_.make(/* `Element */[
+                                                -744106340,
+                                                renderHeader(self)
+                                              ], /* Some */[renderFooter(/* () */0)], /* Some */[TypedGlamor.toString(TestBlockStyles.container(testState, data[/* language */1]))], getError(compilerResult), /* None */0, /* array */[
+                                                ReasonReact.element(/* None */0, /* None */0, Editor.make(data[/* code */2], data[/* language */1], /* None */0, /* Some */[getMarks(compilerResult)], /* None */0, /* None */0, /* Some */[(function (code) {
+                                                              return Curry._1(onChange, /* record */[
+                                                                          /* id */data[/* id */0],
+                                                                          /* language */data[/* language */1],
+                                                                          /* code */code
+                                                                        ]);
+                                                            })], /* array */[])),
+                                                ReasonReact.element(/* None */0, /* None */0, Curry._2(Vrroom.Control[/* If */2][/* make */1], state[/* showOutput */0], (function () {
+                                                            var exit = 0;
+                                                            switch (compilerResult.tag | 0) {
+                                                              case 0 : 
+                                                              case 1 : 
+                                                                  exit = 1;
+                                                                  break;
+                                                              case 2 : 
+                                                                  return React.createElement("div", undefined, Vrroom.text(compilerResult[0]));
+                                                              
+                                                            }
+                                                            if (exit === 1) {
+                                                              return ReasonReact.element(/* None */0, /* None */0, Editor.make(compilerResult[0], /* JS */16585, /* None */0, /* None */0, /* Some */[true], /* None */0, /* None */0, /* array */[]));
+                                                            }
+                                                            
+                                                          })))
+                                              ]));
+                              })));
+            }),
+          /* initialState */(function () {
+              return /* record */[/* showOutput */false];
+            }),
+          /* retainedProps */component[/* retainedProps */11],
+          /* reducer */(function (_, state) {
+              return /* Update */Block.__(0, [/* record */[/* showOutput */!state[/* showOutput */0]]]);
+            }),
+          /* subscriptions */component[/* subscriptions */13],
+          /* jsElementWrapped */component[/* jsElementWrapped */14]
+        ];
 }
 
 var Styles = 0;

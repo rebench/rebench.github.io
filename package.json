@@ -22,6 +22,7 @@
     "bs-in-a-box": "github:glennsl/bs-in-a-box#b83aa97e6a78fdb7274932fa44a8d97dcd7d6d51",
     "@glennsl/bs-json": "^1.1.2",
     "bs-refmt": "github:glennsl/bs-refmt#032f911",
+    "bs-typed-glamor": "github:glennsl/bs-typed-glamor",
     "codemirror": "^5.34.0",
     "file-loader": "^1.1.7",
     "lz-string": "^1.4.4",

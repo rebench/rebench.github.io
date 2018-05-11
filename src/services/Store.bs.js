@@ -27,9 +27,9 @@ function _recalculateScores(tests) {
                     }), tests))));
   return Rebase.List[/* map */0]((function (pod) {
                 var match = pod[/* state */1];
-                if (typeof match === "number") {
+                if (typeof match === "number" || match.tag !== 2) {
                   return pod;
-                } else if (match.tag === 2) {
+                } else {
                   var result = match[0];
                   return /* record */[
                           /* data */pod[/* data */0],
@@ -38,8 +38,6 @@ function _recalculateScores(tests) {
                               /* Some */[(result[/* hz */0] - fastest) / fastest * 100]
                             ])
                         ];
-                } else {
-                  return pod;
                 }
               }), tests);
 }
@@ -73,15 +71,7 @@ function $$default() {
 
 function reducer(state, param) {
   if (typeof param === "number") {
-    if (param) {
-      return /* `UndoableUpdate */[
-              217417351,
-              /* tuple */[
-                "Clear",
-                $$default(/* () */0)
-              ]
-            ];
-    } else {
+    if (param === 0) {
       return /* `Update */[
               999946793,
               /* record */[
@@ -99,6 +89,14 @@ function reducer(state, param) {
                 ]
               ]
             ];
+    } else {
+      return /* `UndoableUpdate */[
+              217417351,
+              /* tuple */[
+                "Clear",
+                $$default(/* () */0)
+              ]
+            ];
     }
   } else {
     switch (param.tag | 0) {
@@ -111,7 +109,7 @@ function reducer(state, param) {
                     /* record */[
                       /* setup */state[/* setup */0],
                       /* tests */_recalculateScores(Rebase.List[/* filter */10]((function ($$this) {
-                                  return +($$this[/* data */0][/* id */0] !== id);
+                                  return $$this[/* data */0][/* id */0] !== id;
                                 }), state[/* tests */1]))
                     ]
                   ]
@@ -123,8 +121,8 @@ function reducer(state, param) {
                   /* record */[
                     /* setup */state[/* setup */0],
                     /* tests */_recalculateScores(Rebase.List[/* map */0]((function ($$this) {
-                                var match = +($$this[/* data */0][/* id */0] === data[/* id */0]);
-                                if (match !== 0) {
+                                var match = $$this[/* data */0][/* id */0] === data[/* id */0];
+                                if (match) {
                                   return /* record */[
                                           /* data */data,
                                           /* state : Untested */0
@@ -143,8 +141,8 @@ function reducer(state, param) {
                   /* record */[
                     /* setup */state[/* setup */0],
                     /* tests */_recalculateScores(Rebase.List[/* map */0]((function ($$this) {
-                                var match = +($$this[/* data */0][/* id */0] === id$1);
-                                if (match !== 0) {
+                                var match = $$this[/* data */0][/* id */0] === id$1;
+                                if (match) {
                                   return /* record */[
                                           /* data */$$this[/* data */0],
                                           /* state */testState

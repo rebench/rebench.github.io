@@ -12,7 +12,7 @@
     "@glennsl/rebase",
     "@glennsl/bs-json",
     "vrroom",
-    "typed-glamor",
+    "bs-typed-glamor",
     "bs-refmt",
     "bs-in-a-box"
   ],

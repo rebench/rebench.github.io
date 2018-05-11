@@ -1,6 +1,6 @@
 'use strict';
 
-var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
+var TypedGlamor = require("bs-typed-glamor/src/TypedGlamor.bs.js");
 
 var container = TypedGlamor.css(/* None */0, /* :: */[
       TypedGlamor.select("& .CodeMirror", /* :: */[
@@ -17,10 +17,13 @@ var container = TypedGlamor.css(/* None */0, /* :: */[
                           /* :: */[
                             "Liberation Mono",
                             /* :: */[
-                              "Menlo,Courier",
+                              "Menlo",
                               /* :: */[
-                                TypedGlamor.monospace,
-                                /* [] */0
+                                "Courier",
+                                /* :: */[
+                                  TypedGlamor.monospace,
+                                  /* [] */0
+                                ]
                               ]
                             ]
                           ]

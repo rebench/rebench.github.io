@@ -4,7 +4,7 @@ var React = require("react");
 var Button = require("../common/components/Button.bs.js");
 var Vrroom = require("vrroom/src/Vrroom.bs.js");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
-var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
+var TypedGlamor = require("bs-typed-glamor/src/TypedGlamor.bs.js");
 var WidthContainer = require("./WidthContainer.bs.js");
 var HelpModalStyles = require("./HelpModalStyles.bs.js");
 
@@ -13,17 +13,31 @@ var content = "\n<p>\n  <span class=\"brand\">re:bench</span> is a benchmark pla
 var component = ReasonReact.statelessComponent("HelpPopup");
 
 function make(onClose, _) {
-  var newrecord = component.slice();
-  newrecord[/* render */9] = (function () {
-      return ReasonReact.element(/* None */0, /* None */0, WidthContainer.make(/* array */[React.createElement("div", {
-                            className: TypedGlamor.toString(HelpModalStyles.container)
-                          }, React.createElement("header", undefined, React.createElement("h1", undefined, Vrroom.text("Help")), ReasonReact.element(/* None */0, /* None */0, Button.make("", /* Some */["close"], /* None */0, /* None */0, /* None */0, onClose, /* array */[]))), React.createElement("main", {
-                                dangerouslySetInnerHTML: {
-                                  __html: content
-                                }
-                              }))]));
-    });
-  return newrecord;
+  return /* record */[
+          /* debugName */component[/* debugName */0],
+          /* reactClassInternal */component[/* reactClassInternal */1],
+          /* handedOffState */component[/* handedOffState */2],
+          /* willReceiveProps */component[/* willReceiveProps */3],
+          /* didMount */component[/* didMount */4],
+          /* didUpdate */component[/* didUpdate */5],
+          /* willUnmount */component[/* willUnmount */6],
+          /* willUpdate */component[/* willUpdate */7],
+          /* shouldUpdate */component[/* shouldUpdate */8],
+          /* render */(function () {
+              return ReasonReact.element(/* None */0, /* None */0, WidthContainer.make(/* array */[React.createElement("div", {
+                                    className: TypedGlamor.toString(HelpModalStyles.container)
+                                  }, React.createElement("header", undefined, React.createElement("h1", undefined, Vrroom.text("Help")), ReasonReact.element(/* None */0, /* None */0, Button.make("", /* Some */["close"], /* None */0, /* None */0, /* None */0, onClose, /* array */[]))), React.createElement("main", {
+                                        dangerouslySetInnerHTML: {
+                                          __html: content
+                                        }
+                                      }))]));
+            }),
+          /* initialState */component[/* initialState */10],
+          /* retainedProps */component[/* retainedProps */11],
+          /* reducer */component[/* reducer */12],
+          /* subscriptions */component[/* subscriptions */13],
+          /* jsElementWrapped */component[/* jsElementWrapped */14]
+        ];
 }
 
 var Styles = 0;

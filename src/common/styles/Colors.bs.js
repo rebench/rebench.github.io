@@ -1,6 +1,6 @@
 'use strict';
 
-var TypedGlamor = require("typed-glamor/src/TypedGlamor.bs.js");
+var TypedGlamor = require("bs-typed-glamor/src/TypedGlamor.bs.js");
 
 var background = TypedGlamor.hex("162228");
 
