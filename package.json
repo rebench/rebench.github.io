@@ -32,7 +32,7 @@
     "vrroom": "github:glennsl/vrroom#691ea02"
   },
   "devDependencies": {
-    "bs-platform": "^2.2.1",
+    "bs-platform": "^3.0.0",
     "webpack": "^3.11.0"
   }
 }
