@@ -28,21 +28,18 @@ function make(data, url, updateStore, _) {
           /* handedOffState */component[/* handedOffState */2],
           /* willReceiveProps */component[/* willReceiveProps */3],
           /* didMount */(function (param) {
-              var send = param[/* send */4];
-              return /* Update */Block.__(0, [/* record */[
-                          /* worker */[/* Some */[Worker.make((function (message) {
-                                      return Curry._1(send, /* WorkerMessage */Block.__(1, [message]));
-                                    }))]],
-                          /* showHelp */param[/* state */2][/* showHelp */1]
-                        ]]);
+              var send = param[/* send */3];
+              return Curry._1(send, /* Init */Block.__(0, [(function (message) {
+                                return Curry._1(send, /* WorkerMessage */Block.__(2, [message]));
+                              })]));
             }),
           /* didUpdate */component[/* didUpdate */5],
           /* willUnmount */component[/* willUnmount */6],
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (param) {
-              var send = param[/* send */4];
-              var state = param[/* state */2];
+              var send = param[/* send */3];
+              var state = param[/* state */1];
               return React.createElement("div", {
                           className: TypedGlamor.toString(AppStyles.container(state[/* showHelp */1]))
                         }, ReasonReact.element(/* None */0, /* None */0, Toolbar.make((function () {
@@ -63,7 +60,7 @@ function make(data, url, updateStore, _) {
                                                   return ReasonReact.element(/* Some */[Test.Id[/* toString */2](test[/* data */0][/* id */0])], /* None */0, TestBlock.make(data[/* current */0][/* setup */0], test[/* data */0], test[/* state */1], (function (changed) {
                                                                     return Curry._1(updateStore, /* UpdateTestData */Block.__(1, [changed]));
                                                                   }), (function () {
-                                                                    return Curry._1(send, /* RunSingle */Block.__(0, [test[/* data */0]]));
+                                                                    return Curry._1(send, /* RunSingle */Block.__(1, [test[/* data */0]]));
                                                                   }), (function () {
                                                                     return Curry._1(updateStore, /* RemoveTest */Block.__(0, [test[/* data */0][/* id */0]]));
                                                                   }), (function (language) {
@@ -158,7 +155,7 @@ function make(data, url, updateStore, _) {
               if (typeof action === "number") {
                 switch (action) {
                   case 0 : 
-                      return /* SideEffects */Block.__(2, [(function () {
+                      return /* SideEffects */Block.__(1, [(function () {
                                     return run(Rebase.List[/* map */0]((function ($$this) {
                                                       return $$this[/* data */0];
                                                     }), data[/* current */0][/* tests */1]));
@@ -175,59 +172,68 @@ function make(data, url, updateStore, _) {
                                 ]]);
                   
                 }
-              } else if (action.tag) {
-                var match = action[0];
-                if (typeof match === "number") {
-                  return /* NoUpdate */0;
-                } else {
-                  switch (match.tag | 0) {
-                    case 0 : 
-                        var result = match[1];
-                        var id = match[0];
-                        return /* SideEffects */Block.__(2, [(function () {
-                                      return Curry._1(updateStore, /* UpdateTestState */Block.__(2, [
-                                                    id,
-                                                    /* Running */Block.__(0, [result])
-                                                  ]));
-                                    })]);
-                    case 1 : 
-                        var error = match[1];
-                        var id$1 = match[0];
-                        return /* SideEffects */Block.__(2, [(function () {
-                                      return Curry._1(updateStore, /* UpdateTestState */Block.__(2, [
-                                                    id$1,
-                                                    /* Error */Block.__(1, [error])
-                                                  ]));
-                                    })]);
-                    case 2 : 
-                        var result$1 = match[1];
-                        var id$2 = match[0];
-                        return /* SideEffects */Block.__(2, [(function () {
-                                      return Curry._1(updateStore, /* UpdateTestState */Block.__(2, [
-                                                    id$2,
-                                                    /* Complete */Block.__(2, [
-                                                        result$1,
-                                                        /* None */0
-                                                      ])
-                                                  ]));
-                                    })]);
-                    case 3 : 
-                        var error$1 = match[0];
-                        return /* SideEffects */Block.__(2, [(function () {
-                                      console.log(error$1);
-                                      return /* () */0;
-                                    })]);
-                    
-                  }
-                }
               } else {
-                var test = action[0];
-                return /* SideEffects */Block.__(2, [(function () {
-                              return run(/* :: */[
-                                          test,
-                                          /* [] */0
-                                        ]);
-                            })]);
+                switch (action.tag | 0) {
+                  case 0 : 
+                      return /* Update */Block.__(0, [/* record */[
+                                  /* worker */[/* Some */[Worker.make(action[0])]],
+                                  /* showHelp */state[/* showHelp */1]
+                                ]]);
+                  case 1 : 
+                      var test = action[0];
+                      return /* SideEffects */Block.__(1, [(function () {
+                                    return run(/* :: */[
+                                                test,
+                                                /* [] */0
+                                              ]);
+                                  })]);
+                  case 2 : 
+                      var match = action[0];
+                      if (typeof match === "number") {
+                        return /* NoUpdate */0;
+                      } else {
+                        switch (match.tag | 0) {
+                          case 0 : 
+                              var result = match[1];
+                              var id = match[0];
+                              return /* SideEffects */Block.__(1, [(function () {
+                                            return Curry._1(updateStore, /* UpdateTestState */Block.__(2, [
+                                                          id,
+                                                          /* Running */Block.__(0, [result])
+                                                        ]));
+                                          })]);
+                          case 1 : 
+                              var error = match[1];
+                              var id$1 = match[0];
+                              return /* SideEffects */Block.__(1, [(function () {
+                                            return Curry._1(updateStore, /* UpdateTestState */Block.__(2, [
+                                                          id$1,
+                                                          /* Error */Block.__(1, [error])
+                                                        ]));
+                                          })]);
+                          case 2 : 
+                              var result$1 = match[1];
+                              var id$2 = match[0];
+                              return /* SideEffects */Block.__(1, [(function () {
+                                            return Curry._1(updateStore, /* UpdateTestState */Block.__(2, [
+                                                          id$2,
+                                                          /* Complete */Block.__(2, [
+                                                              result$1,
+                                                              /* None */0
+                                                            ])
+                                                        ]));
+                                          })]);
+                          case 3 : 
+                              var error$1 = match[0];
+                              return /* SideEffects */Block.__(1, [(function () {
+                                            console.log(error$1);
+                                            return /* () */0;
+                                          })]);
+                          
+                        }
+                      }
+                  
+                }
               }
             }),
           /* subscriptions */component[/* subscriptions */13],

@@ -52,7 +52,7 @@ function make(value, lang, defaultValue, $staropt$star, $staropt$star$1, inputRe
           /* willReceiveProps */component[/* willReceiveProps */3],
           /* didMount */component[/* didMount */4],
           /* didUpdate */(function (param) {
-              return setMarks(param[/* newSelf */1][/* state */2][/* editor */0], marks);
+              return setMarks(param[/* newSelf */1][/* state */1][/* editor */0], marks);
             }),
           /* willUnmount */component[/* willUnmount */6],
           /* willUpdate */component[/* willUpdate */7],
@@ -61,7 +61,7 @@ function make(value, lang, defaultValue, $staropt$star, $staropt$star$1, inputRe
               return React.createElement("div", {
                           className: TypedGlamor.toString(EditorStyles.container)
                         }, ReasonReact.element(/* None */0, inputRef, CodeMirror.make(/* None */0, /* Some */[value], defaultValue, /* Some */[Curry._1(param[/* handle */0], (function (editor, param) {
-                                          param[/* state */2][/* editor */0][0] = /* Some */[editor];
+                                          param[/* state */1][/* editor */0][0] = /* Some */[editor];
                                           return /* () */0;
                                         }))], onChange, /* Some */[{
                                     mode: _langToMode(lang),

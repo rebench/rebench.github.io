@@ -10,6 +10,7 @@ type state = {
 };
 
 type actions =
+  | Init(((Worker.Message.receive)) => unit)
   | RunAll
   | RunSingle(Test.t)
   | ShowHelp
@@ -29,13 +30,8 @@ let make = (~data: Store.state(Store.data),
     showHelp: false
   },
 
-  didMount: ({ send, state }) => {
-    ReasonReact.Update({
-      ...state,
-      worker: ref(Some(Worker.make(
-        ~onMessage  = {message => send(WorkerMessage(message))}
-      )))
-    })
+  didMount: ({ send }) => {
+    send(Init(message => send(WorkerMessage(message))))
   },
 
   reducer: (action, state) => {
@@ -48,7 +44,15 @@ let make = (~data: Store.state(Store.data),
             |> tests => state.worker^ |> Option.forEach(w => w.Worker.postMessage(Run(tests)));
 
     switch action {
-    
+
+    | Init(workerCallback) =>
+      ReasonReact.Update({
+        ...state,
+        worker: ref(Some(Worker.make(
+          ~onMessage = workerCallback
+        )))
+      })
+      
     | RunAll =>
       ReasonReact.SideEffects(
         _self => run(data.current.tests |> List.map(this => this.Store.data))

@@ -50,12 +50,12 @@ function Make(Config) {
             /* willUpdate */component[/* willUpdate */7],
             /* shouldUpdate */component[/* shouldUpdate */8],
             /* render */(function (param) {
-                var state = param[/* state */2];
+                var state = param[/* state */1];
                 var url = _generateUrl(state[/* current */0]);
                 if (url !== window.location.href) {
                   window.history.replaceState(null, "", url);
                 }
-                return Curry._3(renderChildren, state, url, param[/* send */4]);
+                return Curry._3(renderChildren, state, url, param[/* send */3]);
               }),
             /* initialState */(function () {
                 return /* record */[
@@ -69,18 +69,18 @@ function Make(Config) {
                 var variant = match[0];
                 if (variant !== 737434270) {
                   if (variant >= 999946793) {
-                    return /* UpdateWithSideEffects */Block.__(3, [
+                    return /* UpdateWithSideEffects */Block.__(2, [
                               /* record */[
                                 /* current */match[1],
                                 /* undo : None */0
                               ],
                               (function (param) {
-                                  return _persist(param[/* state */2][/* current */0]);
+                                  return _persist(param[/* state */1][/* current */0]);
                                 })
                             ]);
                   } else {
                     var match$1 = match[1];
-                    return /* UpdateWithSideEffects */Block.__(3, [
+                    return /* UpdateWithSideEffects */Block.__(2, [
                               /* record */[
                                 /* current */match$1[1],
                                 /* undo : Some */[/* tuple */[
@@ -89,7 +89,7 @@ function Make(Config) {
                                   ]]
                               ],
                               (function (param) {
-                                  return _persist(param[/* state */2][/* current */0]);
+                                  return _persist(param[/* state */1][/* current */0]);
                                 })
                             ]);
                   }
