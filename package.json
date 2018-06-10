@@ -20,7 +20,7 @@
     "acorn": "^5.4.1",
     "benchmark": "^2.1.4",
     "bs-in-a-box": "github:glennsl/bs-in-a-box#b83aa97e6a78fdb7274932fa44a8d97dcd7d6d51",
-    "@glennsl/bs-json": "^1.1.2",
+    "@glennsl/bs-json": "^2.0.0",
     "bs-refmt": "github:glennsl/bs-refmt#032f911",
     "bs-typed-glamor": "github:glennsl/bs-typed-glamor",
     "codemirror": "^5.34.0",
@@ -29,11 +29,11 @@
     "react": "^16.2.0",
     "react-codemirror2": "^4.0.0",
     "react-dom": "^16.2.0",
-    "reason-react": "^0.3.2",
-    "vrroom": "github:glennsl/vrroom#691ea02"
+    "reason-react": "^0.4.2",
+    "vrroom": "github:glennsl/vrroom#37b054f"
   },
   "devDependencies": {
-    "bs-platform": "^3.0.0",
+    "bs-platform": "^3.1.5",
     "webpack": "^3.11.0"
   }
 }

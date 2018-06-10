@@ -16,8 +16,8 @@ function Make(Config) {
             /* didMount */component[/* didMount */4],
             /* didUpdate */(function (param) {
                 var newSelf = param[/* newSelf */1];
-                if (newSelf[/* retainedProps */3][/* input */0] !== param[/* oldSelf */0][/* retainedProps */3][/* input */0]) {
-                  var match = newSelf[/* state */2];
+                if (newSelf[/* retainedProps */2][/* input */0] !== param[/* oldSelf */0][/* retainedProps */2][/* input */0]) {
+                  var match = newSelf[/* state */1];
                   var timeout = match[/* timeout */1];
                   Rebase.Option[/* forEach */8]((function (id) {
                           clearTimeout(id);
@@ -26,7 +26,7 @@ function Make(Config) {
                         }), timeout[0]);
                   timeout[0] = /* Some */[setTimeout((function () {
                             timeout[0] = /* None */0;
-                            return Curry._1(newSelf[/* send */4], Curry._1(Config[/* compute */0], input));
+                            return Curry._1(newSelf[/* send */3], Curry._1(Config[/* compute */0], input));
                           }), wait)];
                   return /* () */0;
                 } else {
@@ -37,7 +37,7 @@ function Make(Config) {
             /* willUpdate */component[/* willUpdate */7],
             /* shouldUpdate */component[/* shouldUpdate */8],
             /* render */(function (param) {
-                return Curry._1(renderChildren, param[/* state */2][/* output */0]);
+                return Curry._1(renderChildren, param[/* state */1][/* output */0]);
               }),
             /* initialState */(function () {
                 return /* record */[

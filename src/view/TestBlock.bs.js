@@ -161,8 +161,8 @@ function make(setup, data, testState, onChange, onRun, onRemove, onLanguageChang
     }
   };
   var renderHeader = function (param) {
-    var send = param[/* send */4];
-    var match = param[/* state */2][/* showOutput */0];
+    var send = param[/* send */3];
+    var match = param[/* state */1][/* showOutput */0];
     return ReasonReact.element(/* None */0, /* None */0, Vrroom.Fragment[/* make */0](/* array */[
                     React.createElement("div", {
                           className: "box"
@@ -199,7 +199,7 @@ function make(setup, data, testState, onChange, onRun, onRemove, onLanguageChang
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (self) {
-              var state = self[/* state */2];
+              var state = self[/* state */1];
               return ReasonReact.element(/* None */0, /* None */0, Curry._3(TestCompiler[/* make */1], /* tuple */[
                               setup,
                               data

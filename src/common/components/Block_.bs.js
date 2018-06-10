@@ -34,10 +34,10 @@ function make(header, footer, className, error, $staropt$star, children) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (param) {
-              var send = param[/* send */4];
+              var send = param[/* send */3];
               return React.createElement("section", {
                           className: Curry._1(Vrroom.Helpers[/* ClassName */5][/* join */0], /* :: */[
-                                TypedGlamor.toString(BlockStyles.container(isCollapsible, param[/* state */2][/* collapsed */0])),
+                                TypedGlamor.toString(BlockStyles.container(isCollapsible, param[/* state */1][/* collapsed */0])),
                                 /* :: */[
                                   Curry._1(Vrroom.Helpers[/* ClassName */5][/* fromOption */2], className),
                                   /* [] */0

@@ -31,9 +31,9 @@ function Make() {
             /* willUpdate */component[/* willUpdate */7],
             /* shouldUpdate */component[/* shouldUpdate */8],
             /* render */(function (param) {
-                var send = param[/* send */4];
+                var send = param[/* send */3];
                 return React.createElement("div", {
-                            className: TypedGlamor.toString(SelectButtonStyles.container(param[/* state */2][/* isMenuOpen */0]))
+                            className: TypedGlamor.toString(SelectButtonStyles.container(param[/* state */1][/* isMenuOpen */0]))
                           }, ReasonReact.element(/* None */0, /* None */0, OnClickOutside.make((function () {
                                       return Curry._1(send, /* OutsideClicked */1);
                                     }), /* array */[
@@ -68,7 +68,7 @@ function Make() {
                   }
                 } else {
                   var item = action[0];
-                  return /* UpdateWithSideEffects */Block.__(3, [
+                  return /* UpdateWithSideEffects */Block.__(2, [
                             /* record */[/* isMenuOpen */false],
                             (function () {
                                 return Curry._1(onSelect, item[/* value */1]);

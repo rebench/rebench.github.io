@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 164);
+/******/ 	return __webpack_require__(__webpack_require__.s = 155);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 13:
+/***/ 14:
 /***/ (function(module, exports) {
 
 var g;
@@ -93,13 +93,13 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 164:
+/***/ 155:
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(165);
+__webpack_require__(156);
 importScripts('stdlibBundle.js');
 
-const Benchmark = __webpack_require__(166);
+const Benchmark = __webpack_require__(157);
 
 onmessage = ({ data }) => {
   var suite = new Benchmark.Suite;
@@ -149,14 +149,14 @@ onmessage = ({ data }) => {
 
 /***/ }),
 
-/***/ 165:
+/***/ 156:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "stdlibBundle.js";
 
 /***/ }),
 
-/***/ 166:
+/***/ 157:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var require;var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -182,7 +182,7 @@ module.exports = __webpack_require__.p + "stdlibBundle.js";
   var root = (objectTypes[typeof window] && window) || this;
 
   /** Detect free variable `define`. */
-  var freeDefine = __webpack_require__(24);
+  var freeDefine = __webpack_require__(26);
 
   /** Detect free variable `exports`. */
   var freeExports = objectTypes[typeof exports] && exports && !exports.nodeType && exports;
@@ -672,10 +672,10 @@ module.exports = __webpack_require__.p + "stdlibBundle.js";
       // Lazy define.
       createFunction = function(args, body) {
         var result,
-            anchor = __webpack_require__(24) ? __webpack_require__(57) : Benchmark,
+            anchor = __webpack_require__(26) ? __webpack_require__(55) : Benchmark,
             prop = uid + 'createFunction';
 
-        runScript((__webpack_require__(24) ? 'define.amd.' : 'Benchmark.') + prop + '=function(' + args + '){' + body + '}');
+        runScript((__webpack_require__(26) ? 'define.amd.' : 'Benchmark.') + prop + '=function(' + args + '){' + body + '}');
         result = anchor[prop];
         delete anchor[prop];
         return result;
@@ -819,12 +819,12 @@ module.exports = __webpack_require__.p + "stdlibBundle.js";
      * @param {string} code The code to run.
      */
     function runScript(code) {
-      var anchor = __webpack_require__(24) ? __webpack_require__(57) : Benchmark,
+      var anchor = __webpack_require__(26) ? __webpack_require__(55) : Benchmark,
           script = doc.createElement('script'),
           sibling = doc.getElementsByTagName('script')[0],
           parent = sibling.parentNode,
           prop = uid + 'runScript',
-          prefix = '(' + (__webpack_require__(24) ? 'define.amd.' : 'Benchmark.') + prop + '||function(){})();';
+          prefix = '(' + (__webpack_require__(26) ? 'define.amd.' : 'Benchmark.') + prop + '||function(){})();';
 
       // Firefox 2.0.0.2 cannot use script injection as intended because it executes
       // asynchronously, but that's OK because script injection is only used to avoid
@@ -2958,7 +2958,7 @@ module.exports = __webpack_require__.p + "stdlibBundle.js";
   // Some AMD build optimizers, like r.js, check for condition patterns like the following:
   if (true) {
     // Define as an anonymous module so, through path mapping, it can be aliased.
-    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(168), __webpack_require__(169)], __WEBPACK_AMD_DEFINE_RESULT__ = (function(_, platform) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(159), __webpack_require__(160)], __WEBPACK_AMD_DEFINE_RESULT__ = (function(_, platform) {
       return runInContext({
         '_': _,
         'platform': platform
@@ -2985,11 +2985,11 @@ module.exports = __webpack_require__.p + "stdlibBundle.js";
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)(module), __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)(module), __webpack_require__(14)))
 
 /***/ }),
 
-/***/ 167:
+/***/ 158:
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -2998,11 +2998,11 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 167;
+webpackEmptyContext.id = 158;
 
 /***/ }),
 
-/***/ 168:
+/***/ 159:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -3019,7 +3019,7 @@ webpackEmptyContext.id = 167;
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.4';
+  var VERSION = '4.17.10';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -3150,7 +3150,6 @@ webpackEmptyContext.id = 167;
   /** Used to match property names within property paths. */
   var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
       reIsPlainProp = /^\w*$/,
-      reLeadingDot = /^\./,
       rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
 
   /**
@@ -3250,8 +3249,8 @@ webpackEmptyContext.id = 167;
       reOptMod = rsModifier + '?',
       rsOptVar = '[' + rsVarRange + ']?',
       rsOptJoin = '(?:' + rsZWJ + '(?:' + [rsNonAstral, rsRegional, rsSurrPair].join('|') + ')' + rsOptVar + reOptMod + ')*',
-      rsOrdLower = '\\d*(?:(?:1st|2nd|3rd|(?![123])\\dth)\\b)',
-      rsOrdUpper = '\\d*(?:(?:1ST|2ND|3RD|(?![123])\\dTH)\\b)',
+      rsOrdLower = '\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])',
+      rsOrdUpper = '\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])',
       rsSeq = rsOptVar + reOptMod + rsOptJoin,
       rsEmoji = '(?:' + [rsDingbat, rsRegional, rsSurrPair].join('|') + ')' + rsSeq,
       rsSymbol = '(?:' + [rsNonAstral + rsCombo + '?', rsCombo, rsRegional, rsSurrPair, rsAstral].join('|') + ')';
@@ -3444,6 +3443,14 @@ webpackEmptyContext.id = 167;
   /** Used to access faster Node.js helpers. */
   var nodeUtil = (function() {
     try {
+      // Use `util.types` for Node.js 10+.
+      var types = freeModule && freeModule.require && freeModule.require('util').types;
+
+      if (types) {
+        return types;
+      }
+
+      // Legacy `process.binding('util')` for Node.js < 10.
       return freeProcess && freeProcess.binding && freeProcess.binding('util');
     } catch (e) {}
   }());
@@ -3457,34 +3464,6 @@ webpackEmptyContext.id = 167;
       nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
 
   /*--------------------------------------------------------------------------*/
-
-  /**
-   * Adds the key-value `pair` to `map`.
-   *
-   * @private
-   * @param {Object} map The map to modify.
-   * @param {Array} pair The key-value pair to add.
-   * @returns {Object} Returns `map`.
-   */
-  function addMapEntry(map, pair) {
-    // Don't return `map.set` because it's not chainable in IE 11.
-    map.set(pair[0], pair[1]);
-    return map;
-  }
-
-  /**
-   * Adds `value` to `set`.
-   *
-   * @private
-   * @param {Object} set The set to modify.
-   * @param {*} value The value to add.
-   * @returns {Object} Returns `set`.
-   */
-  function addSetEntry(set, value) {
-    // Don't return `set.add` because it's not chainable in IE 11.
-    set.add(value);
-    return set;
-  }
 
   /**
    * A faster alternative to `Function#apply`, this function invokes `func`
@@ -4250,6 +4229,20 @@ webpackEmptyContext.id = 167;
       }
     }
     return result;
+  }
+
+  /**
+   * Gets the value at `key`, unless `key` is "__proto__".
+   *
+   * @private
+   * @param {Object} object The object to query.
+   * @param {string} key The key of the property to get.
+   * @returns {*} Returns the property value.
+   */
+  function safeGet(object, key) {
+    return key == '__proto__'
+      ? undefined
+      : object[key];
   }
 
   /**
@@ -5684,7 +5677,7 @@ webpackEmptyContext.id = 167;
           if (!cloneableTags[tag]) {
             return object ? value : {};
           }
-          result = initCloneByTag(value, tag, baseClone, isDeep);
+          result = initCloneByTag(value, tag, isDeep);
         }
       }
       // Check for circular references and return its corresponding clone.
@@ -5694,6 +5687,22 @@ webpackEmptyContext.id = 167;
         return stacked;
       }
       stack.set(value, result);
+
+      if (isSet(value)) {
+        value.forEach(function(subValue) {
+          result.add(baseClone(subValue, bitmask, customizer, subValue, value, stack));
+        });
+
+        return result;
+      }
+
+      if (isMap(value)) {
+        value.forEach(function(subValue, key) {
+          result.set(key, baseClone(subValue, bitmask, customizer, key, value, stack));
+        });
+
+        return result;
+      }
 
       var keysFunc = isFull
         ? (isFlat ? getAllKeysIn : getAllKeys)
@@ -6622,7 +6631,7 @@ webpackEmptyContext.id = 167;
         }
         else {
           var newValue = customizer
-            ? customizer(object[key], srcValue, (key + ''), object, source, stack)
+            ? customizer(safeGet(object, key), srcValue, (key + ''), object, source, stack)
             : undefined;
 
           if (newValue === undefined) {
@@ -6649,8 +6658,8 @@ webpackEmptyContext.id = 167;
      *  counterparts.
      */
     function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, stack) {
-      var objValue = object[key],
-          srcValue = source[key],
+      var objValue = safeGet(object, key),
+          srcValue = safeGet(source, key),
           stacked = stack.get(srcValue);
 
       if (stacked) {
@@ -7559,20 +7568,6 @@ webpackEmptyContext.id = 167;
     }
 
     /**
-     * Creates a clone of `map`.
-     *
-     * @private
-     * @param {Object} map The map to clone.
-     * @param {Function} cloneFunc The function to clone values.
-     * @param {boolean} [isDeep] Specify a deep clone.
-     * @returns {Object} Returns the cloned map.
-     */
-    function cloneMap(map, isDeep, cloneFunc) {
-      var array = isDeep ? cloneFunc(mapToArray(map), CLONE_DEEP_FLAG) : mapToArray(map);
-      return arrayReduce(array, addMapEntry, new map.constructor);
-    }
-
-    /**
      * Creates a clone of `regexp`.
      *
      * @private
@@ -7583,20 +7578,6 @@ webpackEmptyContext.id = 167;
       var result = new regexp.constructor(regexp.source, reFlags.exec(regexp));
       result.lastIndex = regexp.lastIndex;
       return result;
-    }
-
-    /**
-     * Creates a clone of `set`.
-     *
-     * @private
-     * @param {Object} set The set to clone.
-     * @param {Function} cloneFunc The function to clone values.
-     * @param {boolean} [isDeep] Specify a deep clone.
-     * @returns {Object} Returns the cloned set.
-     */
-    function cloneSet(set, isDeep, cloneFunc) {
-      var array = isDeep ? cloneFunc(setToArray(set), CLONE_DEEP_FLAG) : setToArray(set);
-      return arrayReduce(array, addSetEntry, new set.constructor);
     }
 
     /**
@@ -9193,7 +9174,7 @@ webpackEmptyContext.id = 167;
      */
     function initCloneArray(array) {
       var length = array.length,
-          result = array.constructor(length);
+          result = new array.constructor(length);
 
       // Add properties assigned by `RegExp#exec`.
       if (length && typeof array[0] == 'string' && hasOwnProperty.call(array, 'index')) {
@@ -9220,16 +9201,15 @@ webpackEmptyContext.id = 167;
      * Initializes an object clone based on its `toStringTag`.
      *
      * **Note:** This function only supports cloning values with tags of
-     * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
+     * `Boolean`, `Date`, `Error`, `Map`, `Number`, `RegExp`, `Set`, or `String`.
      *
      * @private
      * @param {Object} object The object to clone.
      * @param {string} tag The `toStringTag` of the object to clone.
-     * @param {Function} cloneFunc The function to clone values.
      * @param {boolean} [isDeep] Specify a deep clone.
      * @returns {Object} Returns the initialized clone.
      */
-    function initCloneByTag(object, tag, cloneFunc, isDeep) {
+    function initCloneByTag(object, tag, isDeep) {
       var Ctor = object.constructor;
       switch (tag) {
         case arrayBufferTag:
@@ -9248,7 +9228,7 @@ webpackEmptyContext.id = 167;
           return cloneTypedArray(object, isDeep);
 
         case mapTag:
-          return cloneMap(object, isDeep, cloneFunc);
+          return new Ctor;
 
         case numberTag:
         case stringTag:
@@ -9258,7 +9238,7 @@ webpackEmptyContext.id = 167;
           return cloneRegExp(object);
 
         case setTag:
-          return cloneSet(object, isDeep, cloneFunc);
+          return new Ctor;
 
         case symbolTag:
           return cloneSymbol(object);
@@ -9305,10 +9285,13 @@ webpackEmptyContext.id = 167;
      * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
      */
     function isIndex(value, length) {
+      var type = typeof value;
       length = length == null ? MAX_SAFE_INTEGER : length;
+
       return !!length &&
-        (typeof value == 'number' || reIsUint.test(value)) &&
-        (value > -1 && value % 1 == 0 && value < length);
+        (type == 'number' ||
+          (type != 'symbol' && reIsUint.test(value))) &&
+            (value > -1 && value % 1 == 0 && value < length);
     }
 
     /**
@@ -9758,11 +9741,11 @@ webpackEmptyContext.id = 167;
      */
     var stringToPath = memoizeCapped(function(string) {
       var result = [];
-      if (reLeadingDot.test(string)) {
+      if (string.charCodeAt(0) === 46 /* . */) {
         result.push('');
       }
-      string.replace(rePropName, function(match, number, quote, string) {
-        result.push(quote ? string.replace(reEscapeChar, '$1') : (number || match));
+      string.replace(rePropName, function(match, number, quote, subString) {
+        result.push(quote ? subString.replace(reEscapeChar, '$1') : (number || match));
       });
       return result;
     });
@@ -13370,9 +13353,11 @@ webpackEmptyContext.id = 167;
       function remainingWait(time) {
         var timeSinceLastCall = time - lastCallTime,
             timeSinceLastInvoke = time - lastInvokeTime,
-            result = wait - timeSinceLastCall;
+            timeWaiting = wait - timeSinceLastCall;
 
-        return maxing ? nativeMin(result, maxWait - timeSinceLastInvoke) : result;
+        return maxing
+          ? nativeMin(timeWaiting, maxWait - timeSinceLastInvoke)
+          : timeWaiting;
       }
 
       function shouldInvoke(time) {
@@ -15804,9 +15789,35 @@ webpackEmptyContext.id = 167;
      * _.defaults({ 'a': 1 }, { 'b': 2 }, { 'a': 3 });
      * // => { 'a': 1, 'b': 2 }
      */
-    var defaults = baseRest(function(args) {
-      args.push(undefined, customDefaultsAssignIn);
-      return apply(assignInWith, undefined, args);
+    var defaults = baseRest(function(object, sources) {
+      object = Object(object);
+
+      var index = -1;
+      var length = sources.length;
+      var guard = length > 2 ? sources[2] : undefined;
+
+      if (guard && isIterateeCall(sources[0], sources[1], guard)) {
+        length = 1;
+      }
+
+      while (++index < length) {
+        var source = sources[index];
+        var props = keysIn(source);
+        var propsIndex = -1;
+        var propsLength = props.length;
+
+        while (++propsIndex < propsLength) {
+          var key = props[propsIndex];
+          var value = object[key];
+
+          if (value === undefined ||
+              (eq(value, objectProto[key]) && !hasOwnProperty.call(object, key))) {
+            object[key] = source[key];
+          }
+        }
+      }
+
+      return object;
     });
 
     /**
@@ -16203,6 +16214,11 @@ webpackEmptyContext.id = 167;
      * // => { '1': 'c', '2': 'b' }
      */
     var invert = createInverter(function(result, value, key) {
+      if (value != null &&
+          typeof value.toString != 'function') {
+        value = nativeObjectToString.call(value);
+      }
+
       result[value] = key;
     }, constant(identity));
 
@@ -16233,6 +16249,11 @@ webpackEmptyContext.id = 167;
      * // => { 'group1': ['a', 'c'], 'group2': ['b'] }
      */
     var invertBy = createInverter(function(result, value, key) {
+      if (value != null &&
+          typeof value.toString != 'function') {
+        value = nativeObjectToString.call(value);
+      }
+
       if (hasOwnProperty.call(result, value)) {
         result[value].push(key);
       } else {
@@ -20091,16 +20112,16 @@ webpackEmptyContext.id = 167;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13), __webpack_require__(19)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14), __webpack_require__(18)(module)))
 
 /***/ }),
 
-/***/ 169:
+/***/ 160:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*!
  * Platform.js <https://mths.be/platform>
- * Copyright 2014-2016 Benjamin Tan <https://demoneaux.github.io/>
+ * Copyright 2014-2018 Benjamin Tan <https://bnjmnt4n.now.sh/>
  * Copyright 2011-2013 John-David Dalton <http://allyoucanleet.com/>
  * Available under MIT license <https://mths.be/mit>
  */
@@ -20842,16 +20863,18 @@ webpackEmptyContext.id = 167;
           arch = data.getProperty('os.arch');
           os = os || data.getProperty('os.name') + ' ' + data.getProperty('os.version');
         }
-        if (isModuleScope && isHostType(context, 'system') && (data = [context.system])[0]) {
-          os || (os = data[0].os || null);
+        if (rhino) {
           try {
-            data[1] = context.require('ringo/engine').version;
-            version = data[1].join('.');
+            version = context.require('ringo/engine').version.join('.');
             name = 'RingoJS';
           } catch(e) {
-            if (data[0].global.system == context.system) {
+            if ((data = context.system) && data.global.system == context.system) {
               name = 'Narwhal';
+              os || (os = data[0].os || null);
             }
+          }
+          if (!name) {
+            name = 'Rhino';
           }
         }
         else if (
@@ -20868,16 +20891,14 @@ webpackEmptyContext.id = 167;
               name = 'NW.js';
               version = data.versions.nw;
             }
-          } else {
+          }
+          if (!name) {
             name = 'Node.js';
             arch = data.arch;
             os = data.platform;
-            version = /[\d.]+/.exec(data.version)
-            version = version ? version[0] : 'unknown';
+            version = /[\d.]+/.exec(data.version);
+            version = version ? version[0] : null;
           }
-        }
-        else if (rhino) {
-          name = 'Rhino';
         }
       }
       // Detect Adobe AIR.
@@ -21317,11 +21338,11 @@ webpackEmptyContext.id = 167;
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(19)(module), __webpack_require__(13)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18)(module), __webpack_require__(14)))
 
 /***/ }),
 
-/***/ 19:
+/***/ 18:
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -21350,7 +21371,7 @@ module.exports = function(module) {
 
 /***/ }),
 
-/***/ 24:
+/***/ 26:
 /***/ (function(module, exports) {
 
 module.exports = function() {
@@ -21360,7 +21381,7 @@ module.exports = function() {
 
 /***/ }),
 
-/***/ 57:
+/***/ 55:
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */

@@ -25,12 +25,12 @@ function make(url, _) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (param) {
-              var send = param[/* send */4];
+              var send = param[/* send */3];
               return React.createElement("div", {
-                          className: TypedGlamor.toString(ShareButtonStyles.container(param[/* state */2][/* showConfirmation */0]))
+                          className: TypedGlamor.toString(ShareButtonStyles.container(param[/* state */1][/* showConfirmation */0]))
                         }, React.createElement("input", {
                               ref: Curry._1(param[/* handle */0], (function (r, param) {
-                                      param[/* state */2][/* inputRef */1][0] = (r == null) ? /* None */0 : [r];
+                                      param[/* state */1][/* inputRef */1][0] = (r == null) ? /* None */0 : [r];
                                       return /* () */0;
                                     })),
                               readOnly: Js.true_,
@@ -59,13 +59,13 @@ function make(url, _) {
                             /* inputRef */state[/* inputRef */1]
                           ]]);
               } else {
-                return /* UpdateWithSideEffects */Block.__(3, [
+                return /* UpdateWithSideEffects */Block.__(2, [
                           /* record */[
                             /* showConfirmation */true,
                             /* inputRef */state[/* inputRef */1]
                           ],
                           (function (param) {
-                              var send = param[/* send */4];
+                              var send = param[/* send */3];
                               Rebase.Option[/* forEach */8]((function (input) {
                                       input.select();
                                       document.execCommand("copy");
