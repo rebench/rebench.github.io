@@ -1,6 +1,5 @@
 'use strict';
 
-var Js = require("bs-platform/lib/js/js.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
@@ -33,7 +32,7 @@ function make(url, _) {
                                       param[/* state */1][/* inputRef */1][0] = (r == null) ? /* None */0 : [r];
                                       return /* () */0;
                                     })),
-                              readOnly: Js.true_,
+                              readOnly: true,
                               value: url
                             }), ReasonReact.element(/* None */0, /* None */0, Button.make("Share", /* Some */["share"], /* None */0, /* None */0, /* None */0, (function () {
                                     return Curry._1(send, /* Clicked */0);
