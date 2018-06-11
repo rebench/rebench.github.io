@@ -47,7 +47,7 @@ let make = (~url, _:childless) => {
 
       <input value    = url
              ref      = handle((r, { state }) => state.inputRef := Js.toOption(r))
-             readOnly = Js.true_ />
+             readOnly = true />
 
       <Button icon      = "share"
               label     = "Share"
